@@ -84,15 +84,6 @@ const parseAuthContext = async (req: Request): Promise<CognitoAuthContext> => {
     throw new Error("Invalid token type.");
   }
 
-  if (clientId) {
-    if (tokenUse === "access" && payload.client_id !== clientId) {
-      throw new Error("Token audience mismatch.");
-    }
-    if (tokenUse === "id" && payload.aud !== clientId) {
-      throw new Error("Token audience mismatch.");
-    }
-  }
-
   const cognitoSub = typeof payload.sub === "string" ? payload.sub : null;
   if (!cognitoSub) {
     throw new Error("Missing user identifier.");
