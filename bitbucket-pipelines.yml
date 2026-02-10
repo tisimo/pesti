@@ -1,0 +1,128 @@
+pipelines:
+  pull-requests:
+    "**":
+      - step:
+          name: DEV - Unit & Integration Tests (2 DBs no mesmo Postgres + SQL schema)
+          image: node:22-alpine
+          services:
+            - postgres
+          caches:
+            - node
+          script:
+            - apk add --no-cache curl postgresql-client
+
+            - npm install --no-audit --no-fund
+            - npm run build
+
+            - export NODE_ENV=test
+            - export PORT=4000
+            - export USE_SSL=false
+
+            - export DB_HOST=127.0.0.1
+            - export DB_PORT=5432
+            - export DB_USER=test
+            - export DB_PASSWORD=test
+            - export DB_NAME=testdb
+
+            # Shared usa o MESMO Postgres (mesmo host/porto), mas DB/user diferentes
+            - export DB_HOST_SHARED=127.0.0.1
+            - export DB_PORT_SHARED=5432
+            - export DB_USER_SHARED=testshared
+            - export DB_PASSWORD_SHARED=testshared
+            - export DB_NAME_SHARED=shareddb
+
+            - |
+              echo "Waiting for PostgreSQL..."
+              for i in $(seq 1 30); do
+                if pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER"; then
+                  echo "Postgres ready"
+                  break
+                fi
+                sleep 1
+              done
+
+            # Criar role + database shared no mesmo Postgres
+            - echo "Criar role e DB shared..."
+            - PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d postgres -v ON_ERROR_STOP=1 -c "DO \$\$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='testshared') THEN CREATE ROLE testshared LOGIN PASSWORD 'testshared'; END IF; END \$\$;"
+            - PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d postgres -v ON_ERROR_STOP=1 -tc "SELECT 1 FROM pg_database WHERE datname='shareddb'" | grep -q 1 || PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d postgres -v ON_ERROR_STOP=1 -c "CREATE DATABASE shareddb OWNER testshared;"
+
+            # Aplicar schema principal
+            - echo "Aplicar schema principal..."
+            - PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -v ON_ERROR_STOP=1 -f ./build/src/dataschema/test-OnlyJustCauses.sql
+
+            # Aplicar schema shared
+            - echo "Aplicar schema shared..."
+            - PGPASSWORD="$DB_PASSWORD_SHARED" psql -h "$DB_HOST_SHARED" -p "$DB_PORT_SHARED" -U "$DB_USER_SHARED" -d "$DB_NAME_SHARED" -v ON_ERROR_STOP=1 -f ./build/src/dataschema/test-Shared.sql
+
+            # Arrancar backend
+            - node build/src/app.js &
+            - export APP_PID=$!
+
+            # Esperar backend
+            - |
+              echo "A aguardar backend..."
+              for i in $(seq 1 30); do
+                if curl -fsS http://127.0.0.1:4000/status >/dev/null; then
+                  echo "Backend dispon�vel"
+                  break
+                fi
+                sleep 1
+              done
+
+            # Testes
+            - npm test
+
+            # Parar backend
+            - kill $APP_PID || true
+            
+      - step:
+          name: Build & Push DEV image to ECR
+          image: docker:24.0.5
+          services:
+            - docker
+          caches:
+            - docker
+          script:
+            - apk add --no-cache python3 py3-pip
+            - pip3 install awscli
+
+            - export DOCKER_BUILDKIT=0
+
+            - export DATE_TAG=$(date -u +"%Y%m%d%H%M%S")
+            - echo "DATE_TAG=$DATE_TAG"
+
+            - echo "Login into ECR"
+            - >
+              aws ecr get-login-password --region "$AWS_REGION" |
+              docker login --username AWS --password-stdin
+              "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
+
+            - echo "Tag immutable (commit hash)"
+
+            - export FULL_TAG=$DATE_TAG
+            - echo "FULL_TAG=$FULL_TAG"
+
+            - echo "Build image"
+            - echo $ECR_REPOSITORY
+            - docker build -t "$ECR_REPOSITORY:$FULL_TAG" .
+
+            - echo "Tag for ECR (immutable)"
+            - docker tag "$ECR_REPOSITORY:$FULL_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$FULL_TAG"
+
+            - echo "Tag for ECR (latest)"
+            - docker tag "$ECR_REPOSITORY:$FULL_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest"
+
+            - echo "Push immutable tag"
+            - docker push "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$FULL_TAG"
+
+            - echo "Push latest tag"
+            - docker push "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest"
+
+definitions:
+  services:
+    postgres:
+      image: postgres:17
+      environment:
+        POSTGRES_DB: testdb
+        POSTGRES_USER: test
+        POSTGRES_PASSWORD: test
