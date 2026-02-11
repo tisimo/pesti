@@ -5,9 +5,7 @@ import { docClient, dynamoClient } from "./dynamo";
 import Logger from "./logger";
 import config from "../../config";
 
-
 export default async ({ expressApp }) => {
-
   // 1. Connect to Shared PostgreSQL
   try {
     await clientShared.connect();
@@ -57,14 +55,26 @@ export default async ({ expressApp }) => {
     path: config.repos.recoveryCodes.path,
   };
 
+  const walletsController = {
+    name: config.controllers.wallets.name,
+    path: config.controllers.wallets.path,
+  };
+
+  const walletsService = {
+    name: config.services.wallets.name,
+    path: config.services.wallets.path,
+  };
+
+  const walletsRepo = {
+    name: config.repos.wallets.name,
+    path: config.repos.wallets.path,
+  };
+
   dependencyInjectorLoader({
     schemas: [],
-    controllers: [
-      accountController,
-      recoveryCodesController,
-    ],
-    services: [accountService, recoveryCodesService],
-    repos: [accountRepo, recoveryCodesRepo],
+    controllers: [accountController, recoveryCodesController, walletsController],
+    services: [accountService, recoveryCodesService, walletsService],
+    repos: [accountRepo, recoveryCodesRepo, walletsRepo],
   });
 
   // 4. Load Express

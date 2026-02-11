@@ -51,6 +51,10 @@ export default {
       name: "RoleController",
       path: "../controllers/roleController",
     },
+    wallets: {
+      name: "WalletsController",
+      path: "../controllers/WalletsController",
+    },
   },
 
   services: {
@@ -66,6 +70,10 @@ export default {
       name: "RoleService",
       path: "../services/roleService",
     },
+    wallets: {
+      name: "WalletsService",
+      path: "../services/WalletsService",
+    },
   },
 
   repos: {
@@ -80,6 +88,10 @@ export default {
     role: {
       name: "RoleRepo",
       path: "../repos/roleRepo",
+    },
+    wallets: {
+      name: "WalletsRepo",
+      path: "../repos/Wallets/WalletsRepo",
     },
   },
 
