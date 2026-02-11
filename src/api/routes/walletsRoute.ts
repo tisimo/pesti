@@ -44,6 +44,36 @@ export default (app: Router) => {
 
   /**
    * @swagger
+   * /api/wallets/account/{accountId}:
+   *   get:
+   *     summary: Get Wallet By Account ID
+   *     tags: [Wallets]
+   *     parameters:
+   *       - in: path
+   *         name: accountId
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Requested Wallet
+   *       400:
+   *         description: Bad Request
+   *       404:
+   *         description: Wallet Not Found
+   */
+  route.get(
+    "/account/:accountId",
+    celebrate({
+      params: Joi.object({
+        accountId: Joi.string().required(),
+      }),
+    }),
+    (req, res, next) => ctrl.getWalletByAccountId(req, res, next),
+  );
+
+  /**
+   * @swagger
    * /api/wallets:
    *   post:
    *     summary: Create Wallet

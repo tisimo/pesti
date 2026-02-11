@@ -23,6 +23,20 @@ export default class WalletsRepo implements IWalletsRepo {
     return WalletMap.fromPersistence(result.rows[0]);
   }
 
+  public async getWalletByAccountId(accountId: string): Promise<Wallet | null> {
+    const query = `
+      SELECT *
+      FROM ${this.table}
+      WHERE "accountId" = $1
+      LIMIT 1
+    `;
+
+    const result = await clientShared.query(query, [accountId]);
+    if (!result.rowCount) return null;
+
+    return WalletMap.fromPersistence(result.rows[0]);
+  }
+
   public async createWallet(wallet: Wallet): Promise<Wallet> {
     const persistenceWallet = WalletMap.toPersistence(wallet);
 

@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { celebrate, Joi } from "celebrate";
 
 const route = Router();
 
@@ -24,7 +23,7 @@ export default (app: Router) => {
    *                   type: string
    *                   example: ok
    */
-  route.get("", (req, res) => {
+  route.get("", (_req, res) => {
     res.json({ status: "ok" });
   });
 };

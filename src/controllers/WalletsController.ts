@@ -33,6 +33,30 @@ export default class WalletsController implements IWalletsController {
     }
   }
 
+  public async getWalletByAccountId(req: Request, res: Response, next: NextFunction) {
+    try {
+      const accountId = req.params.accountId as string;
+
+      if (!accountId) {
+        res.status(400).json({ message: "Account Id Is Required!" });
+        return;
+      }
+
+      const wallet = await this.walletsService.getWalletByAccountId(accountId);
+
+      if (wallet.isFailure) {
+        res.status(404).json({ message: "Wallet Not Found!" });
+        Logger.error(wallet.error);
+        return;
+      }
+
+      res.status(200).json(wallet.getValue());
+    } catch (error) {
+      Logger.error(error);
+      return next(error);
+    }
+  }
+
   public async createWallet(req: Request, res: Response, next: NextFunction) {
     try {
       const authSub = (req as any).auth?.cognitoSub;

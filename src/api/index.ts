@@ -1,7 +1,7 @@
 import { Router } from "express";
-import status from "./routes/status";
 import account from "./routes/accountRoute";
 import recoveryCodesRoute from "./routes/recoveryCodesRoute";
+import status from "./routes/status";
 import wallets from "./routes/walletsRoute";
 
 export default () => {
@@ -9,8 +9,8 @@ export default () => {
 
   account(app);
   recoveryCodesRoute(app);
-  wallets(app);
   status(app);
+  wallets(app);
 
   return app;
 };
