@@ -59,7 +59,7 @@ export default class WalletsController implements IWalletsController {
 
   public async createWallet(req: Request, res: Response, next: NextFunction) {
     try {
-      const authSub = (req as any).auth?.cognitoSub;
+      const accountId = (req as any).auth?.accountId;
       const { walletAddress } = req.body;
 
       if (!walletAddress) {
@@ -67,12 +67,12 @@ export default class WalletsController implements IWalletsController {
         return;
       }
 
-      if (!authSub) {
+      if (!accountId) {
         res.status(403).json({ message: "Forbidden!" });
         return;
       }
 
-      const wallet = await this.walletsService.createWallet(walletAddress, authSub);
+      const wallet = await this.walletsService.createWallet(accountId, walletAddress);
 
       if (wallet.isFailure) {
         if (String(wallet.error).includes("Wallet Already Exists!")) {
