@@ -59,7 +59,7 @@ export default class WalletsController implements IWalletsController {
 
   public async createWallet(req: Request, res: Response, next: NextFunction) {
     try {
-      const accountId = (req as any).auth?.accountId;
+      const accountId = (req as any).accountId;
       const { walletAddress } = req.body;
 
       if (!walletAddress) {
