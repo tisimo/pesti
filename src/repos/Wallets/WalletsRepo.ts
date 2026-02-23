@@ -13,7 +13,7 @@ export default class WalletsRepo implements IWalletsRepo {
     const query = `
       SELECT *
       FROM ${this.table}
-      WHERE "walletAddress" = $1
+      WHERE LOWER("walletAddress") = LOWER($1)
       LIMIT 1
     `;
 

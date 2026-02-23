@@ -4,6 +4,7 @@ import { clientShared } from "./postgresShared";
 import { docClient, dynamoClient } from "./dynamo";
 import Logger from "./logger";
 import config from "../../config";
+import { startTransactionListener } from "./transactionListener";
 
 export default async ({ expressApp }) => {
   // 1. Connect to Shared PostgreSQL
@@ -70,14 +71,27 @@ export default async ({ expressApp }) => {
     path: config.repos.wallets.path,
   };
 
+  const transactionsService = {
+    name: config.services.transactions.name,
+    path: config.services.transactions.path,
+  };
+
+  const transactionsRepo = {
+    name: config.repos.transactions.name,
+    path: config.repos.transactions.path,
+  };
+
   dependencyInjectorLoader({
     schemas: [],
     controllers: [accountController, recoveryCodesController, walletsController],
-    services: [accountService, recoveryCodesService, walletsService],
-    repos: [accountRepo, recoveryCodesRepo, walletsRepo],
+    services: [accountService, recoveryCodesService, walletsService, transactionsService],
+    repos: [accountRepo, recoveryCodesRepo, walletsRepo, transactionsRepo],
   });
 
   // 4. Load Express
   expressLoader({ app: expressApp });
   Logger.info("Express Loaded");
+
+  // 5. Start Transaction Listener
+  await startTransactionListener();
 };

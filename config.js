@@ -74,6 +74,10 @@ export default {
       name: "WalletsService",
       path: "../services/WalletsService",
     },
+    transactions: {
+      name: "TransactionsService",
+      path: "../services/TransactionsService",
+    },
   },
 
   repos: {
@@ -93,6 +97,23 @@ export default {
       name: "WalletsRepo",
       path: "../repos/Wallets/WalletsRepo",
     },
+    transactions: {
+      name: "TransactionsRepo",
+      path: "../repos/Transactions/TransactionsRepo",
+    },
+  },
+
+  alchemy: {
+    apiKey: process.env.ALCHEMY_API_KEY || "",
+    network: process.env.ALCHEMY_NETWORK || "base-mainnet",
+  },
+
+  onlyPayments: {
+    address: process.env.ONLY_PAYMENTS_ADDRESS || "",
+  },
+
+  backends: {
+    causes: { url: process.env.BACKEND_CAUSES_URL || "http://localhost:4000/api" },
   },
 
   awsRegion: process.env.AWS_REGION || 'eu-west-1',
