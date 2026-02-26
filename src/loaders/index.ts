@@ -1,6 +1,6 @@
 import expressLoader from "./express";
 import dependencyInjectorLoader from "./dependencyInjector";
-import { clientShared } from "./postgresShared";
+import { connectWithRetry } from "./postgresShared";
 import { docClient, dynamoClient } from "./dynamo";
 import Logger from "./logger";
 import config from "../../config";
@@ -8,13 +8,8 @@ import { startTransactionListener } from "./transactionListener";
 
 export default async ({ expressApp }) => {
   // 1. Connect to Shared PostgreSQL
-  try {
-    await clientShared.connect();
-    Logger.info("Connection to Shared PostgreSQL established successfully.");
-  } catch (error) {
-    Logger.error({ err: error }, "Error when connecting to Shared PostgreSQL:");
-    throw error;
-  }
+  await connectWithRetry();
+  Logger.info("Connection to Shared PostgreSQL established successfully.");
 
   // 2. Connect to DynamoDB
   try {
