@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { internalAuth } from "../middlewares/internalAuth";
 
 const route = Router();
 
@@ -25,5 +26,9 @@ export default (app: Router) => {
    */
   route.get("", (_req, res) => {
     res.json({ status: "ok" });
+  });
+
+  route.get("/internal", internalAuth, (_req, res) => {
+    res.json({ status: "ok", scope: "internal" });
   });
 };
