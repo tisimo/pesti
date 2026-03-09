@@ -76,6 +76,21 @@ export default async ({ expressApp }) => {
     path: config.repos.transactions.path,
   };
 
+  const verificationController = {
+    name: config.controllers.verification.name,
+    path: config.controllers.verification.path,
+  };
+
+  const verificationService = {
+    name: config.services.verification.name,
+    path: config.services.verification.path,
+  };
+
+  const verificationRepo = {
+    name: config.repos.verification.name,
+    path: config.repos.verification.path,
+  };
+
   const depositController = {
     name: config.controllers.deposit.name,
     path: config.controllers.deposit.path,
@@ -88,9 +103,22 @@ export default async ({ expressApp }) => {
 
   dependencyInjectorLoader({
     schemas: [],
-    controllers: [accountController, recoveryCodesController, walletsController, depositController],
-    services: [accountService, recoveryCodesService, walletsService, transactionsService, depositService],
-    repos: [accountRepo, recoveryCodesRepo, walletsRepo, transactionsRepo],
+    controllers: [
+      accountController,
+      depositController,
+      recoveryCodesController,
+      verificationController,
+      walletsController,
+    ],
+    services: [
+      accountService,
+      depositService,
+      recoveryCodesService,
+      transactionsService,
+      verificationService,
+      walletsService,
+    ],
+    repos: [accountRepo, recoveryCodesRepo, transactionsRepo, verificationRepo, walletsRepo],
   });
 
   // 4. Load Express

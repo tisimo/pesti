@@ -51,6 +51,10 @@ export default {
       name: "RoleController",
       path: "../controllers/roleController",
     },
+    verification: {
+      name: "VerificationController",
+      path: "../controllers/VerificationController",
+    },
     wallets: {
       name: "WalletsController",
       path: "../controllers/WalletsController",
@@ -86,6 +90,10 @@ export default {
       name: "DepositService",
       path: "../services/DepositService",
     },
+    verification: {
+      name: "VerificationService",
+      path: "../services/VerificationService",
+    },
   },
 
   repos: {
@@ -108,6 +116,10 @@ export default {
     transactions: {
       name: "TransactionsRepo",
       path: "../repos/Transactions/TransactionsRepo",
+    },
+    verification: {
+      name: "VerificationRepo",
+      path: "../repos/Verification/VerificationRepo",
     },
   },
 
