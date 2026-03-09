@@ -11,7 +11,7 @@ export default class VerificationController implements IVerificationController {
 
   public async getVerificationStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const accountId = req.params.accountId;
+      const accountId = req.params.accountId as string;
 
       const result = await this.verificationService.createVerification(accountId);
 
@@ -30,10 +30,10 @@ export default class VerificationController implements IVerificationController {
 
   public async createVerification(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { accountId } = req.body;
+      const accountId = (req as any).accountId;
 
       if (!accountId) {
-        res.status(400).json({ message: "accountId Is Required!" });
+        res.status(400).json({ message: "AccountId Is Required!" });
         return;
       }
 
@@ -54,7 +54,7 @@ export default class VerificationController implements IVerificationController {
 
   public async updateSessionId(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { accountId } = req.params;
+      const accountId = (req as any).accountId;
       const { sessionId } = req.body;
 
       if (!sessionId) {
@@ -79,13 +79,19 @@ export default class VerificationController implements IVerificationController {
 
   public async markVerified(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { sessionId } = req.params;
+      const sessionId = req.params.sessionId as string;
+      const accountId = (req as any).accountId;
 
-      const result = await this.verificationService.markVerified(sessionId);
+      const result = await this.verificationService.markVerified(sessionId, accountId);
 
       if (result.isFailure) {
-        Logger.error(result.error);
+        if (result.error === "Forbidden!") {
+          res.status(403).json({ message: "Forbidden!" });
+          return;
+        }
+
         res.status(404).json({ message: "Verification Not Found For Session!" });
+        Logger.error(result.error);
         return;
       }
 
@@ -98,11 +104,17 @@ export default class VerificationController implements IVerificationController {
 
   public async markDeclined(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { sessionId } = req.params;
+      const sessionId = req.params.sessionId as string;
+      const accountId = (req as any).accountId;
 
-      const result = await this.verificationService.markDeclined(sessionId);
+      const result = await this.verificationService.markDeclined(sessionId, accountId);
 
       if (result.isFailure) {
+        if (result.error === "Forbidden!") {
+          res.status(403).json({ message: "Forbidden!" });
+          return;
+        }
+
         Logger.error(result.error);
         res.status(404).json({ message: "Verification Not Found For Session!" });
         return;

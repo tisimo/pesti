@@ -43,20 +43,8 @@ export default (app: Router) => {
    * @swagger
    * /api/verifications:
    *   post:
-   *     summary: Get or create a PENDING verification row for an account
+   *     summary: Create a PENDING verification row for the authenticated account
    *     tags: [Verifications]
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             required:
-   *               - accountId
-   *             properties:
-   *               accountId:
-   *                 type: string
-   *                 format: uuid
    *     responses:
    *       201:
    *         description: Verification created or returned
@@ -65,26 +53,15 @@ export default (app: Router) => {
    */
   route.post(
     "",
-    celebrate({
-      body: Joi.object({
-        accountId: Joi.string().uuid().required(),
-      }),
-    }),
     (req, res, next) => ctrl.createVerification(req, res, next),
   );
 
   /**
    * @swagger
-   * /api/verifications/{accountId}/session:
+   * /api/verifications/session:
    *   patch:
-   *     summary: Record a Veriff session ID against a verification row
+   *     summary: Store a Veriff session ID for the authenticated account
    *     tags: [Verifications]
-   *     parameters:
-   *       - in: path
-   *         name: accountId
-   *         required: true
-   *         schema:
-   *           type: string
    *     requestBody:
    *       required: true
    *       content:
@@ -98,18 +75,15 @@ export default (app: Router) => {
    *                 type: string
    *     responses:
    *       200:
-   *         description: Session recorded
+   *         description: Session ID updated
    *       400:
    *         description: Bad Request
    *       404:
    *         description: Verification Not Found
    */
   route.patch(
-    "/:accountId/session",
+    "/session",
     celebrate({
-      params: Joi.object({
-        accountId: Joi.string().uuid().required(),
-      }),
       body: Joi.object({
         sessionId: Joi.string().required(),
       }),

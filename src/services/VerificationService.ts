@@ -55,12 +55,16 @@ export default class VerificationService implements IVerificationService {
     }
   }
 
-  public async markVerified(sessionId: string): Promise<Result<VerificationDTO>> {
+  public async markVerified(sessionId: string, accountId: string): Promise<Result<VerificationDTO>> {
     try {
       const verification = await this.verificationRepo.findBySessionId(sessionId);
 
       if (!verification) {
         return Result.fail<VerificationDTO>("Verification Not Found For Session!");
+      }
+
+      if (verification.accountId !== accountId) {
+        return Result.fail<VerificationDTO>("Forbidden!");
       }
 
       verification.markVerified(sessionId);
@@ -72,12 +76,16 @@ export default class VerificationService implements IVerificationService {
     }
   }
 
-  public async markDeclined(sessionId: string): Promise<Result<VerificationDTO>> {
+  public async markDeclined(sessionId: string, accountId: string): Promise<Result<VerificationDTO>> {
     try {
       const verification = await this.verificationRepo.findBySessionId(sessionId);
 
       if (!verification) {
         return Result.fail<VerificationDTO>("Verification Not Found For Session!");
+      }
+
+      if (verification.accountId !== accountId) {
+        return Result.fail<VerificationDTO>("Forbidden!");
       }
 
       verification.markDeclined(sessionId);
