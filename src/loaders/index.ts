@@ -76,10 +76,20 @@ export default async ({ expressApp }) => {
     path: config.repos.transactions.path,
   };
 
+  const depositController = {
+    name: config.controllers.deposit.name,
+    path: config.controllers.deposit.path,
+  };
+
+  const depositService = {
+    name: config.services.deposit.name,
+    path: config.services.deposit.path,
+  };
+
   dependencyInjectorLoader({
     schemas: [],
-    controllers: [accountController, recoveryCodesController, walletsController],
-    services: [accountService, recoveryCodesService, walletsService, transactionsService],
+    controllers: [accountController, recoveryCodesController, walletsController, depositController],
+    services: [accountService, recoveryCodesService, walletsService, transactionsService, depositService],
     repos: [accountRepo, recoveryCodesRepo, walletsRepo, transactionsRepo],
   });
 

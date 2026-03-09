@@ -55,6 +55,10 @@ export default {
       name: "WalletsController",
       path: "../controllers/WalletsController",
     },
+    deposit: {
+      name: "DepositController",
+      path: "../controllers/DepositController",
+    },
   },
 
   services: {
@@ -77,6 +81,10 @@ export default {
     transactions: {
       name: "TransactionsService",
       path: "../services/TransactionsService",
+    },
+    deposit: {
+      name: "DepositService",
+      path: "../services/DepositService",
     },
   },
 
@@ -110,6 +118,11 @@ export default {
 
   onlyPayments: {
     address: process.env.ONLY_PAYMENTS_ADDRESS || "",
+  },
+
+  cdp: {
+    apiKeyId: process.env.CDP_API_KEY_ID || "",
+    apiKeySecret: process.env.CDP_API_KEY_SECRET || "",
   },
 
   backends: {
