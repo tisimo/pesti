@@ -79,8 +79,8 @@ export default class VerificationController implements IVerificationController {
 
   public async markVerified(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const sessionId = req.params.sessionId as string;
       const accountId = (req as any).accountId;
+      const sessionId = req.params.sessionId as string;
 
       const result = await this.verificationService.markVerified(sessionId, accountId);
 
@@ -104,8 +104,8 @@ export default class VerificationController implements IVerificationController {
 
   public async markDeclined(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const sessionId = req.params.sessionId as string;
       const accountId = (req as any).accountId;
+      const sessionId = req.params.sessionId as string;
 
       const result = await this.verificationService.markDeclined(sessionId, accountId);
 

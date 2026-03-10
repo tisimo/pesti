@@ -3,6 +3,7 @@ import { celebrate, Joi } from "celebrate";
 import { Container } from "typedi";
 import IVerificationController from "../../controllers/IControllers/IVerificationController";
 import config from "../../../config.js";
+import { requireCognitoAccount } from "../middlewares/cognitoAuth";
 
 const route = Router();
 
@@ -51,10 +52,7 @@ export default (app: Router) => {
    *       400:
    *         description: Bad Request
    */
-  route.post(
-    "",
-    (req, res, next) => ctrl.createVerification(req, res, next),
-  );
+  route.post("", requireCognitoAccount, (req, res, next) => ctrl.createVerification(req, res, next));
 
   /**
    * @swagger
@@ -83,6 +81,7 @@ export default (app: Router) => {
    */
   route.patch(
     "/session",
+    requireCognitoAccount,
     celebrate({
       body: Joi.object({
         sessionId: Joi.string().required(),
@@ -111,6 +110,7 @@ export default (app: Router) => {
    */
   route.patch(
     "/session/:sessionId/approve",
+    requireCognitoAccount,
     celebrate({
       params: Joi.object({
         sessionId: Joi.string().required(),
@@ -139,6 +139,7 @@ export default (app: Router) => {
    */
   route.patch(
     "/session/:sessionId/decline",
+    requireCognitoAccount,
     celebrate({
       params: Joi.object({
         sessionId: Joi.string().required(),
