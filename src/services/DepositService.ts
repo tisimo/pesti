@@ -1,10 +1,14 @@
-import { Service } from "typedi";
+import { Inject, Service } from "typedi";
 import { generateJwt } from "@coinbase/cdp-sdk/auth";
 import { Result } from "../core/logic/Result";
 import { CreateDepositRequestDTO, CreateDepositResponseDTO, OnrampQuote } from "../dto/DepositRequestDTO";
+import { DepositDTO } from "../dto/DepositDTO";
 import IDepositService from "./IServices/IDepositService";
 import Logger from "../loaders/logger";
 import config from "../../config";
+import { IDepositRepo } from "../repos/Deposits/IDepositRepo";
+import DepositRepository from "../repos/Deposits/DepositRepo";
+import { DepositMap } from "mappers/DepositMapper";
 
 const CDP_API_HOST = "api.cdp.coinbase.com";
 const CDP_ONRAMP_PATH = "/platform/v2/onramp/sessions";
@@ -13,6 +17,24 @@ const DESTINATION_NETWORK = "base";
 
 @Service()
 export default class DepositService implements IDepositService {
+  constructor(
+    @Inject(() => DepositRepository) private depositRepository: IDepositRepo,
+  ) {}
+
+  public async getDepositById(depositId: string): Promise<Result<DepositDTO>> {
+    try {
+      const deposit = await this.depositRepository.getDepositById(depositId);
+
+      if (!deposit) {
+        return Result.fail<DepositDTO>("Deposit Not Found!");
+      }
+      return Result.ok<DepositDTO>(DepositMap.toDTO(deposit));
+    } catch (error) {
+      Logger.error(error, "Error getting deposit by ID");
+      return Result.fail<DepositDTO>(error?.message ?? "Error getting deposit by ID!");
+    }
+  }
+
   public async createOnrampSession(
     dto: CreateDepositRequestDTO,
   ): Promise<Result<CreateDepositResponseDTO>> {
@@ -75,6 +97,16 @@ export default class DepositService implements IDepositService {
       return Result.fail<CreateDepositResponseDTO>(
         error?.message ?? "Error creating onramp session!",
       );
+    }
+  }
+
+  public async updateStatus(depositId: string, status: string): Promise<Result<void>> {
+    try {
+      await this.depositRepository.updateDepositStatus(depositId, status);
+      return Result.ok<void>(undefined);
+    } catch (error) {
+      Logger.error(error, "Error updating deposit status");
+      return Result.fail<void>(error?.message ?? "Error updating deposit status!");
     }
   }
 }
