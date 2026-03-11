@@ -1,7 +1,7 @@
 import { Service } from "typedi";
 import { generateJwt } from "@coinbase/cdp-sdk/auth";
 import { Result } from "../core/logic/Result";
-import { CreateDepositRequestDTO, CreateDepositResponseDTO, OnrampQuote } from "../dto/DepositDTO";
+import { CreateDepositRequestDTO, CreateDepositResponseDTO, OnrampQuote } from "../dto/DepositRequestDTO";
 import IDepositService from "./IServices/IDepositService";
 import Logger from "../loaders/logger";
 import config from "../../config";

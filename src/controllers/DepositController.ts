@@ -4,7 +4,7 @@ import IDepositController from "./IControllers/IDepositController";
 import DepositService from "../services/DepositService";
 import IDepositService from "../services/IServices/IDepositService";
 import Logger from "../loaders/logger";
-import type { CreateDepositRequestDTO } from "../dto/DepositDTO";
+import type { CreateDepositRequestDTO } from "../dto/DepositRequestDTO";
 
 @Service()
 export default class DepositController implements IDepositController {

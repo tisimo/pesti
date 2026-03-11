@@ -1,9 +1,11 @@
-export type DepositDTO = {
-  depositId: string;
+export type WithdrawalDTO = {
+  withdrawalId: string;
   walletAddress: string;
   amount: number;
   amountFiat: number;
   currency: string;
+  fee: number;
+  feeTx: string | null;
   provider: string;
   method: string;
   application: string;
