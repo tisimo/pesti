@@ -77,50 +77,28 @@ export default class VerificationController implements IVerificationController {
     }
   }
 
-  public async markVerified(req: Request, res: Response, next: NextFunction): Promise<void> {
+  public async handleWebhook(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const accountId = (req as any).accountId;
-      const sessionId = req.params.sessionId as string;
+      // TODO: validate x-hmac-signature header using VERIFF_SECRET
+      Logger.info("[Veriff Webhook] body: " + JSON.stringify(req.body, null, 2));
 
-      const result = await this.verificationService.markVerified(sessionId, accountId);
+      const sessionId = req.body?.verification?.id as string | undefined;
+      const veriffStatus = req.body?.verification?.status as string | undefined;
 
-      if (result.isFailure) {
-        if (result.error === "Forbidden!") {
-          res.status(403).json({ message: "Forbidden!" });
-          return;
-        }
-
-        res.status(404).json({ message: "Verification Not Found For Session!" });
-        Logger.error(result.error);
+      if (!sessionId || !veriffStatus) {
+        // Event webhooks (Started, Submitted) may not carry a decision — acknowledge and ignore
+        res.status(200).json({ message: "Acknowledged" });
         return;
       }
 
-      res.status(200).json(result.getValue());
-    } catch (error) {
-      Logger.error(error);
-      return next(error);
-    }
-  }
-
-  public async markDeclined(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-      const accountId = (req as any).accountId;
-      const sessionId = req.params.sessionId as string;
-
-      const result = await this.verificationService.markDeclined(sessionId, accountId);
+      const result = await this.verificationService.handleWebhook(sessionId, veriffStatus);
 
       if (result.isFailure) {
-        if (result.error === "Forbidden!") {
-          res.status(403).json({ message: "Forbidden!" });
-          return;
-        }
-
         Logger.error(result.error);
-        res.status(404).json({ message: "Verification Not Found For Session!" });
-        return;
       }
 
-      res.status(200).json(result.getValue());
+      // Always respond 200 so Veriff does not retry
+      res.status(200).json({ message: "Acknowledged" });
     } catch (error) {
       Logger.error(error);
       return next(error);

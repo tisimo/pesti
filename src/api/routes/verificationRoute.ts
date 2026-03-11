@@ -92,59 +92,25 @@ export default (app: Router) => {
 
   /**
    * @swagger
-   * /api/verifications/session/{sessionId}/approve:
-   *   patch:
-   *     summary: Mark a verification as VERIFIED by session ID
+   * /api/verifications/session/webhook:
+   *   post:
+   *     summary: Receive Veriff Webhook Decisions
    *     tags: [Verifications]
-   *     parameters:
-   *       - in: path
-   *         name: sessionId
-   *         required: true
-   *         schema:
-   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
    *     responses:
    *       200:
-   *         description: Verification approved
-   *       404:
-   *         description: Verification Not Found
+   *         description: Acknowledged
    */
-  route.patch(
-    "/session/:sessionId/approve",
-    requireCognitoAccount,
+  route.post(
+    "/session/webhook",
     celebrate({
-      params: Joi.object({
-        sessionId: Joi.string().required(),
-      }),
+      body: Joi.object().unknown(true),
     }),
-    (req, res, next) => ctrl.markVerified(req, res, next),
-  );
-
-  /**
-   * @swagger
-   * /api/verifications/session/{sessionId}/decline:
-   *   patch:
-   *     summary: Mark a verification as DECLINED by session ID
-   *     tags: [Verifications]
-   *     parameters:
-   *       - in: path
-   *         name: sessionId
-   *         required: true
-   *         schema:
-   *           type: string
-   *     responses:
-   *       200:
-   *         description: Verification declined
-   *       404:
-   *         description: Verification Not Found
-   */
-  route.patch(
-    "/session/:sessionId/decline",
-    requireCognitoAccount,
-    celebrate({
-      params: Joi.object({
-        sessionId: Joi.string().required(),
-      }),
-    }),
-    (req, res, next) => ctrl.markDeclined(req, res, next),
+    (req, res, next) => ctrl.handleWebhook(req, res, next),
   );
 };

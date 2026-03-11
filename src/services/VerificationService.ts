@@ -55,45 +55,29 @@ export default class VerificationService implements IVerificationService {
     }
   }
 
-  public async markVerified(sessionId: string, accountId: string): Promise<Result<VerificationDTO>> {
+  public async handleWebhook(sessionId: string, veriffStatus: string): Promise<Result<void>> {
     try {
+      if (veriffStatus !== "approved" && veriffStatus !== "declined") {
+        return Result.ok<void>();
+      }
+
       const verification = await this.verificationRepo.findBySessionId(sessionId);
 
       if (!verification) {
-        return Result.fail<VerificationDTO>("Verification Not Found For Session!");
+        return Result.fail<void>("Verification Not Found For Session!");
       }
 
-      if (verification.accountId !== accountId) {
-        return Result.fail<VerificationDTO>("Forbidden!");
+      if (veriffStatus === "approved") {
+        verification.markVerified(sessionId);
+      } else {
+        verification.markDeclined(sessionId);
       }
 
-      verification.markVerified(sessionId);
       await this.verificationRepo.save(verification);
 
-      return Result.ok<VerificationDTO>(VerificationMap.toDTO(verification));
+      return Result.ok<void>();
     } catch (error) {
-      return Result.fail<VerificationDTO>(error?.message ?? "Error Marking Verification As Verified!");
-    }
-  }
-
-  public async markDeclined(sessionId: string, accountId: string): Promise<Result<VerificationDTO>> {
-    try {
-      const verification = await this.verificationRepo.findBySessionId(sessionId);
-
-      if (!verification) {
-        return Result.fail<VerificationDTO>("Verification Not Found For Session!");
-      }
-
-      if (verification.accountId !== accountId) {
-        return Result.fail<VerificationDTO>("Forbidden!");
-      }
-
-      verification.markDeclined(sessionId);
-      await this.verificationRepo.save(verification);
-
-      return Result.ok<VerificationDTO>(VerificationMap.toDTO(verification));
-    } catch (error) {
-      return Result.fail<VerificationDTO>(error?.message ?? "Error Marking Verification As Declined!");
+      return Result.fail<void>(error?.message ?? "Error Processing Veriff Webhook!");
     }
   }
 }
