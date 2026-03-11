@@ -5,6 +5,7 @@ import status from "./routes/status";
 import verification from "./routes/verificationRoute";
 import wallets from "./routes/walletsRoute";
 import deposits from "./routes/depositRoute";
+import withdrawals from "./routes/withdrawalRoute";
 
 export default () => {
   const app = Router();
@@ -15,6 +16,7 @@ export default () => {
   verification(app);
   wallets(app);
   deposits(app);
+  withdrawals(app);
 
   return app;
 };

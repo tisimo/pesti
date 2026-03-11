@@ -1,3 +1,18 @@
+export type GenerateSessionTokenRequestDTO = {
+  walletAddress: string;
+};
+
+export type GenerateSessionTokenResponseDTO = {
+  sessionToken: string;
+};
+
+export type OfframpTransactionRequestDTO = {
+  status: string;
+  sell_amount: string;
+  to_address: string;
+  asset: string;
+  network: string;
+};
 export type WithdrawalDTO = {
   withdrawalId: string;
   walletAddress: string;

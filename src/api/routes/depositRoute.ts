@@ -30,7 +30,8 @@ export default (app: Router) => {
    *               - depositAddress
    *               - paymentAmount
    *               - paymentCurrency
-   *               - partnerUserRef
+   *               - paymentMethod
+   *               - accountId
    *             properties:
    *               depositAddress:
    *                 type: string
@@ -41,9 +42,12 @@ export default (app: Router) => {
    *               paymentCurrency:
    *                 type: string
    *                 description: Fiat currency code (e.g. USD, EUR)
-   *               partnerUserRef:
+   *               paymentMethod:
    *                 type: string
-   *                 description: Unique identifier for the end-user (max 50 chars)
+   *                 description: Payment method (e.g. CARD, ACH, APPLE_PAY)
+   *               accountId:
+   *                 type: string
+   *                 description: Internal account ID used as partnerUserRef
    *     responses:
    *       201:
    *         description: Onramp session created
@@ -69,7 +73,8 @@ export default (app: Router) => {
         depositAddress: Joi.string().required(),
         paymentAmount: Joi.string().required(),
         paymentCurrency: Joi.string().required(),
-        partnerUserRef: Joi.string().max(50).required(),
+        paymentMethod: Joi.string().required(),
+        accountId: Joi.string().max(50).required(),
       }),
     }),
     (req, res, next) => ctrl.createDeposit(req, res, next),

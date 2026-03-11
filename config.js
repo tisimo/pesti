@@ -63,6 +63,10 @@ export default {
       name: "DepositController",
       path: "../controllers/DepositController",
     },
+    withdrawal: {
+      name: "WithdrawalController",
+      path: "../controllers/WithdrawalController",
+    },
   },
 
   services: {
@@ -89,6 +93,10 @@ export default {
     deposit: {
       name: "DepositService",
       path: "../services/DepositService",
+    },
+    withdrawal: {
+      name: "WithdrawalService",
+      path: "../services/WithdrawalService",
     },
     verification: {
       name: "VerificationService",

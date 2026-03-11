@@ -101,6 +101,16 @@ export default async ({ expressApp }) => {
     path: config.services.deposit.path,
   };
 
+  const withdrawalController = {
+    name: config.controllers.withdrawal.name,
+    path: config.controllers.withdrawal.path,
+  };
+
+  const withdrawalService = {
+    name: config.services.withdrawal.name,
+    path: config.services.withdrawal.path,
+  };
+
   dependencyInjectorLoader({
     schemas: [],
     controllers: [
@@ -109,6 +119,7 @@ export default async ({ expressApp }) => {
       recoveryCodesController,
       verificationController,
       walletsController,
+      withdrawalController,
     ],
     services: [
       accountService,
@@ -117,6 +128,7 @@ export default async ({ expressApp }) => {
       transactionsService,
       verificationService,
       walletsService,
+      withdrawalService,
     ],
     repos: [accountRepo, recoveryCodesRepo, transactionsRepo, verificationRepo, walletsRepo],
   });
