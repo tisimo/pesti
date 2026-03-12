@@ -8,7 +8,7 @@ import Logger from "../loaders/logger";
 import config from "../../config";
 import { IDepositRepo } from "../repos/Deposits/IDepositRepo";
 import DepositRepository from "../repos/Deposits/DepositRepo";
-import { DepositMap } from "mappers/DepositMapper";
+import { DepositMap } from "../mappers/DepositMapper";
 
 const CDP_API_HOST = "api.cdp.coinbase.com";
 const CDP_ONRAMP_PATH = "/platform/v2/onramp/sessions";
