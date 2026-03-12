@@ -10,6 +10,19 @@ import type { GenerateSessionTokenRequestDTO } from "../dto/WithdrawalDTO";
 export default class WithdrawalController implements IWithdrawalController {
   constructor(@Inject(() => WithdrawalService) private withdrawalService: IWithdrawalService) {}
 
+  getWithdrawalById(req: Request, res: Response, next: NextFunction): Promise<void> {
+    console.log(req, res, next);
+    throw new Error("Method not implemented.");
+  }
+  createWithdrawal(req: Request, res: Response, next: NextFunction): Promise<void> {
+    console.log(req, res, next);
+    throw new Error("Method not implemented.");
+  }
+  updateStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
+    console.log(req, res, next);
+    throw new Error("Method not implemented.");
+  }
+
   public async generateSession(req: Request, res: Response, next: NextFunction) {
     try {
       const dto = req.body as GenerateSessionTokenRequestDTO;
