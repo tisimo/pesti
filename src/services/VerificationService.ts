@@ -6,6 +6,9 @@ import { VerificationMap } from "../mappers/VerificationMapper";
 import IVerificationService from "./IServices/IVerificationService";
 import { IVerificationRepo } from "../repos/Verification/IVerificationRepo";
 import VerificationRepo from "../repos/Verification/VerificationRepo";
+import { callService } from "../utils/internalCallService";
+import config from "../../config.js";
+import Logger from "../loaders/logger";
 
 @Service()
 export default class VerificationService implements IVerificationService {
@@ -69,6 +72,11 @@ export default class VerificationService implements IVerificationService {
 
       if (veriffStatus === "approved") {
         verification.markVerified(sessionId);
+
+        await callService(config.backends.causes.url, "/internal/profile/verify", {
+          method: "POST",
+          body: JSON.stringify({ accountId: verification.accountId }),
+        });
       } else {
         verification.markDeclined(sessionId);
       }
