@@ -15,6 +15,18 @@ export default class TransactionsService implements ITransactionsService {
     @Inject(() => WalletsRepo) private walletsRepo: IWalletsRepo,
   ) {}
 
+  public async getAllTransactions(accountId: string, page: number): Promise<Result<TransactionDTO[]>> {
+    try {
+      const transactions = await this.transactionRepo.getAllTransactions(accountId, page);
+
+      const transactionsDTO = transactions.map(transaction => TransactionMap.toDTO(transaction));
+
+      return Result.ok<TransactionDTO[]>(transactionsDTO);
+    } catch (error) {
+      return Result.fail<TransactionDTO[]>(error?.message ?? "Error Fetching All Transactions!");
+    }
+  }
+
   public async getTransactionById(transactionId: string): Promise<Result<TransactionDTO>> {
     try {
       const transaction = await this.transactionRepo.getTransactionById(transactionId);

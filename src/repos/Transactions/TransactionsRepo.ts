@@ -9,6 +9,26 @@ import Logger from "../../loaders/logger";
 export default class TransactionsRepo implements ITransactionsRepo {
   private table = `"Transaction"`;
 
+  public async getAllTransactions(accountId: string, page: number): Promise<Transaction[]> {
+    const offset = (page - 1) * 50;
+    const query = `
+      SELECT t.*
+      FROM ${this.table} t
+      JOIN "Wallet" w ON w."accountId" = $1
+      WHERE t."senderAddress" = w."walletAddress"
+         OR t."receiverAddress" = w."walletAddress"
+      ORDER BY t."createdAt" DESC
+      LIMIT 50 OFFSET $2
+    `;
+
+    const result = await clientShared.query(query, [accountId, offset]);
+    if (!result.rowCount) return [];
+
+    Logger.info({ accountId: accountId }, "Retrieved All Transactions.");
+
+    return result.rows.map(row => TransactionMap.fromPersistence(row));
+  }
+
   public async getTransactionById(transactionId: string): Promise<Transaction | null> {
     const query = `
       SELECT *
