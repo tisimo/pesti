@@ -9,6 +9,25 @@ import Logger from "../../loaders/logger";
 export default class DepositRepo implements IDepositRepo {
   private table = `"Deposit"`;
 
+  public async getAllDeposits(accountId: string, page: number): Promise<Deposit[]> {
+    const offset = (page - 1) * 50;
+    const query = `
+      SELECT d.*
+      FROM ${this.table} d
+      JOIN "Wallet" w ON w."walletAddress" = d."walletAddress"
+      WHERE w."accountId" = $1
+      ORDER BY d."createdAt" DESC
+      LIMIT 50 OFFSET $2
+    `;
+
+    const result = await clientShared.query(query, [accountId, offset]);
+    if (!result.rowCount) return [];
+
+    Logger.info({ accountId }, "Retrieved All Deposits.");
+
+    return result.rows.map(row => DepositMap.fromPersistence(row));
+  }
+
   public async getDepositById(depositId: string): Promise<Deposit | null> {
     const query = `
       SELECT *

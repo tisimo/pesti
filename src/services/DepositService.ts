@@ -21,6 +21,18 @@ export default class DepositService implements IDepositService {
     @Inject(() => DepositRepository) private depositRepository: IDepositRepo,
   ) {}
 
+  public async getAllDeposits(accountId: string, page: number): Promise<Result<DepositDTO[]>> {
+    try {
+      const deposits = await this.depositRepository.getAllDeposits(accountId, page);
+
+      const depositsDTO = deposits.map(deposit => DepositMap.toDTO(deposit));
+
+      return Result.ok<DepositDTO[]>(depositsDTO);
+    } catch (error) {
+      return Result.fail<DepositDTO[]>(error?.message ?? "Error Fetching All Deposits!");
+    }
+  }
+
   public async getDepositById(depositId: string): Promise<Result<DepositDTO>> {
     try {
       const deposit = await this.depositRepository.getDepositById(depositId);
@@ -86,6 +98,22 @@ export default class DepositService implements IDepositService {
         Logger.error({ data }, "Coinbase onramp response missing onrampUrl");
         return Result.fail<CreateDepositResponseDTO>("Invalid response from Coinbase API");
       }
+
+      const deposit = DepositMap.toDomain({
+        depositId,
+        walletAddress: dto.depositAddress,
+        amount: Number(data?.quote?.purchaseAmount ?? dto.paymentAmount),
+        amountFiat: Number(dto.paymentAmount),
+        currency: dto.paymentCurrency,
+        provider: "Coinbase",
+        method: dto.paymentMethod,
+        application: "Onramp",
+        txHash: null,
+        status: "PENDING",
+        createdAt: new Date().toISOString(),
+      });
+
+      await this.depositRepository.createDeposit(deposit);
 
       return Result.ok<CreateDepositResponseDTO>({
         depositId,

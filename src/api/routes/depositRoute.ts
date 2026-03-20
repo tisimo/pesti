@@ -14,6 +14,42 @@ export default (app: Router) => {
 
   /**
    * @swagger
+   * /api/deposits/{page}:
+   *   get:
+   *     summary: Get All Deposits For Authenticated User
+   *     tags: [Deposits]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: page
+   *         required: true
+   *         schema:
+   *           type: integer
+   *           minimum: 1
+   *           default: 1
+   *         description: Page number (50 deposits per page)
+   *     responses:
+   *       200:
+   *         description: Deposits List
+   *       403:
+   *         description: Forbidden
+   *       500:
+   *         description: Error Fetching Deposits
+   */
+  route.get(
+    "/:page",
+    requireCognitoAccount,
+    celebrate({
+      params: Joi.object({
+        page: Joi.number().integer().min(1).default(1),
+      }),
+    }),
+    (req, res, next) => ctrl.getAllDeposits(req, res, next),
+  );
+
+  /**
+   * @swagger
    * /api/deposits:
    *   post:
    *     summary: Create a Coinbase onramp deposit session

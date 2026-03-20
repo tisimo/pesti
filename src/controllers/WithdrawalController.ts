@@ -4,20 +4,50 @@ import IWithdrawalController from "./IControllers/IWithdrawalController";
 import WithdrawalService from "../services/WithdrawalService";
 import IWithdrawalService from "../services/IServices/IWithdrawalService";
 import Logger from "../loaders/logger";
-import type { GenerateSessionTokenRequestDTO } from "../dto/WithdrawalDTO";
+import type { GenerateSessionTokenRequestDTO, GenerateSessionTokenResponseDTO, OfframpTransactionRequestDTO } from "dto/WithdrawalDTO";
 
 @Service()
 export default class WithdrawalController implements IWithdrawalController {
   constructor(@Inject(() => WithdrawalService) private withdrawalService: IWithdrawalService) {}
 
+  public async getAllWithdrawals(req: Request, res: Response, next: NextFunction) {
+    try {
+      const accountId = (req as any).accountId;
+      let page = req.params.page as string;
+
+      if (!accountId) {
+        res.status(403).json({ message: "Forbidden!" });
+        return;
+      }
+
+      if (!page) {
+        page = "1";
+      }
+
+      const result = await this.withdrawalService.getAllWithdrawals(accountId, parseInt(page));
+
+      if (result.isFailure) {
+        res.status(500).json({ message: result.error });
+        return;
+      }
+
+      res.status(200).json(result.getValue());
+    } catch (error) {
+      Logger.error(error);
+      return next(error);
+    }
+  }
+
   getWithdrawalById(req: Request, res: Response, next: NextFunction): Promise<void> {
     console.log(req, res, next);
     throw new Error("Method not implemented.");
   }
+
   createWithdrawal(req: Request, res: Response, next: NextFunction): Promise<void> {
     console.log(req, res, next);
     throw new Error("Method not implemented.");
   }
+
   updateStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
     console.log(req, res, next);
     throw new Error("Method not implemented.");
