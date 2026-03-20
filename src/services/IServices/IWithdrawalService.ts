@@ -3,14 +3,11 @@ import type {
   GenerateSessionTokenRequestDTO,
   GenerateSessionTokenResponseDTO,
   OfframpTransactionRequestDTO,
+  WithdrawalDTO,
 } from "dto/WithdrawalDTO";
 
 export default interface IWithdrawalService {
-  generateSessionToken(
-    dto: GenerateSessionTokenRequestDTO,
-  ): Promise<Result<GenerateSessionTokenResponseDTO>>;
-
-  getOfframpTransactionStatus(
-    partnerUserRef: string,
-  ): Promise<Result<OfframpTransactionRequestDTO>>;
+  getAllWithdrawals(accountId: string, page: number): Promise<Result<WithdrawalDTO[]>>;
+  generateSessionToken(dto: GenerateSessionTokenRequestDTO): Promise<Result<GenerateSessionTokenResponseDTO>>;
+  getOfframpTransactionStatus(partnerUserRef: string): Promise<Result<OfframpTransactionRequestDTO>>;
 }

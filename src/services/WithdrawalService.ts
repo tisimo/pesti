@@ -1,7 +1,8 @@
-import { Service } from "typedi";
+import { Inject, Service } from "typedi";
 import { generateJwt } from "@coinbase/cdp-sdk/auth";
 import { Result } from "../core/logic/Result";
 import {
+  WithdrawalDTO,
   GenerateSessionTokenRequestDTO,
   GenerateSessionTokenResponseDTO,
   OfframpTransactionRequestDTO,
@@ -9,12 +10,31 @@ import {
 import IWithdrawalService from "./IServices/IWithdrawalService";
 import Logger from "../loaders/logger";
 import config from "../../config";
+import { IWithdrawalRepo } from "../repos/Withdrawals/IWithdrawalRepo";
+import WithdrawalRepository from "../repos/Withdrawals/WithdrawalRepo";
+import { WithdrawalMap } from "../mappers/WithdrawalMapper";
 
 const COINBASE_API_HOST = "api.developer.coinbase.com";
 const TOKEN_PATH = "/onramp/v1/token";
 
 @Service()
 export default class WithdrawalService implements IWithdrawalService {
+  constructor(
+    @Inject(() => WithdrawalRepository) private withdrawalRepository: IWithdrawalRepo,
+  ) {}
+
+  public async getAllWithdrawals(accountId: string, page: number): Promise<Result<WithdrawalDTO[]>> {
+    try {
+      const withdrawals = await this.withdrawalRepository.getAllWithdrawals(accountId, page);
+
+      const withdrawalsDTO = withdrawals.map((withdrawal) => WithdrawalMap.toDTO(withdrawal));
+
+      return Result.ok<WithdrawalDTO[]>(withdrawalsDTO);
+    } catch (error) {
+      return Result.fail<WithdrawalDTO[]>(error?.message ?? "Error Fetching All Withdrawals!");
+    }
+  }
+
   public async generateSessionToken(
     dto: GenerateSessionTokenRequestDTO,
   ): Promise<Result<GenerateSessionTokenResponseDTO>> {

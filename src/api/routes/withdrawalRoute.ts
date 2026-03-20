@@ -14,6 +14,42 @@ export default (app: Router) => {
 
   /**
    * @swagger
+   * /api/withdrawals/{page}:
+   *   get:
+   *    summary: Get All Withdrawals For Authenticated User
+   *   tags: [Withdrawals]
+   *  security:
+   *    - bearerAuth: []
+   *  parameters:
+   *    - in: path
+   *     name: page
+   *    required: true
+   *    schema:
+   *      type: integer
+   *     minimum: 1
+   *    default: 1
+   *   description: Page number (50 withdrawals per page)
+   *  responses:
+   *    200:
+   *    description: Withdrawals List
+   *   403:
+   *   description: Forbidden
+   *  500:
+   *  description: Error Fetching Withdrawals
+   * */
+  route.get(
+    "/:page",
+    requireCognitoAccount,
+    celebrate({
+      params: Joi.object({
+        page: Joi.number().integer().min(1).default(1),
+      }),
+    }),
+    (req, res, next) => ctrl.getAllWithdrawals(req, res, next),
+  );
+  
+  /**
+   * @swagger
    * /api/withdrawals/generate-session:
    *   post:
    *     summary: Generate a Coinbase offramp session token

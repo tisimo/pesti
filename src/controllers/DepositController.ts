@@ -11,6 +11,35 @@ export default class DepositController implements IDepositController {
   constructor(
     @Inject(() => DepositService) private depositService: IDepositService) {}
 
+  public async getAllDeposits(req: Request, res: Response, next: NextFunction) {
+    try {
+      const accountId = (req as any).accountId;
+      let page = req.params.page as string;
+
+      if (!accountId) {
+        res.status(403).json({ message: "Forbidden!" });
+        return;
+      }
+
+      if (!page) {
+        page = "1";
+      }
+
+      const deposits = await this.depositService.getAllDeposits(accountId, parseInt(page));
+
+      if (deposits.isFailure) {
+        Logger.error(deposits.error);
+        res.status(500).json({ message: "Error Fetching Deposits!" });
+        return;
+      }
+
+      res.status(200).json(deposits.getValue());
+    } catch (error) {
+      Logger.error(error);
+      return next(error);
+    }
+  }
+
 
   public async getDepositById(req: Request, res: Response, next: NextFunction) {
     try {
