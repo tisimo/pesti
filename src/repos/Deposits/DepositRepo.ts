@@ -7,7 +7,7 @@ import Logger from "../../loaders/logger";
 
 @Service()
 export default class DepositRepo implements IDepositRepo {
-  private table = `"Deposit"`;
+  private table = `"Deposits"`;
 
   public async getAllDeposits(accountId: string, page: number): Promise<Deposit[]> {
     const offset = (page - 1) * 50;
@@ -34,7 +34,7 @@ export default class DepositRepo implements IDepositRepo {
         FROM ${this.table}
         WHERE "depositId" = $1
         LIMIT 1
-    `; 
+    `;
 
     const result = await clientShared.query(query, [depositId]);
     if (!result.rowCount) return null;
@@ -63,17 +63,17 @@ export default class DepositRepo implements IDepositRepo {
     `;
 
     const values = [
-        raw.depositId,
-        raw.walletAddress,
-        raw.amount,
-        raw.amountFiat,
-        raw.currency,
-        raw.provider,
-        raw.method,
-        raw.application,
-        raw.txHash,
-        raw.status,
-        raw.createdAt,
+      raw.depositId,
+      raw.walletAddress,
+      raw.amount,
+      raw.amountFiat,
+      raw.currency,
+      raw.provider,
+      raw.method,
+      raw.application,
+      raw.txHash,
+      raw.status,
+      raw.createdAt,
     ];
 
     await clientShared.query(query, values);
