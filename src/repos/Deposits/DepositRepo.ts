@@ -16,6 +16,7 @@ export default class DepositRepo implements IDepositRepo {
       FROM ${this.table} d
       JOIN "Wallet" w ON w."walletAddress" = d."walletAddress"
       WHERE w."accountId" = $1
+      AND d."status" = 'COMPLETED'
       ORDER BY d."createdAt" DESC
       LIMIT 50 OFFSET $2
     `;
