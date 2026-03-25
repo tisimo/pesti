@@ -25,7 +25,12 @@ export default ({ app }: { app: express.Application }) => {
 
   // Alternate description:
   // Enable Cross Origin Resource Sharing to all origins by default
-  app.use(cors());
+  app.use(
+    cors({
+      origin: config.corsOrigin, // ex: https://app.teudominio.com
+      exposedHeaders: ["X-Total-Count"],
+    })
+  );
 
   const jsonLimit = "80mb";
   app.use(express.json({ limit: jsonLimit }));
