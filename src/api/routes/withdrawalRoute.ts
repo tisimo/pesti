@@ -47,7 +47,7 @@ export default (app: Router) => {
     }),
     (req, res, next) => ctrl.getAllWithdrawals(req, res, next),
   );
-  
+
   /**
    * @swagger
    * /api/withdrawals/generate-session:
@@ -64,10 +64,22 @@ export default (app: Router) => {
    *             type: object
    *             required:
    *               - walletAddress
+   *               - amount
+   *               - fee
+   *               - currency
    *             properties:
    *               walletAddress:
    *                 type: string
    *                 description: User's wallet address for the offramp session
+   *               amount:
+   *                 type: number
+   *                 description: Total USDC amount to withdraw (sell amount + fee)
+   *               fee:
+   *                 type: number
+   *                 description: Platform fee in USDC
+   *               currency:
+   *                 type: string
+   *                 description: Fiat currency code (e.g. USDC)
    *     responses:
    *       200:
    *         description: Session token generated
@@ -77,6 +89,8 @@ export default (app: Router) => {
    *               type: object
    *               properties:
    *                 sessionToken:
+   *                   type: string
+   *                 withdrawalId:
    *                   type: string
    *       400:
    *         description: Bad Request
