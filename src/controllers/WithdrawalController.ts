@@ -4,7 +4,7 @@ import IWithdrawalController from "./IControllers/IWithdrawalController";
 import WithdrawalService from "../services/WithdrawalService";
 import IWithdrawalService from "../services/IServices/IWithdrawalService";
 import Logger from "../loaders/logger";
-import type { GenerateSessionTokenRequestDTO, GenerateSessionTokenResponseDTO, OfframpTransactionRequestDTO } from "dto/WithdrawalDTO";
+import type { CreateWithdrawalRequestDTO, GenerateSessionTokenRequestDTO } from "dto/WithdrawalDTO";
 
 @Service()
 export default class WithdrawalController implements IWithdrawalController {
@@ -38,19 +38,81 @@ export default class WithdrawalController implements IWithdrawalController {
     }
   }
 
-  getWithdrawalById(req: Request, res: Response, next: NextFunction): Promise<void> {
-    console.log(req, res, next);
-    throw new Error("Method not implemented.");
+  public async getWithdrawalById(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const withdrawalId = req.params.withdrawalId as string;
+
+      if (!withdrawalId) {
+        res.status(400).json({ message: "Withdrawal Id Is Required!" });
+        return;
+      }
+
+      const result = await this.withdrawalService.getWithdrawalById(withdrawalId);
+
+      if (result.isFailure) {
+        if (String(result.error).includes("Not Found")) {
+          res.status(404).json({ message: result.error });
+        } else {
+          res.status(500).json({ message: "Error Finding Withdrawal!" });
+        }
+        Logger.error(result.error);
+        return;
+      }
+
+      res.status(200).json(result.getValue());
+    } catch (error) {
+      Logger.error(error);
+      return next(error);
+    }
   }
 
-  createWithdrawal(req: Request, res: Response, next: NextFunction): Promise<void> {
-    console.log(req, res, next);
-    throw new Error("Method not implemented.");
+  public async createWithdrawal(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const dto = req.body as CreateWithdrawalRequestDTO;
+      const result = await this.withdrawalService.createWithdrawal(dto);
+
+      if (result.isFailure) {
+        res.status(400).json({ message: result.error });
+        Logger.error(result.error);
+        return;
+      }
+
+      res.status(201).json(result.getValue());
+    } catch (error) {
+      Logger.error(error);
+      return next(error);
+    }
   }
 
-  updateStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
-    console.log(req, res, next);
-    throw new Error("Method not implemented.");
+  public async updateStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const withdrawalId = req.params.withdrawalId as string;
+
+      if (!withdrawalId) {
+        res.status(400).json({ message: "Withdrawal Id Is Required!" });
+        return;
+      }
+
+      const { status } = req.body;
+
+      if (!status) {
+        res.status(400).json({ message: "Status Is Required!" });
+        return;
+      }
+
+      const result = await this.withdrawalService.updateStatus(withdrawalId, status);
+
+      if (result.isFailure) {
+        res.status(400).json({ message: result.error });
+        Logger.error(result.error);
+        return;
+      }
+
+      res.status(200).json({ message: "Withdrawal Status Updated Successfully!" });
+    } catch (error) {
+      Logger.error(error);
+      return next(error);
+    }
   }
 
   public async generateSession(req: Request, res: Response, next: NextFunction) {

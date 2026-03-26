@@ -3,6 +3,7 @@ import { generateJwt } from "@coinbase/cdp-sdk/auth";
 import { Result } from "../core/logic/Result";
 import {
   WithdrawalDTO,
+  CreateWithdrawalRequestDTO,
   GenerateSessionTokenRequestDTO,
   GenerateSessionTokenResponseDTO,
   OfframpTransactionRequestDTO,
@@ -19,19 +20,71 @@ const TOKEN_PATH = "/onramp/v1/token";
 
 @Service()
 export default class WithdrawalService implements IWithdrawalService {
-  constructor(
-    @Inject(() => WithdrawalRepository) private withdrawalRepository: IWithdrawalRepo,
-  ) {}
+  constructor(@Inject(() => WithdrawalRepository) private withdrawalRepository: IWithdrawalRepo) {}
 
   public async getAllWithdrawals(accountId: string, page: number): Promise<Result<WithdrawalDTO[]>> {
     try {
       const withdrawals = await this.withdrawalRepository.getAllWithdrawals(accountId, page);
 
-      const withdrawalsDTO = withdrawals.map((withdrawal) => WithdrawalMap.toDTO(withdrawal));
+      const withdrawalsDTO = withdrawals.map(withdrawal => WithdrawalMap.toDTO(withdrawal));
 
       return Result.ok<WithdrawalDTO[]>(withdrawalsDTO);
     } catch (error) {
       return Result.fail<WithdrawalDTO[]>(error?.message ?? "Error Fetching All Withdrawals!");
+    }
+  }
+
+  public async getWithdrawalById(withdrawalId: string): Promise<Result<WithdrawalDTO>> {
+    try {
+      const withdrawal = await this.withdrawalRepository.getWithdrawalById(withdrawalId);
+
+      if (!withdrawal) {
+        return Result.fail<WithdrawalDTO>("Withdrawal Not Found!");
+      }
+
+      return Result.ok<WithdrawalDTO>(WithdrawalMap.toDTO(withdrawal));
+    } catch (error) {
+      Logger.error(error, "Error getting withdrawal by ID");
+      return Result.fail<WithdrawalDTO>(error?.message ?? "Error getting withdrawal by ID!");
+    }
+  }
+
+  public async createWithdrawal(dto: CreateWithdrawalRequestDTO): Promise<Result<WithdrawalDTO>> {
+    try {
+      const withdrawalId = crypto.randomUUID();
+
+      const withdrawal = WithdrawalMap.toDomain({
+        withdrawalId,
+        walletAddress: dto.walletAddress,
+        amount: dto.amount,
+        amountFiat: dto.amountFiat,
+        currency: dto.currency,
+        fee: dto.fee,
+        feeTx: dto.feeTx,
+        provider: dto.provider,
+        method: dto.method,
+        application: dto.application,
+        txHash: dto.txHash,
+        status: "PENDING",
+        createdAt: new Date().toISOString(),
+      });
+
+      const saved = await this.withdrawalRepository.createWithdrawal(withdrawal);
+
+      return Result.ok<WithdrawalDTO>(WithdrawalMap.toDTO(saved));
+    } catch (error) {
+      Logger.error(error, "Error creating withdrawal");
+      return Result.fail<WithdrawalDTO>(error?.message ?? "Error creating withdrawal!");
+    }
+  }
+
+  public async updateStatus(withdrawalId: string, status: string): Promise<Result<void>> {
+    try {
+      await this.withdrawalRepository.updateWithdrawalStatus(withdrawalId, status);
+      return Result.ok<void>(undefined);
+    } catch (error) {
+      Logger.error(error, "Error updating withdrawal status");
+      return Result.fail<void>(error?.message ?? "Error updating withdrawal status!");
     }
   }
 
@@ -49,9 +102,7 @@ export default class WithdrawalService implements IWithdrawalService {
       });
 
       const body = {
-        addresses: [
-          { address: dto.walletAddress, blockchains: ["base"] },
-        ],
+        addresses: [{ address: dto.walletAddress, blockchains: ["base"] }],
       };
 
       const response = await fetch(`https://${COINBASE_API_HOST}${TOKEN_PATH}`, {
@@ -77,18 +128,34 @@ export default class WithdrawalService implements IWithdrawalService {
         return Result.fail<GenerateSessionTokenResponseDTO>("Invalid response from Coinbase API");
       }
 
-      return Result.ok<GenerateSessionTokenResponseDTO>({ sessionToken: data.token });
+      const withdrawalId = crypto.randomUUID();
+
+      const withdrawal = WithdrawalMap.toDomain({
+        withdrawalId,
+        walletAddress: dto.walletAddress,
+        amount: dto.amount,
+        amountFiat: 0,
+        currency: dto.currency,
+        fee: dto.fee,
+        feeTx: null,
+        provider: "Coinbase",
+        method: "Offramp",
+        application: "Offramp",
+        txHash: null,
+        status: "PENDING",
+        createdAt: new Date().toISOString(),
+      });
+
+      await this.withdrawalRepository.createWithdrawal(withdrawal);
+
+      return Result.ok<GenerateSessionTokenResponseDTO>({ sessionToken: data.token, withdrawalId });
     } catch (error) {
       Logger.error(error, "Error generating Coinbase session token");
-      return Result.fail<GenerateSessionTokenResponseDTO>(
-        error?.message ?? "Error generating session token",
-      );
+      return Result.fail<GenerateSessionTokenResponseDTO>(error?.message ?? "Error generating session token");
     }
   }
 
-  public async getOfframpTransactionStatus(
-    partnerUserRef: string,
-  ): Promise<Result<OfframpTransactionRequestDTO>> {
+  public async getOfframpTransactionStatus(partnerUserRef: string): Promise<Result<OfframpTransactionRequestDTO>> {
     try {
       const sellPath = `/onramp/v1/sell/user/${partnerUserRef}/transactions`;
 
@@ -125,9 +192,7 @@ export default class WithdrawalService implements IWithdrawalService {
       return Result.ok<OfframpTransactionRequestDTO>(transactions[0]);
     } catch (error) {
       Logger.error(error, "Error fetching offramp transaction status");
-      return Result.fail<OfframpTransactionRequestDTO>(
-        error?.message ?? "Error fetching transaction status",
-      );
+      return Result.fail<OfframpTransactionRequestDTO>(error?.message ?? "Error fetching transaction status");
     }
   }
 }

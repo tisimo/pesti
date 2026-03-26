@@ -8,8 +8,7 @@ import type { CreateDepositRequestDTO } from "../dto/DepositRequestDTO";
 
 @Service()
 export default class DepositController implements IDepositController {
-  constructor(
-    @Inject(() => DepositService) private depositService: IDepositService) {}
+  constructor(@Inject(() => DepositService) private depositService: IDepositService) {}
 
   public async getAllDeposits(req: Request, res: Response, next: NextFunction) {
     try {
@@ -40,7 +39,6 @@ export default class DepositController implements IDepositController {
     }
   }
 
-
   public async getDepositById(req: Request, res: Response, next: NextFunction) {
     try {
       const depositId = req.params.depositId as string;
@@ -64,12 +62,11 @@ export default class DepositController implements IDepositController {
       }
 
       res.status(200).json(result.getValue());
-
     } catch (error) {
       Logger.error(error);
       return next(error);
+    }
   }
-}
 
   public async createDeposit(req: Request, res: Response, next: NextFunction) {
     try {
@@ -91,7 +88,7 @@ export default class DepositController implements IDepositController {
   }
 
   public async updateStatus(req: Request, res: Response, next: NextFunction) {
-    try{
+    try {
       const depositId = req.params.depositId as string;
 
       if (!depositId) {
@@ -113,7 +110,7 @@ export default class DepositController implements IDepositController {
         Logger.error(result.error);
         return;
       }
-       
+
       res.status(200).json({ message: "Deposit Status Updated Successfully!" });
     } catch (error) {
       Logger.error(error);

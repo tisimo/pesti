@@ -1,9 +1,13 @@
 export type GenerateSessionTokenRequestDTO = {
   walletAddress: string;
+  amount: number;
+  fee: number;
+  currency: string;
 };
 
 export type GenerateSessionTokenResponseDTO = {
   sessionToken: string;
+  withdrawalId: string;
 };
 
 export type OfframpTransactionRequestDTO = {
@@ -13,6 +17,19 @@ export type OfframpTransactionRequestDTO = {
   asset: string;
   network: string;
 };
+export type CreateWithdrawalRequestDTO = {
+  walletAddress: string;
+  amount: number;
+  amountFiat: number;
+  currency: string;
+  fee: number;
+  feeTx: string | null;
+  txHash: string | null;
+  provider: string;
+  method: string;
+  application: string;
+};
+
 export type WithdrawalDTO = {
   withdrawalId: string;
   walletAddress: string;

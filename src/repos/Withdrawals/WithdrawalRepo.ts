@@ -30,14 +30,65 @@ export default class WithdrawalRepo implements IWithdrawalRepo {
   }
 
   public async getWithdrawalById(withdrawalId: string): Promise<Withdrawal | null> {
-    throw new Error("Method not implemented.");
+    const query = `
+      SELECT *
+      FROM ${this.table}
+      WHERE "withdrawalId" = $1
+      LIMIT 1
+    `;
+
+    const result = await clientShared.query(query, [withdrawalId]);
+    if (!result.rowCount) return null;
+
+    return WithdrawalMap.fromPersistence(result.rows[0]);
   }
 
   public async createWithdrawal(withdrawal: Withdrawal): Promise<Withdrawal> {
-    throw new Error("Method not implemented.");
+    const raw = WithdrawalMap.toPersistence(withdrawal);
+
+    const query = `
+      INSERT INTO ${this.table} (
+        "withdrawalId",
+        "walletAddress",
+        "amount",
+        "amountFiat",
+        "currency",
+        "provider",
+        "method",
+        "application",
+        "txHash",
+        "status",
+        "createdAt"
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      RETURNING *
+    `;
+
+    const values = [
+      raw.withdrawalId,
+      raw.walletAddress,
+      raw.amount,
+      raw.amountFiat,
+      raw.currency,
+      raw.provider,
+      raw.method,
+      raw.application,
+      raw.txHash,
+      raw.status,
+      raw.createdAt,
+    ];
+
+    await clientShared.query(query, values);
+    Logger.info({ withdrawalId: withdrawal.withdrawalId.toString() }, "Withdrawal created in DB");
+    return withdrawal;
   }
 
   public async updateWithdrawalStatus(withdrawalId: string, status: string): Promise<void> {
-    throw new Error("Method not implemented.");
+    const query = `
+      UPDATE ${this.table}
+      SET "status" = $1
+      WHERE "withdrawalId" = $2
+    `;
+    await clientShared.query(query, [status, withdrawalId]);
+    Logger.info({ withdrawalId, status }, "Withdrawal status updated in DB");
   }
 }

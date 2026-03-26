@@ -89,6 +89,9 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         walletAddress: Joi.string().required(),
+        amount: Joi.number().positive().required(),
+        fee: Joi.number().min(0).required(),
+        currency: Joi.string().required(),
       }),
     }),
     (req, res, next) => ctrl.generateSession(req, res, next),
