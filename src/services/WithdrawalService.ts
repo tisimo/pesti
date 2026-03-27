@@ -18,6 +18,8 @@ import { WithdrawalMap } from "../mappers/WithdrawalMapper";
 const COINBASE_API_HOST = "api.developer.coinbase.com";
 const TOKEN_PATH = "/onramp/v1/token";
 
+const COINBASE_API_PATH = "https://pay.coinbase.com/v3/sell/";
+
 @Service()
 export default class WithdrawalService implements IWithdrawalService {
   constructor(@Inject(() => WithdrawalRepository) private withdrawalRepository: IWithdrawalRepo) {}
@@ -101,11 +103,28 @@ export default class WithdrawalService implements IWithdrawalService {
         expiresIn: 120,
       });
 
+      // const body = {
+      //   addresses: [{ address: dto.walletAddress, blockchains: ["base"] }],
+      // };
+
       const body = {
+        partnerUserRef: dto.partnerUserRef,
+        redirectUrl: dto.redirectUrl,
         addresses: [{ address: dto.walletAddress, blockchains: ["base"] }],
       };
 
+      /*
       const response = await fetch(`https://${COINBASE_API_HOST}${TOKEN_PATH}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify(body),
+      });
+       **/
+
+      const response = await fetch(`${COINBASE_API_PATH}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -3,6 +3,8 @@ export type GenerateSessionTokenRequestDTO = {
   amount: number;
   fee: number;
   currency: string;
+  partnerUserRef: string;
+  redirectUrl: string;
 };
 
 export type GenerateSessionTokenResponseDTO = {
