@@ -67,6 +67,8 @@ export default (app: Router) => {
    *               - amount
    *               - fee
    *               - currency
+   *               - partnerUserRef
+   *               - redirectUrl
    *             properties:
    *               walletAddress:
    *                 type: string
@@ -80,6 +82,12 @@ export default (app: Router) => {
    *               currency:
    *                 type: string
    *                 description: Fiat currency code (e.g. USDC)
+   *               partnerUserRef:
+   *                 type: string
+   *                 description: App's unique user identifier for Coinbase offramp
+   *               redirectUrl:
+   *                 type: string
+   *                 description: URL to redirect users to after the offramp transaction
    *     responses:
    *       200:
    *         description: Session token generated
@@ -106,6 +114,8 @@ export default (app: Router) => {
         amount: Joi.number().positive().required(),
         fee: Joi.number().min(0).required(),
         currency: Joi.string().required(),
+        partnerUserRef: Joi.string().required(),
+        redirectUrl: Joi.string().uri().required(),
       }),
     }),
     (req, res, next) => ctrl.generateSession(req, res, next),
