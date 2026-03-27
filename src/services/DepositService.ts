@@ -107,7 +107,7 @@ export default class DepositService implements IDepositService {
         currency: dto.paymentCurrency,
         provider: "Coinbase",
         method: dto.paymentMethod,
-        application: "Onramp",
+        application: "OnlyJustCauses",
         txHash: null,
         status: "PENDING",
         createdAt: new Date().toISOString(),

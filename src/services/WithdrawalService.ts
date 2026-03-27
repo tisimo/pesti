@@ -140,7 +140,7 @@ export default class WithdrawalService implements IWithdrawalService {
         feeTx: null,
         provider: "Coinbase",
         method: "Offramp",
-        application: "Offramp",
+        application: "OnlyJustCauses",
         txHash: null,
         status: "PENDING",
         createdAt: new Date().toISOString(),
