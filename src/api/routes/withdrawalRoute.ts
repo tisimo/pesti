@@ -169,4 +169,53 @@ export default (app: Router) => {
     }),
     (req, res, next) => ctrl.getTransactionStatus(req, res, next),
   );
+
+  /**
+   * @swagger
+   * /api/withdrawals/{withdrawalId}/status:
+   *   patch:
+   *     summary: Update withdrawal status
+   *     tags: [Withdrawals]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: withdrawalId
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The withdrawal ID
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required:
+   *               - status
+   *             properties:
+   *               status:
+   *                 type: string
+   *                 enum: [PENDING, COMPLETED, FAILED]
+   *     responses:
+   *       200:
+   *         description: Status updated
+   *       400:
+   *         description: Bad Request
+   *       401:
+   *         description: Unauthorized
+   */
+  route.patch(
+    "/:withdrawalId/status",
+    requireCognitoAccount,
+    celebrate({
+      params: Joi.object({
+        withdrawalId: Joi.string().uuid().required(),
+      }),
+      body: Joi.object({
+        status: Joi.string().valid("PENDING", "COMPLETED", "FAILED").required(),
+      }),
+    }),
+    (req, res, next) => ctrl.updateStatus(req, res, next),
+  );
 };

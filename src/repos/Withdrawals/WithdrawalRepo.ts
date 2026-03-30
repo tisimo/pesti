@@ -16,7 +16,7 @@ export default class WithdrawalRepo implements IWithdrawalRepo {
         FROM ${this.table} w
         JOIN "Wallet" wa ON wa."walletAddress" = w."walletAddress"
         WHERE wa."accountId" = $1
-        AND d."status" = 'COMPLETED'
+        AND w."status" = 'COMPLETED'
         ORDER BY w."createdAt" DESC
         LIMIT 50 OFFSET $2
     `;
