@@ -27,7 +27,13 @@ export default ({ app }: { app: express.Application }) => {
   // Enable Cross Origin Resource Sharing to all origins by default
   app.use(
     cors({
-      origin: config.corsOrigin, // ex: https://app.teudominio.com
+      origin: (origin, callback) => {
+        if (!origin || config.corsOrigin.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error(`CORS: origin '${origin}' not allowed`));
+        }
+      },
       exposedHeaders: ["X-Total-Count"],
     })
   );
