@@ -72,16 +72,19 @@ export default class VerificationService implements IVerificationService {
 
       if (veriffStatus === "approved") {
         verification.markVerified(sessionId);
+        await this.verificationRepo.save(verification);
 
-        await callService(config.backends.causes.url, "/internal/profile/verify", {
-          method: "POST",
-          body: JSON.stringify({ accountId: verification.accountId }),
-        });
+        try {
+          await callService(config.backends.causes.url, "/internal/profile/verify", {
+            method: "POST",
+            body: JSON.stringify({ accountId: verification.accountId }),
+          });
+        } catch (error) {
+          Logger.error({ error, accountId: verification.accountId }, "Failed To Notify BackEnd!");
+        }
       } else {
         verification.markDeclined(sessionId);
       }
-
-      await this.verificationRepo.save(verification);
 
       return Result.ok<void>();
     } catch (error) {
