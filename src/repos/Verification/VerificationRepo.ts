@@ -68,6 +68,6 @@ export default class VerificationRepo implements IVerificationRepo {
     ];
 
     await clientShared.query(query, values);
-    Logger.info({ accountId: p.accountId, status: p.status }, "Verification saved.");
+    Logger.info({ accountId: p.accountId, status: p.status }, "Verification Saved.");
   }
 }

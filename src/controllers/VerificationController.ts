@@ -83,7 +83,9 @@ export default class VerificationController implements IVerificationController {
       Logger.info("[Veriff Webhook] body: " + JSON.stringify(req.body, null, 2));
 
       const sessionId = req.body?.verification?.id as string | undefined;
-      const veriffStatus = req.body?.verification?.status as string | undefined;
+      const veriffStatus = req.body?.verification?.decision as string | undefined;
+
+      Logger.info("VERIFF DECISION: " + veriffStatus);
 
       if (!sessionId || !veriffStatus) {
         // Event webhooks (Started, Submitted) may not carry a decision — acknowledge and ignore
