@@ -82,8 +82,8 @@ export default class VerificationController implements IVerificationController {
       // TODO: validate x-hmac-signature header using VERIFF_SECRET
       Logger.info("[Veriff Webhook] body: " + JSON.stringify(req.body, null, 2));
 
-      const sessionId = req.body?.verification?.id as string | undefined;
-      const veriffStatus = req.body?.verification?.decision as string | undefined;
+      const sessionId = req.body?.sessionId as string | undefined;
+      const veriffStatus = req.body?.data?.verification?.decision as string | undefined;
 
       Logger.info("VERIFF DECISION: " + veriffStatus);
 
