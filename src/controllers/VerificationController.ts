@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import IVerificationController from "./IControllers/IVerificationController";
 import VerificationService from "../services/VerificationService";
 import IVerificationService from "../services/IServices/IVerificationService";
+import { VerificationDataDTO } from "../dto/VerificationDataDTO";
 import Logger from "../loaders/logger";
 
 @Service()
@@ -80,16 +81,22 @@ export default class VerificationController implements IVerificationController {
   public async handleWebhook(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       // TODO: validate x-hmac-signature header using VERIFF_SECRET
-      Logger.info("[Veriff Webhook] body: " + JSON.stringify(req.body, null, 2));
+      Logger.info("[Veriff Webhook] Body: " + JSON.stringify(req.body, null, 2));
 
       const sessionId = req.body?.sessionId as string | undefined;
       const veriffStatus = req.body?.data?.verification?.decision as string | undefined;
 
-      Logger.info("VERIFF DECISION: " + veriffStatus);
+      const verificationData = req.body.data.verification;
+
+      const firstName = verificationData.person.firstName.value;
+      const lastName = verificationData.person.lastName.value;
+      const birthDate = verificationData.person.dateOfBirth.value;
+      const gender = verificationData.person.gender.value;
+      const country = verificationData.document.country.value;
+      const documentType = verificationData.document.type.value;
 
       if (!sessionId || !veriffStatus) {
-        // Event webhooks (Started, Submitted) may not carry a decision — acknowledge and ignore
-        res.status(200).json({ message: "Acknowledged" });
+        res.status(200).json({ message: "Acknowledged." });
         return;
       }
 
@@ -99,8 +106,13 @@ export default class VerificationController implements IVerificationController {
         Logger.error(result.error);
       }
 
-      // Always respond 200 so Veriff does not retry
-      res.status(200).json({ message: "Acknowledged" });
+      if (veriffStatus === "approved") {
+        const dataDTO: VerificationDataDTO = { firstName, lastName, birthDate, gender, country, documentType };
+        const dataResult = await this.verificationService.saveVerificationData(sessionId, dataDTO);
+        if (dataResult.isFailure) Logger.error(dataResult.error);
+      }
+
+      res.status(200).json({ message: "Acknowledged." });
     } catch (error) {
       Logger.error(error);
       return next(error);

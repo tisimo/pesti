@@ -129,6 +129,10 @@ export default {
       name: "VerificationRepo",
       path: "../repos/Verification/VerificationRepo",
     },
+    verificationData: {
+      name: "VerificationDataRepo",
+      path: "../repos/Verification/VerificationDataRepo",
+    },
   },
 
   alchemy: {

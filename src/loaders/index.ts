@@ -91,6 +91,11 @@ export default async ({ expressApp }) => {
     path: config.repos.verification.path,
   };
 
+  const verificationDataRepo = {
+    name: config.repos.verificationData.name,
+    path: config.repos.verificationData.path,
+  };
+
   const depositController = {
     name: config.controllers.deposit.name,
     path: config.controllers.deposit.path,
@@ -130,7 +135,7 @@ export default async ({ expressApp }) => {
       walletsService,
       withdrawalService,
     ],
-    repos: [accountRepo, recoveryCodesRepo, transactionsRepo, verificationRepo, walletsRepo],
+    repos: [accountRepo, recoveryCodesRepo, transactionsRepo, verificationDataRepo, verificationRepo, walletsRepo],
   });
 
   // 4. Load Express

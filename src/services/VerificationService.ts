@@ -1,18 +1,27 @@
 import { Inject, Service } from "typedi";
 import { Result } from "../core/logic/Result";
 import { Verification } from "../domain/Verification";
+import { VerificationData } from "../domain/VerificationData";
+import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { VerificationDTO } from "../dto/VerificationDTO";
+import { VerificationDataDTO } from "../dto/VerificationDataDTO";
 import { VerificationMap } from "../mappers/VerificationMapper";
+import { VerificationDataMap } from "../mappers/VerificationDataMapper";
 import IVerificationService from "./IServices/IVerificationService";
 import { IVerificationRepo } from "../repos/Verification/IVerificationRepo";
 import VerificationRepo from "../repos/Verification/VerificationRepo";
+import { IVerificationDataRepo } from "../repos/Verification/IVerificationDataRepo";
+import VerificationDataRepo from "../repos/Verification/VerificationDataRepo";
 import { callService } from "../utils/internalCallService";
 import config from "../../config.js";
 import Logger from "../loaders/logger";
 
 @Service()
 export default class VerificationService implements IVerificationService {
-  constructor(@Inject(() => VerificationRepo) private verificationRepo: IVerificationRepo) {}
+  constructor(
+    @Inject(() => VerificationRepo) private verificationRepo: IVerificationRepo,
+    @Inject(() => VerificationDataRepo) private verificationDataRepo: IVerificationDataRepo,
+  ) {}
 
   public async createVerification(accountId: string): Promise<Result<VerificationDTO>> {
     try {
@@ -89,6 +98,46 @@ export default class VerificationService implements IVerificationService {
       return Result.ok<void>();
     } catch (error) {
       return Result.fail<void>(error?.message ?? "Error Processing Veriff Webhook!");
+    }
+  }
+
+  public async saveVerificationData(
+    sessionId: string,
+    verificationDataDTO: VerificationDataDTO,
+  ): Promise<Result<VerificationDataDTO>> {
+    try {
+      const verification = await this.verificationRepo.findBySessionId(sessionId);
+
+      if (!verification) {
+        return Result.fail<VerificationDataDTO>("Verification Not Found For Session!");
+      }
+
+      const now = new Date();
+      const verificationId = verification.verificationId.toString();
+
+      const dataOrError = VerificationData.create(
+        {
+          firstName: verificationDataDTO.firstName,
+          lastName: verificationDataDTO.lastName,
+          birthDate: verificationDataDTO.birthDate ? new Date(verificationDataDTO.birthDate) : undefined,
+          gender: verificationDataDTO.gender,
+          country: verificationDataDTO.country,
+          documentType: verificationDataDTO.documentType,
+          createdAt: now,
+          updatedAt: now,
+        },
+        new UniqueEntityID(verificationId),
+      );
+
+      if (dataOrError.isFailure) {
+        return Result.fail<VerificationDataDTO>(dataOrError.error);
+      }
+
+      const saved = await this.verificationDataRepo.saveVerificationData(dataOrError.getValue());
+
+      return Result.ok<VerificationDataDTO>(VerificationDataMap.toDTO(saved));
+    } catch (error) {
+      return Result.fail<VerificationDataDTO>(error?.message ?? "Error Saving Verification Data!");
     }
   }
 }
