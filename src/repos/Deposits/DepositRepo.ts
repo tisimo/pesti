@@ -24,7 +24,7 @@ export default class DepositRepo implements IDepositRepo {
     const result = await clientShared.query(query, [accountId, offset]);
     if (!result.rowCount) return [];
 
-    Logger.info({ accountId }, "Retrieved All Deposits.");
+    Logger.info("Retrieved All Deposits.");
 
     return result.rows.map(row => DepositMap.fromPersistence(row));
   }

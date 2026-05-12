@@ -66,7 +66,7 @@ export default class TransactionsRepo implements ITransactionsRepo {
     const result = await clientShared.query(query, [accountId, offset]);
     if (!result.rowCount) return [];
 
-    Logger.info({ accountId: accountId }, "Retrieved All Transactions.");
+    Logger.info("Retrieved All Transactions.");
 
     return result.rows.map(row => TransactionMap.fromPersistence(row));
   }

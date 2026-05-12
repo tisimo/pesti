@@ -94,7 +94,7 @@ export default class AccountRepo implements IAccountRepo {
     const result = await clientShared.query(query, ["INACTIVE", cognitoSub]);
     if (!result.rowCount) return null;
 
-    Logger.info({ cognitoSub: cognitoSub }, "Deleted Account.");
+    Logger.info("Deleted Account.");
     return AccountMap.toDomain(result.rows[0]);
   }
 }

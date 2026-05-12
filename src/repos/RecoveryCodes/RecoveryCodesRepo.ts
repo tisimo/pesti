@@ -31,7 +31,7 @@ export default class RecoveryCodesRepo implements IRecoveryCodesRepo {
     `;
 
     await clientShared.query(query, values);
-    Logger.info({ cognitoSub: rows[0].cognitoSub }, "Inserted New Recovery Codes.");
+    Logger.info("Inserted New Recovery Codes.");
 
     return recoveryCodes;
   }
@@ -47,7 +47,7 @@ export default class RecoveryCodesRepo implements IRecoveryCodesRepo {
     const result = await clientShared.query(query, [cognitoSub, recoveryCode]);
     if (!result.rowCount) return null;
 
-    Logger.info({ cognitoSub: cognitoSub }, "Deleted Recovery Code.");
+    Logger.info("Deleted Recovery Code.");
     return RecoveryCodeMap.toDomain(result.rows[0]);
   }
 }

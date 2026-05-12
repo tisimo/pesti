@@ -12,9 +12,7 @@ export default class AccountController implements IAccountController {
   public async getAccountByCognitoSub(req: Request, res: Response, next: NextFunction) {
     try {
       const cognitoSub = req.params.cognitoSub as string;
-      console.log("CognitoSub: " + cognitoSub);
       const authSub = (req as any).auth?.cognitoSub;
-      console.log("AuthSub: " + authSub);
 
       if (!cognitoSub) {
         res.status(400).json({ message: "CognitoSub Is Required!" });

@@ -24,7 +24,7 @@ export default class WithdrawalRepo implements IWithdrawalRepo {
     const result = await clientShared.query(query, [accountId, offset]);
     if (!result.rowCount) return [];
 
-    Logger.info({ accountId }, "Retrieved All Withdrawals.");
+    Logger.info("Retrieved All Withdrawals.");
 
     return result.rows.map(row => WithdrawalMap.fromPersistence(row));
   }
