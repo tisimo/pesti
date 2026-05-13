@@ -86,19 +86,19 @@ export default class VerificationController implements IVerificationController {
       const sessionId = req.body?.sessionId as string | undefined;
       const veriffStatus = req.body?.data?.verification?.decision as string | undefined;
 
-      const verificationData = req.body.data.verification;
-
-      const firstName = verificationData.person.firstName.value;
-      const lastName = verificationData.person.lastName.value;
-      const birthDate = verificationData.person.dateOfBirth.value;
-      const gender = verificationData.person.gender.value;
-      const country = verificationData.document.country.value;
-      const documentType = verificationData.document.type.value;
-
       if (!sessionId || !veriffStatus) {
         res.status(200).json({ message: "Acknowledged." });
         return;
       }
+
+      const verificationData = req.body.data.verification;
+
+      const firstName = verificationData.person?.firstName?.value;
+      const lastName = verificationData.person?.lastName?.value;
+      const birthDate = verificationData.person?.dateOfBirth?.value;
+      const gender = verificationData.person?.gender?.value;
+      const country = verificationData.document?.country?.value;
+      const documentType = verificationData.document?.type?.value;
 
       const result = await this.verificationService.handleWebhook(sessionId, veriffStatus);
 
