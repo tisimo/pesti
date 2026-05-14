@@ -23,6 +23,20 @@ export default class VerificationService implements IVerificationService {
     @Inject(() => VerificationDataRepo) private verificationDataRepo: IVerificationDataRepo,
   ) {}
 
+  public async getVerificationByAccountId(accountId: string): Promise<Result<VerificationDTO | null>> {
+    try {
+      const verification = await this.verificationRepo.findByAccountId(accountId);
+
+      if (!verification) {
+        return Result.ok<VerificationDTO | null>(null);
+      }
+
+      return Result.ok<VerificationDTO | null>(VerificationMap.toDTO(verification));
+    } catch (error) {
+      return Result.fail<VerificationDTO | null>(error?.message ?? "Error Getting Verification!");
+    }
+  }
+
   public async createVerification(accountId: string): Promise<Result<VerificationDTO>> {
     try {
       let verification = await this.verificationRepo.findByAccountId(accountId);
@@ -93,6 +107,7 @@ export default class VerificationService implements IVerificationService {
         }
       } else {
         verification.markDeclined(sessionId);
+        await this.verificationRepo.save(verification);
       }
 
       return Result.ok<void>();

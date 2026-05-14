@@ -14,15 +14,22 @@ export default class VerificationController implements IVerificationController {
     try {
       const accountId = req.params.accountId as string;
 
-      const result = await this.verificationService.createVerification(accountId);
+      const result = await this.verificationService.getVerificationByAccountId(accountId);
 
       if (result.isFailure) {
         Logger.error(result.error);
+        res.status(500).json({ message: "Error Getting Verification!" });
+        return;
+      }
+
+      const verification = result.getValue();
+
+      if (!verification) {
         res.status(404).json({ message: "Verification Not Found!" });
         return;
       }
 
-      res.status(200).json(result.getValue());
+      res.status(200).json(verification);
     } catch (error) {
       Logger.error(error);
       return next(error);
