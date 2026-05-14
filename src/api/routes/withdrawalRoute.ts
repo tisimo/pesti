@@ -50,6 +50,64 @@ export default (app: Router) => {
 
   /**
    * @swagger
+   * /api/withdrawals:
+   *   post:
+   *     summary: Create a withdrawal record
+   *     tags: [Withdrawals]
+   *     security:
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required:
+   *               - walletAddress
+   *               - amount
+   *               - fee
+   *               - currency
+   *               - provider
+   *               - method
+   *             properties:
+   *               walletAddress:
+   *                 type: string
+   *               amount:
+   *                 type: number
+   *               fee:
+   *                 type: number
+   *               currency:
+   *                 type: string
+   *               provider:
+   *                 type: string
+   *               method:
+   *                 type: string
+   *     responses:
+   *       201:
+   *         description: Withdrawal created
+   *       400:
+   *         description: Bad Request
+   *       401:
+   *         description: Unauthorized
+   */
+  route.post(
+    "/",
+    requireCognitoAccount,
+    celebrate({
+      body: Joi.object({
+        walletAddress: Joi.string().required(),
+        amount: Joi.number().positive().required(),
+        fee: Joi.number().min(0).required(),
+        currency: Joi.string().required(),
+        provider: Joi.string().required(),
+        method: Joi.string().required(),
+      }),
+    }),
+    (req, res, next) => ctrl.createWithdrawal(req, res, next),
+  );
+
+  /**
+   * @swagger
    * /api/withdrawals/generate-session:
    *   post:
    *     summary: Generate a Coinbase offramp session token

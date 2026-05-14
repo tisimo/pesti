@@ -82,13 +82,30 @@ export default class WithdrawalRepo implements IWithdrawalRepo {
     return withdrawal;
   }
 
-  public async updateWithdrawalStatus(withdrawalId: string, status: string): Promise<void> {
+  public async getLatestPendingWithdrawal(walletAddress: string): Promise<Withdrawal | null> {
     const query = `
-      UPDATE ${this.table}
-      SET "status" = $1
-      WHERE "withdrawalId" = $2
+      SELECT *
+      FROM ${this.table}
+      WHERE "walletAddress" = $1
+      AND "status" = 'PENDING'
+      ORDER BY "createdAt" DESC
+      LIMIT 1
     `;
-    await clientShared.query(query, [status, withdrawalId]);
-    Logger.info({ withdrawalId, status }, "Withdrawal status updated in DB");
+
+    const result = await clientShared.query(query, [walletAddress]);
+    if (!result.rowCount) return null;
+
+    return WithdrawalMap.fromPersistence(result.rows[0]);
+  }
+
+  public async updateWithdrawalStatus(withdrawalId: string, status: string, txHash?: string | null): Promise<void> {
+    const query = txHash
+      ? `UPDATE ${this.table} SET "status" = $1, "txHash" = $2 WHERE "withdrawalId" = $3`
+      : `UPDATE ${this.table} SET "status" = $1 WHERE "withdrawalId" = $2`;
+
+    const values = txHash ? [status, txHash, withdrawalId] : [status, withdrawalId];
+
+    await clientShared.query(query, values);
+    Logger.info({ withdrawalId, status, txHash }, "Withdrawal status updated in DB");
   }
 }

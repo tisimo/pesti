@@ -78,6 +78,25 @@ export default class WithdrawalService implements IWithdrawalService {
     }
   }
 
+  public async confirmWithdrawal(walletAddress: string, txHash: string): Promise<Result<void>> {
+    try {
+      const withdrawal = await this.withdrawalRepository.getLatestPendingWithdrawal(walletAddress);
+
+      if (!withdrawal) {
+        Logger.warn({ walletAddress, txHash }, "No pending withdrawal found for wallet — skipping confirmation");
+        return Result.ok<void>(undefined);
+      }
+
+      const withdrawalId = withdrawal.withdrawalId.toString();
+      await this.withdrawalRepository.updateWithdrawalStatus(withdrawalId, "COMPLETED", txHash);
+      Logger.info({ withdrawalId, walletAddress, txHash }, "Withdrawal confirmed via on-chain event");
+      return Result.ok<void>(undefined);
+    } catch (error) {
+      Logger.error(error, "Error confirming withdrawal");
+      return Result.fail<void>(error?.message ?? "Error confirming withdrawal");
+    }
+  }
+
   public async updateStatus(withdrawalId: string, status: string): Promise<Result<void>> {
     try {
       await this.withdrawalRepository.updateWithdrawalStatus(withdrawalId, status);

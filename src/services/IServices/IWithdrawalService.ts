@@ -12,6 +12,7 @@ export default interface IWithdrawalService {
   getWithdrawalById(withdrawalId: string): Promise<Result<WithdrawalDTO>>;
   createWithdrawal(dto: CreateWithdrawalRequestDTO): Promise<Result<WithdrawalDTO>>;
   updateStatus(withdrawalId: string, status: string): Promise<Result<void>>;
+  confirmWithdrawal(walletAddress: string, txHash: string): Promise<Result<void>>;
   generateSessionToken(dto: GenerateSessionTokenRequestDTO): Promise<Result<GenerateSessionTokenResponseDTO>>;
   getOfframpTransactionStatus(partnerUserRef: string): Promise<Result<OfframpTransactionRequestDTO>>;
 }

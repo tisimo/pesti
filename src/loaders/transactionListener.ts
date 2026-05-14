@@ -5,8 +5,10 @@ import { InternalApiClient } from "../services/transactionListener/InternalApiCl
 import { TransactionType } from "../utils/blockchain/eventDataSchema";
 import { DonationHandler } from "../services/transactionListener/handlers/DonationHandler";
 import { TipHandler } from "../services/transactionListener/handlers/TipHandler";
+import { WithdrawHandler } from "../services/transactionListener/handlers/WithdrawHandler";
 import type IWalletsService from "../services/IServices/IWalletsService";
 import type ITransactionsService from "../services/IServices/ITransactionsService";
+import type IWithdrawalService from "../services/IServices/IWithdrawalService";
 import Logger from "./logger";
 import config from "../../config";
 
@@ -59,11 +61,13 @@ export async function startTransactionListener(): Promise<void> {
   try {
     const walletsService = Container.get(config.services.wallets.name) as IWalletsService;
     const transactionsService = Container.get(config.services.transactions.name) as ITransactionsService;
+    const withdrawalService = Container.get(config.services.withdrawal.name) as IWithdrawalService;
     const clients = buildApiClients();
 
     const router = new TransactionRouter(transactionsService);
     router.register(new DonationHandler(getApiClient(clients, TransactionType.DonateJC), walletsService));
     router.register(new TipHandler(getApiClient(clients, TransactionType.TipJC)));
+    router.register(new WithdrawHandler(withdrawalService));
 
     const listener = new TransactionListener(
       {

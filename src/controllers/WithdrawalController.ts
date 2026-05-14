@@ -68,7 +68,13 @@ export default class WithdrawalController implements IWithdrawalController {
 
   public async createWithdrawal(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const dto = req.body as CreateWithdrawalRequestDTO;
+      const dto: CreateWithdrawalRequestDTO = {
+        ...req.body,
+        amountFiat: 0,
+        feeTx: null,
+        txHash: null,
+        application: "OnlyJustCauses",
+      };
       const result = await this.withdrawalService.createWithdrawal(dto);
 
       if (result.isFailure) {

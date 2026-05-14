@@ -4,5 +4,6 @@ export interface IWithdrawalRepo {
     getAllWithdrawals(accountId: string, page: number): Promise<Withdrawal[]>;
     getWithdrawalById(withdrawalId: string): Promise<Withdrawal | null>;
     createWithdrawal(withdrawal: Withdrawal): Promise<Withdrawal>;
-    updateWithdrawalStatus(withdrawalId: string, status: string): Promise<void>;
+    getLatestPendingWithdrawal(walletAddress: string): Promise<Withdrawal | null>;
+    updateWithdrawalStatus(withdrawalId: string, status: string, txHash?: string | null): Promise<void>;
 }
