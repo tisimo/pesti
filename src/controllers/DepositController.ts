@@ -89,7 +89,7 @@ export default class DepositController implements IDepositController {
 
   public async getTransactionStatus(req: Request, res: Response, next: NextFunction) {
     try {
-      const { partnerUserRef } = req.params;
+      const partnerUserRef = req.params.partnerUserRef as string;
 
       const result = await this.depositService.getOnrampTransactionStatus(partnerUserRef);
 
