@@ -23,6 +23,7 @@ export class ReconnectManager<T> {
   private resource: T | null = null;
   private attempts = 0;
   private running = false;
+  private reconnecting = false;
 
   constructor(
     reconnectable: ReconnectableResource<T>,
@@ -48,7 +49,8 @@ export class ReconnectManager<T> {
   }
 
   async reconnect(): Promise<void> {
-    if (!this.running) return;
+    if (!this.running || this.reconnecting) return;
+    this.reconnecting = true;
 
     this.attempts++;
     const delay = Math.min(
@@ -63,13 +65,17 @@ export class ReconnectManager<T> {
 
     await new Promise((resolve) => setTimeout(resolve, delay));
 
-    if (!this.running) return;
+    if (!this.running) {
+      this.reconnecting = false;
+      return;
+    }
 
     if (this.resource) {
       this.reconnectable.cleanup(this.resource);
       this.resource = null;
     }
 
+    this.reconnecting = false;
     await this.connect();
   }
 
