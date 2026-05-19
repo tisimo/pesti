@@ -5,4 +5,5 @@ export default interface IDepositController {
   getDepositById(req: Request, res: Response, next: NextFunction): Promise<void>;
   createDeposit(req: Request, res: Response, next: NextFunction): Promise<void>;
   updateStatus(req: Request, res: Response, next: NextFunction): Promise<void>;
+  getTransactionStatus(req: Request, res: Response, next: NextFunction): Promise<void>;
 }

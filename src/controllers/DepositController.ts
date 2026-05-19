@@ -87,6 +87,24 @@ export default class DepositController implements IDepositController {
     }
   }
 
+  public async getTransactionStatus(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { partnerUserRef } = req.params;
+
+      const result = await this.depositService.getOnrampTransactionStatus(partnerUserRef);
+
+      if (result.isFailure) {
+        res.status(400).json({ message: result.error });
+        return;
+      }
+
+      res.status(200).json(result.getValue());
+    } catch (error) {
+      Logger.error(error);
+      return next(error);
+    }
+  }
+
   public async updateStatus(req: Request, res: Response, next: NextFunction) {
     try {
       const depositId = req.params.depositId as string;

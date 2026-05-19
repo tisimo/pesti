@@ -1,7 +1,7 @@
 import { Inject, Service } from "typedi";
 import { generateJwt } from "@coinbase/cdp-sdk/auth";
 import { Result } from "../core/logic/Result";
-import { CreateDepositRequestDTO, CreateDepositResponseDTO, OnrampQuote } from "../dto/DepositRequestDTO";
+import { CreateDepositRequestDTO, CreateDepositResponseDTO, OnrampQuote, OnrampTransactionDTO } from "../dto/DepositRequestDTO";
 import { DepositDTO } from "../dto/DepositDTO";
 import IDepositService from "./IServices/IDepositService";
 import Logger from "../loaders/logger";
@@ -51,7 +51,7 @@ export default class DepositService implements IDepositService {
     dto: CreateDepositRequestDTO,
   ): Promise<Result<CreateDepositResponseDTO>> {
     try {
-      const depositId = crypto.randomUUID();
+      const depositId = dto.depositId ?? crypto.randomUUID();
 
       const jwt = await generateJwt({
         apiKeyId: config.cdp.apiKeyId,
@@ -135,6 +135,46 @@ export default class DepositService implements IDepositService {
     } catch (error) {
       Logger.error(error, "Error updating deposit status");
       return Result.fail<void>(error?.message ?? "Error updating deposit status!");
+    }
+  }
+
+  public async getOnrampTransactionStatus(partnerUserRef: string): Promise<Result<OnrampTransactionDTO>> {
+    try {
+      const host = "api.developer.coinbase.com";
+      const path = `/onramp/v1/buy/user/${partnerUserRef}/transactions`;
+
+      const jwt = await generateJwt({
+        apiKeyId: config.cdp.apiKeyId,
+        apiKeySecret: config.cdp.apiKeySecret,
+        requestMethod: "GET",
+        requestHost: host,
+        requestPath: path,
+        expiresIn: 120,
+      });
+
+      const response = await fetch(`https://${host}${path}`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${jwt}` },
+      });
+
+      if (!response.ok) {
+        const errorBody = (await response.json().catch(() => null)) as { message?: string } | null;
+        const errorMessage = errorBody?.message ?? `Coinbase API returned ${response.status}`;
+        Logger.error({ status: response.status, errorBody }, "Coinbase onramp status fetch failed");
+        return Result.fail<OnrampTransactionDTO>(errorMessage);
+      }
+
+      const data = (await response.json()) as { transactions?: OnrampTransactionDTO[] };
+      const transactions = data?.transactions;
+
+      if (!transactions || transactions.length === 0) {
+        return Result.fail<OnrampTransactionDTO>("No onramp transactions found");
+      }
+
+      return Result.ok<OnrampTransactionDTO>(transactions[0]);
+    } catch (error) {
+      Logger.error(error, "Error fetching onramp transaction status");
+      return Result.fail<OnrampTransactionDTO>((error as Error)?.message ?? "Error fetching transaction status");
     }
   }
 }

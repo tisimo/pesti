@@ -106,6 +106,7 @@ export default (app: Router) => {
     requireCognitoAccount,
     celebrate({
       body: Joi.object({
+        depositId: Joi.string().uuid().required(),
         depositAddress: Joi.string().required(),
         paymentAmount: Joi.string().required(),
         paymentCurrency: Joi.string().required(),
@@ -114,5 +115,30 @@ export default (app: Router) => {
       }),
     }),
     (req, res, next) => ctrl.createDeposit(req, res, next),
+  );
+
+  route.get(
+    "/transaction-status/:partnerUserRef",
+    requireCognitoAccount,
+    celebrate({
+      params: Joi.object({
+        partnerUserRef: Joi.string().required(),
+      }),
+    }),
+    (req, res, next) => ctrl.getTransactionStatus(req, res, next),
+  );
+
+  route.patch(
+    "/:depositId/status",
+    requireCognitoAccount,
+    celebrate({
+      params: Joi.object({
+        depositId: Joi.string().uuid().required(),
+      }),
+      body: Joi.object({
+        status: Joi.string().valid("PENDING", "COMPLETED", "FAILED").required(),
+      }),
+    }),
+    (req, res, next) => ctrl.updateStatus(req, res, next),
   );
 };
