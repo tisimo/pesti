@@ -56,7 +56,7 @@ export class TransactionListener implements ReconnectableResource<ethers.WebSock
       this.reconnectManager.reconnect();
     });
 
-    provider.websocket.on("close", (code: number) => {
+    (provider.websocket as any).on("close", (code: number) => {
       Logger.warn({ code }, "WebSocket connection closed, scheduling reconnect");
       this.reconnectManager.reconnect();
     });
