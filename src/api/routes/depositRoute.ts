@@ -137,6 +137,7 @@ export default (app: Router) => {
       }),
       body: Joi.object({
         status: Joi.string().valid("PENDING", "COMPLETED", "FAILED").required(),
+        amount: Joi.number().positive().optional(),
       }),
     }),
     (req, res, next) => ctrl.updateStatus(req, res, next),

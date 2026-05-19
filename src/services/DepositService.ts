@@ -128,13 +128,13 @@ export default class DepositService implements IDepositService {
     }
   }
 
-  public async updateStatus(depositId: string, status: string): Promise<Result<void>> {
+  public async updateStatus(depositId: string, status: string, amount?: number): Promise<Result<void>> {
     try {
-      await this.depositRepository.updateDepositStatus(depositId, status);
+      await this.depositRepository.updateDepositStatus(depositId, status, amount);
       return Result.ok<void>(undefined);
     } catch (error) {
       Logger.error(error, "Error updating deposit status");
-      return Result.fail<void>(error?.message ?? "Error updating deposit status!");
+      return Result.fail<void>((error as Error)?.message ?? "Error updating deposit status!");
     }
   }
 

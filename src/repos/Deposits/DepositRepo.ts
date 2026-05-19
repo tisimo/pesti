@@ -82,13 +82,14 @@ export default class DepositRepo implements IDepositRepo {
     return deposit;
   }
 
-  public async updateDepositStatus(depositId: string, status: string): Promise<void> {
-    const query = `
-        UPDATE ${this.table}
-        SET "status" = $1
-        WHERE "depositId" = $2
-    `;
-    await clientShared.query(query, [status, depositId]);
-    Logger.info({ depositId, status }, "Deposit status updated in DB");
+  public async updateDepositStatus(depositId: string, status: string, amount?: number): Promise<void> {
+    const query = amount != null
+      ? `UPDATE ${this.table} SET "status" = $1, "amount" = $2 WHERE "depositId" = $3`
+      : `UPDATE ${this.table} SET "status" = $1 WHERE "depositId" = $2`;
+
+    const values = amount != null ? [status, amount, depositId] : [status, depositId];
+
+    await clientShared.query(query, values);
+    Logger.info({ depositId, status, amount }, "Deposit status updated in DB");
   }
 }

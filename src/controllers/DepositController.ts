@@ -114,14 +114,18 @@ export default class DepositController implements IDepositController {
         return;
       }
 
-      const { status } = req.body;
+      const { status, amount } = req.body;
 
       if (!status) {
         res.status(400).json({ message: "Status Is Required!" });
         return;
       }
 
-      const result = await this.depositService.updateStatus(depositId, status);
+      const result = await this.depositService.updateStatus(
+        depositId,
+        status,
+        typeof amount === "number" ? amount : undefined,
+      );
 
       if (result.isFailure) {
         res.status(400).json({ message: result.error });
