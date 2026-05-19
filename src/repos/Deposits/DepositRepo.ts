@@ -14,7 +14,7 @@ export default class DepositRepo implements IDepositRepo {
     const query = `
       SELECT d.*
       FROM ${this.table} d
-      JOIN "Wallet" w ON w."walletAddress" = d."walletAddress"
+      JOIN "Wallet" w ON LOWER(w."walletAddress") = LOWER(d."walletAddress")
       WHERE w."accountId" = $1
       AND d."status" = 'COMPLETED'
       ORDER BY d."createdAt" DESC
