@@ -12,95 +12,8 @@ export default (app: Router) => {
 
   const ctrl = Container.get(config.controllers.deposit.name) as IDepositController;
 
-  /**
-   * @swagger
-   * /api/deposits/{page}:
-   *   get:
-   *     summary: Get All Deposits For Authenticated User
-   *     tags: [Deposits]
-   *     security:
-   *       - bearerAuth: []
-   *     parameters:
-   *       - in: path
-   *         name: page
-   *         required: true
-   *         schema:
-   *           type: integer
-   *           minimum: 1
-   *           default: 1
-   *         description: Page number (50 deposits per page)
-   *     responses:
-   *       200:
-   *         description: Deposits List
-   *       403:
-   *         description: Forbidden
-   *       500:
-   *         description: Error Fetching Deposits
-   */
-  route.get(
-    "/:page",
-    requireCognitoAccount,
-    celebrate({
-      params: Joi.object({
-        page: Joi.number().integer().min(1).default(1),
-      }),
-    }),
-    (req, res, next) => ctrl.getAllDeposits(req, res, next),
-  );
+  // Specific routes must come BEFORE the wildcard /:page route
 
-  /**
-   * @swagger
-   * /api/deposits:
-   *   post:
-   *     summary: Create a Coinbase onramp deposit session
-   *     tags: [Deposits]
-   *     security:
-   *       - bearerAuth: []
-   *     requestBody:
-   *       required: true
-   *       content:
-   *         application/json:
-   *           schema:
-   *             type: object
-   *             required:
-   *               - depositAddress
-   *               - paymentAmount
-   *               - paymentCurrency
-   *               - paymentMethod
-   *               - accountId
-   *             properties:
-   *               depositAddress:
-   *                 type: string
-   *                 description: Destination wallet address for the purchased crypto
-   *               paymentAmount:
-   *                 type: string
-   *                 description: Fiat amount the user wants to pay (fee-inclusive)
-   *               paymentCurrency:
-   *                 type: string
-   *                 description: Fiat currency code (e.g. USD, EUR)
-   *               paymentMethod:
-   *                 type: string
-   *                 description: Payment method (e.g. CARD, ACH, APPLE_PAY)
-   *               accountId:
-   *                 type: string
-   *                 description: Internal account ID used as partnerUserRef
-   *     responses:
-   *       201:
-   *         description: Onramp session created
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 depositId:
-   *                   type: string
-   *                 onrampUrl:
-   *                   type: string
-   *       400:
-   *         description: Bad Request
-   *       401:
-   *         description: Unauthorized
-   */
   route.post(
     "/generate-onramp",
     requireCognitoAccount,
@@ -141,5 +54,16 @@ export default (app: Router) => {
       }),
     }),
     (req, res, next) => ctrl.updateStatus(req, res, next),
+  );
+
+  route.get(
+    "/:page",
+    requireCognitoAccount,
+    celebrate({
+      params: Joi.object({
+        page: Joi.number().integer().min(1).default(1),
+      }),
+    }),
+    (req, res, next) => ctrl.getAllDeposits(req, res, next),
   );
 };

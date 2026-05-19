@@ -165,8 +165,6 @@ export default class DepositService implements IDepositService {
       }
 
       const data = (await response.json()) as { transactions?: OnrampTransactionDTO[] };
-      Logger.info({ partnerUserRef, rawResponse: data }, "Coinbase onramp status raw response");
-
       const transactions = data?.transactions;
 
       if (!transactions || transactions.length === 0) {

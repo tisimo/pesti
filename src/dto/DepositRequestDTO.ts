@@ -31,9 +31,11 @@ export type CreateDepositResponseDTO = {
 };
 
 export type OnrampTransactionDTO = {
+  transaction_id: string;
   status: string;
-  purchase_amount?: string;
+  purchase_amount?: { value: string; currency: string };
   purchase_currency?: string;
-  to_address?: string;
+  wallet_address?: string;
   created_at?: string;
+  completed_at?: string;
 };
