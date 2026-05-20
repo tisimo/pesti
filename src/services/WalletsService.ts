@@ -6,6 +6,9 @@ import { IWalletsRepo } from "../repos/Wallets/IWalletsRepo";
 import { WalletMap } from "../mappers/WalletMapper";
 import { Wallet } from "../domain/Wallet";
 import WalletsRepo from "../repos/Wallets/WalletsRepo";
+import { AlchemyNotifyClient } from "./alchemyWebhook/AlchemyNotifyClient";
+import Logger from "../loaders/logger";
+import config from "../../config.js";
 
 @Service()
 export default class WalletsService implements IWalletsService {
@@ -63,6 +66,14 @@ export default class WalletsService implements IWalletsService {
       }
 
       const saved = await this.walletsRepo.createWallet(wallet.getValue());
+
+      if (config.alchemy.authToken && config.alchemy.webhookId) {
+        const notifyClient = new AlchemyNotifyClient(config.alchemy.authToken, config.alchemy.webhookId);
+        notifyClient.addAddress(walletAddress).catch((err) => {
+          Logger.warn({ err, walletAddress }, "Failed to register wallet with Alchemy webhook — deposit detection may be delayed");
+        });
+      }
+
       return Result.ok<WalletDTO>(WalletMap.toDTO(saved));
     } catch (error) {
       return Result.fail<WalletDTO>(error?.message ?? "Error Creating Wallet!");

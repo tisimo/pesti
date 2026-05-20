@@ -6,6 +6,7 @@ import status from "./routes/status";
 import transactions from "./routes/transactionsRoute";
 import verification from "./routes/verificationRoute";
 import wallets from "./routes/walletsRoute";
+import webhooks from "./routes/webhookRoute";
 import withdrawals from "./routes/withdrawalRoute";
 
 export default () => {
@@ -18,6 +19,7 @@ export default () => {
   transactions(app);
   verification(app);
   wallets(app);
+  webhooks(app);
   withdrawals(app);
 
   return app;

@@ -142,6 +142,9 @@ export default {
   alchemy: {
     apiKey: process.env.ALCHEMY_API_KEY || "",
     network: process.env.ALCHEMY_NETWORK || "base-mainnet",
+    authToken: process.env.ALCHEMY_AUTH_TOKEN || "",
+    webhookId: process.env.ALCHEMY_WEBHOOK_ID || "",
+    webhookSigningKey: process.env.ALCHEMY_WEBHOOK_SIGNING_KEY || "",
   },
 
   onlyPayments: {

@@ -44,7 +44,13 @@ export default ({ app }: { app: express.Application }) => {
   app.use(require("method-override")());
 
   // Middleware that transforms the raw string of req.body into json
-  app.use(bodyParser.json({ limit: jsonLimit }));
+  // Captures rawBody for webhook signature verification
+  app.use(bodyParser.json({
+    limit: jsonLimit,
+    verify: (req: any, _res, buf) => {
+      req.rawBody = buf;
+    },
+  }));
 
   // Swagger documentation
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
