@@ -5,6 +5,7 @@ import { docClient, dynamoClient } from "./dynamo";
 import Logger from "./logger";
 import config from "../../config";
 import { startTransactionListener } from "./transactionListener";
+import { startUsdcDepositListener } from "./usdcDepositListener";
 
 export default async ({ expressApp }) => {
   // 1. Connect to Shared PostgreSQL
@@ -116,6 +117,11 @@ export default async ({ expressApp }) => {
     path: config.services.withdrawal.path,
   };
 
+  const depositRepo = {
+    name: config.repos.deposit.name,
+    path: config.repos.deposit.path,
+  };
+
   dependencyInjectorLoader({
     schemas: [],
     controllers: [
@@ -135,7 +141,7 @@ export default async ({ expressApp }) => {
       walletsService,
       withdrawalService,
     ],
-    repos: [accountRepo, recoveryCodesRepo, transactionsRepo, verificationDataRepo, verificationRepo, walletsRepo],
+    repos: [accountRepo, depositRepo, recoveryCodesRepo, transactionsRepo, verificationDataRepo, verificationRepo, walletsRepo],
   });
 
   // 4. Load Express
@@ -144,4 +150,7 @@ export default async ({ expressApp }) => {
 
   // 5. Start Transaction Listener
   await startTransactionListener();
+
+  // 6. Start USDC on-chain deposit listener
+  await startUsdcDepositListener();
 };

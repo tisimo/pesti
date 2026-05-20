@@ -121,6 +121,10 @@ export default {
       name: "WalletsRepo",
       path: "../repos/Wallets/WalletsRepo",
     },
+    deposit: {
+      name: "DepositRepo",
+      path: "../repos/Deposits/DepositRepo",
+    },
     transactions: {
       name: "TransactionsRepo",
       path: "../repos/Transactions/TransactionsRepo",
@@ -142,6 +146,10 @@ export default {
 
   onlyPayments: {
     address: process.env.ONLY_PAYMENTS_ADDRESS || "",
+  },
+
+  usdc: {
+    address: process.env.USDC_CONTRACT_ADDRESS || "",
   },
 
   cdp: {

@@ -29,6 +29,20 @@ export default class DepositRepo implements IDepositRepo {
     return result.rows.map(row => DepositMap.fromPersistence(row));
   }
 
+  public async findDepositByTxHash(txHash: string): Promise<Deposit | null> {
+    const query = `
+      SELECT *
+        FROM ${this.table}
+        WHERE "txHash" = $1
+        LIMIT 1
+    `;
+
+    const result = await clientShared.query(query, [txHash]);
+    if (!result.rowCount) return null;
+
+    return DepositMap.fromPersistence(result.rows[0]);
+  }
+
   public async getDepositById(depositId: string): Promise<Deposit | null> {
     const query = `
       SELECT *
