@@ -1,4 +1,5 @@
 import type { InternalApiClient } from "./InternalApiClient";
+import type { Log } from "ethers";
 
 export interface ParsedTransaction {
   transactionHash: string;
@@ -28,3 +29,9 @@ export interface ListenerConfig {
 
 /** Maps each transaction type number to the API client that handles it. */
 export type BackendMapping = Record<number, InternalApiClient>;
+
+export interface ExtraLogFilter {
+  address: string;
+  topics: string[];
+  handler: (log: Log) => Promise<void>;
+}

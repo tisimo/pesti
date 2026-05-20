@@ -5,7 +5,6 @@ import { docClient, dynamoClient } from "./dynamo";
 import Logger from "./logger";
 import config from "../../config";
 import { startTransactionListener } from "./transactionListener";
-import { startUsdcDepositListener } from "./usdcDepositListener";
 
 export default async ({ expressApp }) => {
   // 1. Connect to Shared PostgreSQL
@@ -148,9 +147,6 @@ export default async ({ expressApp }) => {
   expressLoader({ app: expressApp });
   Logger.info("Express Loaded");
 
-  // 5. Start Transaction Listener
+  // 5. Start Transaction Listener (includes USDC deposit filter on same WebSocket)
   await startTransactionListener();
-
-  // 6. Start USDC on-chain deposit listener
-  await startUsdcDepositListener();
 };

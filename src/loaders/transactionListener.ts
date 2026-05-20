@@ -6,9 +6,12 @@ import { TransactionType } from "../utils/blockchain/eventDataSchema";
 import { DonationHandler } from "../services/transactionListener/handlers/DonationHandler";
 import { TipHandler } from "../services/transactionListener/handlers/TipHandler";
 import { WithdrawHandler } from "../services/transactionListener/handlers/WithdrawHandler";
+import { buildUsdcTransferTopic, createUsdcDepositHandler } from "../services/transactionListener/handlers/UsdcDepositHandler";
 import type IWalletsService from "../services/IServices/IWalletsService";
 import type ITransactionsService from "../services/IServices/ITransactionsService";
 import type IWithdrawalService from "../services/IServices/IWithdrawalService";
+import type { IDepositRepo } from "../repos/Deposits/IDepositRepo";
+import type { IWalletsRepo } from "../repos/Wallets/IWalletsRepo";
 import Logger from "./logger";
 import config from "../../config";
 
@@ -69,6 +72,21 @@ export async function startTransactionListener(): Promise<void> {
     router.register(new TipHandler(getApiClient(clients, TransactionType.TipJC)));
     router.register(new WithdrawHandler(withdrawalService));
 
+    const extraFilters = [];
+
+    if (config.usdc.address) {
+      const depositRepo = Container.get(config.repos.deposit.name) as IDepositRepo;
+      const walletsRepo = Container.get(config.repos.wallets.name) as IWalletsRepo;
+      extraFilters.push({
+        address: config.usdc.address,
+        topics: [buildUsdcTransferTopic()],
+        handler: createUsdcDepositHandler(depositRepo, walletsRepo),
+      });
+      Logger.info({ usdcAddress: config.usdc.address }, "USDC deposit filter registered");
+    } else {
+      Logger.warn("USDC deposit filter skipped — USDC_CONTRACT_ADDRESS not set");
+    }
+
     const listener = new TransactionListener(
       {
         alchemyApiKey: config.alchemy.apiKey,
@@ -76,6 +94,7 @@ export async function startTransactionListener(): Promise<void> {
         contractAddress: config.onlyPayments.address,
       },
       router,
+      extraFilters,
     );
 
     await listener.start();

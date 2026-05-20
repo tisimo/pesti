@@ -3,7 +3,7 @@ import { getEventTopicHash, parseTransactionLog } from "../../utils/blockchain/E
 import { ReconnectManager } from "../../utils/ReconnectManager";
 import type { ReconnectableResource } from "../../utils/ReconnectManager";
 import { TransactionRouter } from "./TransactionRouter";
-import type { ListenerConfig } from "./types";
+import type { ListenerConfig, ExtraLogFilter } from "./types";
 import Logger from "../../loaders/logger";
 
 const ALCHEMY_WS_URLS: Record<string, string> = {
@@ -15,9 +15,10 @@ export class TransactionListener implements ReconnectableResource<ethers.WebSock
   private readonly wsUrl: string;
   private readonly contractAddress: string;
   private readonly router: TransactionRouter;
+  private readonly extraFilters: ExtraLogFilter[];
   private readonly reconnectManager: ReconnectManager<ethers.WebSocketProvider>;
 
-  constructor(config: ListenerConfig, router: TransactionRouter) {
+  constructor(config: ListenerConfig, router: TransactionRouter, extraFilters: ExtraLogFilter[] = []) {
     const baseWs = ALCHEMY_WS_URLS[config.alchemyNetwork];
     if (!baseWs) {
       throw new Error(`Unsupported Alchemy network: ${config.alchemyNetwork}`);
@@ -26,6 +27,7 @@ export class TransactionListener implements ReconnectableResource<ethers.WebSock
     this.wsUrl = `${baseWs}/${config.alchemyApiKey}`;
     this.contractAddress = config.contractAddress;
     this.router = router;
+    this.extraFilters = extraFilters;
     this.reconnectManager = new ReconnectManager<ethers.WebSocketProvider>(this, {
       label: "TransactionListener",
     });
@@ -51,7 +53,7 @@ export class TransactionListener implements ReconnectableResource<ethers.WebSock
     const topicHash = getEventTopicHash();
     const provider = new ethers.WebSocketProvider(this.wsUrl);
 
-    provider.on("error", (error: Error) => {
+    (provider.websocket as any).on("error", (error: Error) => {
       Logger.error({ err: error }, "WebSocket provider error");
       this.reconnectManager.reconnect();
     });
@@ -68,8 +70,12 @@ export class TransactionListener implements ReconnectableResource<ethers.WebSock
 
     provider.on(filter, (log: ethers.Log) => this.handleLog(log));
 
+    for (const extra of this.extraFilters) {
+      provider.on({ address: extra.address, topics: [extra.topics[0]] }, extra.handler);
+    }
+
     Logger.info(
-      { topicHash, contractAddress: this.contractAddress },
+      { topicHash, contractAddress: this.contractAddress, extraFilters: this.extraFilters.length },
       "Subscribed to TransactionExecuted events",
     );
 
