@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { Container } from "typedi";
 import { DepositMap } from "../../mappers/DepositMapper";
 import type { IDepositRepo } from "../../repos/Deposits/IDepositRepo";
+import type { IWalletsRepo } from "../../repos/Wallets/IWalletsRepo";
 import Logger from "../../loaders/logger";
 import config from "../../../config.js";
 
@@ -36,6 +37,7 @@ export default (app: Router) => {
     }
 
     const depositRepo = Container.get(config.repos.deposit.name) as IDepositRepo;
+    const walletsRepo = Container.get(config.repos.wallets.name) as IWalletsRepo;
 
     for (const activity of payload.event?.activity ?? []) {
       if (activity.category !== "token" || activity.asset !== "USDC" || !activity.toAddress) {
@@ -49,9 +51,13 @@ export default (app: Router) => {
         const amount = activity.value ?? 0;
         if (amount <= 0) continue;
 
+        // Lookup wallet to get the exact stored address (case-insensitive match)
+        const wallet = await walletsRepo.getWalletByAddress(activity.toAddress);
+        if (!wallet) continue;
+
         const deposit = DepositMap.toDomain({
           depositId: crypto.randomUUID(),
-          walletAddress: activity.toAddress,
+          walletAddress: wallet.walletAddress,
           amount,
           amountFiat: amount,
           currency: "USD",
