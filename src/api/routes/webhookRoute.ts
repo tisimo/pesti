@@ -55,6 +55,16 @@ export default (app: Router) => {
         const wallet = await walletsRepo.getWalletByAddress(activity.toAddress);
         if (!wallet) continue;
 
+        // Skip if there's a pending onramp deposit — the polling flow will complete it
+        const pendingOnramp = await depositRepo.findPendingDepositByWallet(wallet.walletAddress);
+        if (pendingOnramp) {
+          Logger.info(
+            { txHash: activity.hash, walletAddress: wallet.walletAddress },
+            "Skipping on-chain deposit — pending onramp deposit exists",
+          );
+          continue;
+        }
+
         const deposit = DepositMap.toDomain({
           depositId: crypto.randomUUID(),
           walletAddress: wallet.walletAddress,
