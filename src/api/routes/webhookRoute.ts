@@ -1,6 +1,5 @@
 import { Router, Request, Response } from "express";
 import { Container } from "typedi";
-import crypto from "crypto";
 import { DepositMap } from "../../mappers/DepositMapper";
 import type { IDepositRepo } from "../../repos/Deposits/IDepositRepo";
 import Logger from "../../loaders/logger";
@@ -30,23 +29,6 @@ export default (app: Router) => {
   app.use("/webhooks", route);
 
   route.post("/alchemy", async (req: Request, res: Response) => {
-    // Verify Alchemy signature
-    const signingKey = config.alchemy.webhookSigningKey;
-    if (signingKey) {
-      const signature = req.headers["x-alchemy-signature"] as string;
-      const rawBody = (req as any).rawBody as Buffer;
-
-      if (!rawBody || !signature) {
-        return res.status(401).json({ error: "Missing signature" });
-      }
-
-      const hmac = crypto.createHmac("sha256", signingKey).update(rawBody).digest("hex");
-      if (hmac !== signature) {
-        Logger.warn("Alchemy webhook signature mismatch — request rejected");
-        return res.status(401).json({ error: "Invalid signature" });
-      }
-    }
-
     const payload = req.body as AlchemyWebhookPayload;
 
     if (payload.type !== "ADDRESS_ACTIVITY") {
