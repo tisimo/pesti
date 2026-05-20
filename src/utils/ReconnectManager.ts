@@ -24,6 +24,8 @@ export class ReconnectManager<T> {
   private attempts = 0;
   private running = false;
   private reconnecting = false;
+  private connectionStartTime: number | null = null;
+  private readonly stableThresholdMs = 60_000;
 
   constructor(
     reconnectable: ReconnectableResource<T>,
@@ -51,6 +53,15 @@ export class ReconnectManager<T> {
   async reconnect(): Promise<void> {
     if (!this.running || this.reconnecting) return;
     this.reconnecting = true;
+
+    const wasStable =
+      this.connectionStartTime !== null &&
+      Date.now() - this.connectionStartTime >= this.stableThresholdMs;
+
+    if (wasStable) {
+      this.attempts = 0;
+    }
+    this.connectionStartTime = null;
 
     this.attempts++;
     const delay = Math.min(
@@ -90,7 +101,7 @@ export class ReconnectManager<T> {
   private async connect(): Promise<T> {
     try {
       this.resource = await this.reconnectable.connect();
-      this.attempts = 0;
+      this.connectionStartTime = Date.now();
       return this.resource;
     } catch (error) {
       Logger.error(

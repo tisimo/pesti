@@ -39,12 +39,10 @@ export default ({ app }: { app: express.Application }) => {
   );
 
   const jsonLimit = "80mb";
-  app.use(express.json({ limit: jsonLimit }));
 
   app.use(require("method-override")());
 
-  // Middleware that transforms the raw string of req.body into json
-  // Captures rawBody for webhook signature verification
+  // Single JSON parser that also captures rawBody for webhook signature verification
   app.use(bodyParser.json({
     limit: jsonLimit,
     verify: (req: any, _res, buf) => {
