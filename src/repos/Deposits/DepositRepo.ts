@@ -35,6 +35,7 @@ export default class DepositRepo implements IDepositRepo {
         FROM ${this.table}
         WHERE LOWER("walletAddress") = LOWER($1)
         AND "status" = 'PENDING'
+        AND "createdAt" > NOW() - INTERVAL '15 minutes'
         LIMIT 1
     `;
 
