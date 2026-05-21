@@ -7,4 +7,5 @@ export interface IDepositRepo {
     findPendingDepositByWallet(walletAddress: string): Promise<Deposit | null>;
     createDeposit(deposit: Deposit): Promise<Deposit>;
     updateDepositStatus(depositId: string, status: string, amount?: number): Promise<void>;
+    completeDepositOnChain(depositId: string, txHash: string, amount: number): Promise<void>;
 }

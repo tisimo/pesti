@@ -112,6 +112,16 @@ export default class DepositRepo implements IDepositRepo {
     return deposit;
   }
 
+  public async completeDepositOnChain(depositId: string, txHash: string, amount: number): Promise<void> {
+    const query = `
+      UPDATE ${this.table}
+      SET "status" = 'COMPLETED', "txHash" = $1, "amount" = $2
+      WHERE "depositId" = $3
+    `;
+    await clientShared.query(query, [txHash, amount, depositId]);
+    Logger.info({ depositId, txHash, amount }, "Deposit completed on-chain");
+  }
+
   public async updateDepositStatus(depositId: string, status: string, amount?: number): Promise<void> {
     const query = amount != null
       ? `UPDATE ${this.table} SET "status" = $1, "amount" = $2 WHERE "depositId" = $3`

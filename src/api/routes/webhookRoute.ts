@@ -51,40 +51,44 @@ export default (app: Router) => {
         const amount = activity.value ?? 0;
         if (amount <= 0) continue;
 
-        // Lookup wallet to get the exact stored address (case-insensitive match)
         const wallet = await walletsRepo.getWalletByAddress(activity.toAddress);
         if (!wallet) continue;
 
-        // Skip if there's a pending onramp deposit — the polling flow will complete it
         const pendingOnramp = await depositRepo.findPendingDepositByWallet(wallet.walletAddress);
+
         if (pendingOnramp) {
-          Logger.info(
-            { txHash: activity.hash, walletAddress: wallet.walletAddress },
-            "Skipping on-chain deposit — pending onramp deposit exists",
+          // Onramp in progress — complete the existing pending deposit instead of creating a duplicate
+          await depositRepo.completeDepositOnChain(
+            pendingOnramp.depositId.toString(),
+            activity.hash,
+            amount,
           );
-          continue;
+          Logger.info(
+            { txHash: activity.hash, depositId: pendingOnramp.depositId.toString(), amount },
+            "Pending onramp deposit completed on-chain via webhook",
+          );
+        } else {
+          // Direct on-chain transfer — create new deposit
+          const deposit = DepositMap.toDomain({
+            depositId: crypto.randomUUID(),
+            walletAddress: wallet.walletAddress,
+            amount,
+            amountFiat: amount,
+            currency: "USD",
+            provider: "OnChain",
+            method: "USDC",
+            application: "OnlyJustCauses",
+            txHash: activity.hash,
+            status: "COMPLETED",
+            createdAt: new Date().toISOString(),
+          });
+
+          await depositRepo.createDeposit(deposit);
+          Logger.info(
+            { txHash: activity.hash, to: activity.toAddress, amount },
+            "On-chain USDC deposit recorded via webhook",
+          );
         }
-
-        const deposit = DepositMap.toDomain({
-          depositId: crypto.randomUUID(),
-          walletAddress: wallet.walletAddress,
-          amount,
-          amountFiat: amount,
-          currency: "USD",
-          provider: "OnChain",
-          method: "USDC",
-          application: "OnlyJustCauses",
-          txHash: activity.hash,
-          status: "COMPLETED",
-          createdAt: new Date().toISOString(),
-        });
-
-        await depositRepo.createDeposit(deposit);
-
-        Logger.info(
-          { txHash: activity.hash, to: activity.toAddress, from: activity.fromAddress, amount },
-          "On-chain USDC deposit recorded via webhook",
-        );
       } catch (error) {
         Logger.error({ err: error, txHash: activity.hash }, "Error processing Alchemy webhook activity");
       }
