@@ -39,8 +39,15 @@ export default (app: Router) => {
     const depositRepo = Container.get(config.repos.deposit.name) as IDepositRepo;
     const walletsRepo = Container.get(config.repos.wallets.name) as IWalletsRepo;
 
+    const onlyPaymentsAddress = config.onlyPayments.address?.toLowerCase();
+
     for (const activity of payload.event?.activity ?? []) {
       if (activity.category !== "token" || activity.asset !== "USDC" || !activity.toAddress) {
+        continue;
+      }
+
+      // Skip transfers from the OnlyPayments contract — those are donations/tips, not deposits
+      if (onlyPaymentsAddress && activity.fromAddress?.toLowerCase() === onlyPaymentsAddress) {
         continue;
       }
 
