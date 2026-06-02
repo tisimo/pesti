@@ -164,7 +164,7 @@ export default {
     causes: { url: process.env.BACKEND_CAUSES_URL || "http://localhost:4000/api" },
   },
 
-  awsRegion: process.env.AWS_REGION || 'eu-west-1',
+  awsRegion: process.env.AWS_REGION || "eu-west-1",
   awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
   awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 
@@ -173,5 +173,5 @@ export default {
   auroraUserShared: process.env.DB_USER_SHARED,
   auroraPasswordShared: process.env.DB_PASSWORD_SHARED,
   auroraDatabaseShared: process.env.DB_NAME_SHARED,
-  corsOrigin: (process.env.CORS_ORIGIN || "http://localhost:5173").split(",").map(o => o.trim()),
+  corsOrigin: (process.env.CORS_ORIGIN || "http://localhost:5173,http://10.0.2.2:5173").split(",").map(o => o.trim()),
 };
