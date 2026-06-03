@@ -1,0 +1,29 @@
+@startuml KYB_VERIFICATION_SSD
+title KYB Organization Verification\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "JustCauses Operator" as OP
+participant ":System" as SYS
+
+OP -> SYS : openOrganizations(filters)
+SYS --> OP : showOrganizations()
+
+OP -> SYS : openKybSubmission(profileId)
+SYS --> OP : showOrganizationDocuments()
+
+OP -> SYS : decideKyb(profileId, decision, adminNote)
+
+alt Approve organization
+    SYS --> OP : kybApproved()\nnote: organization verified;\naudit log written
+else Reject organization
+    SYS --> OP : kybRejected()\nnote: note required;\norganization notified
+else Reject stale pending submission
+    SYS --> OP : staleKybRejected()\nnote: pending for more than 7 days
+else Missing permission or invalid state
+    SYS --> OP : showError("Action not available")
+end
+
+@enduml

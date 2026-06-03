@@ -1,0 +1,34 @@
+﻿@startuml Roles_Permissions_SSD
+title Roles and Permissions\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "Admin Operator" as OP
+participant ":System" as SYS
+
+OP -> SYS : openRolesAndPermissionsPage()
+SYS --> OP : renderApplicationSelector(applications)
+
+OP -> SYS : selectApplication(application)
+SYS --> OP : renderRolesAndPermissions(roles, permissions)
+
+alt Update role permissions
+    OP -> SYS : submitRolePermissions(roleId, permissionIds)
+    alt Permissions belong to the same application
+        SYS --> OP : rolePermissionsUpdated()\nnote: audit log written
+    else Permission from another application
+        SYS --> OP : showError("Permission does not belong to this application")
+    end
+
+else Create role
+    OP -> SYS : submitNewRole(name, application, permissionIds)
+    alt Valid role data
+        SYS --> OP : roleCreated()\nnote: role scoped to application
+    else Invalid application or permissions
+        SYS --> OP : showValidationErrors()
+    end
+end
+
+@enduml

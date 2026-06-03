@@ -1,0 +1,73 @@
+@startuml multiapp-role-permission-model
+title Multi-Application Role and Permission Model
+
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam nodesep 70
+skinparam ranksep 60
+top to bottom direction
+
+class "User\nBO_Users" as User {
+  +userId
+  +cognitoSub
+  +roleIds[]
+  +status
+}
+
+class "Role\nBO_Roles" as Role {
+  +roleId
+  +name
+  +application
+  +permissions[]
+}
+
+class "Permission\nBO_Permissions" as Permission {
+  +id
+  +name
+  +application
+  +category
+}
+
+class "PageGate\nBO_PageGates" as PageGate {
+  +gateId
+  +pageKey
+  +application
+  +requiredPermissions[]
+}
+
+' Layout hints only.
+User -[hidden]down- Role
+PageGate -[hidden]down- Permission
+Role -[hidden]right- Permission
+
+User "1" -down-> "0..*" Role : roleIds
+Role "1" -right-> "0..*" Permission : permissions
+PageGate "*" -down-> "0..*" Permission : requiredPermissions\nOR
+
+note left of User
+Um utilizador pode nao ter roles.
+Utilizadores aplicacionais podem ter, no maximo,
+uma role por aplicacao.
+Roles de backoffice sao globais e exclusivas.
+end note
+
+note right of Permission
+As permissoes pertencem a uma aplicacao.
+Uma role so pode receber permissoes
+da mesma aplicacao.
+end note
+
+note bottom
+O acesso efetivo nao e uma entidade persistida.
+E calculado por buildEffectiveAccess() a partir
+de User, Role e Permission, e devolvido ao FrontEnd
+como appsAccessible e permissionsByApplication.
+end note
+
+note bottom of Role
+Aplicacoes atualmente usadas:
+backoffice e just_causes.
+end note
+
+@enduml

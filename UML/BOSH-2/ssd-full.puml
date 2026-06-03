@@ -1,0 +1,102 @@
+@startuml BOSH-2_SSD_Full
+title YYC Queue\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+
+actor "Compliance Officer" as CO
+participant "YycQueuePage\n(FE)" as PAGE
+participant "OjcYycController\n(BE)" as CTRL
+participant "OjcYycService\n(BE)" as SVC
+participant "OjcYycRepo\n(BE)" as REPO
+database "Shared DO\n(Verifications / Account)" as SHARED
+database "OJC DO\n(Profiles)" as PG
+
+== Load YYC queue ==
+CO -> PAGE : openYycQueue()
+activate PAGE
+PAGE -> CTRL : GET /ojc/kyc?status=PENDING&page=1&pageSize=20
+activate CTRL
+CTRL -> SVC : list(status?, page, pageSize)
+activate SVC
+SVC -> REPO : list(status?, limit, offset)
+activate REPO
+
+REPO -> SHARED : SELECT COUNT(*)::int AS total\nFROM "Verifications" v\nWHERE status=:status (optional)
+activate SHARED
+SHARED --> REPO : total
+deactivate SHARED
+
+alt total = 0
+    REPO --> SVC : { entries: [], total: 0 }
+    deactivate REPO
+    SVC --> CTRL : { entries: [], total: 0 }
+    deactivate SVC
+    CTRL --> PAGE : 200 { entries: [], total: 0 }
+    deactivate CTRL
+    PAGE --> CO : renderEmptyState()
+
+else total > 0
+    activate REPO
+    activate SVC
+    activate CTRL
+    REPO -> SHARED : SELECT verificationId, accountId, status,\nveriffSessionId, verifiedAt, createdAt, updatedAt\nFROM "Verifications" v\n[WHERE status=:status]\nORDER OY createdAt DESC\nLIMIT :limit OFFSET :offset
+    activate SHARED
+    SHARED --> REPO : [VerificationRow]
+    deactivate SHARED
+
+    REPO -> PG : SELECT accountId, firstName, lastName,\nusername, country\nFROM "Profiles"\nWHERE accountId = ANY(:accountIds)
+    activate PG
+    PG --> REPO : [ProfileRow]
+    deactivate PG
+
+    REPO -> SHARED : SELECT accountId, email\nFROM "Account"\nWHERE accountId = ANY(:accountIds)
+    activate SHARED
+    SHARED --> REPO : [AccountRow]
+    deactivate SHARED
+
+    REPO --> SVC : { entries: [YycEntry], total }
+    deactivate REPO
+    SVC --> CTRL : { entries, total }
+    deactivate SVC
+    CTRL --> PAGE : 200 { entries, total }
+    deactivate CTRL
+    PAGE --> CO : renderYycList(entries, total)
+    deactivate PAGE
+end
+
+== Filter by status ==
+CO -> PAGE : selectStatusFilter(status)
+activate PAGE
+PAGE -> CTRL : GET /ojc/kyc?status=:status&page=1&pageSize=20
+activate CTRL
+CTRL -> SVC : list(status, 1, 20)
+activate SVC
+SVC -> REPO : list(status, 20, 0)
+activate REPO
+REPO -> SHARED : SELECT COUNT(*)::int AS total\nFROM "Verifications" WHERE status=:status
+activate SHARED
+SHARED --> REPO : total
+deactivate SHARED
+REPO -> SHARED : SELECT ... FROM "Verifications"\nWHERE status=:status ORDER OY createdAt DESC\nLIMIT 20 OFFSET 0
+activate SHARED
+SHARED --> REPO : [VerificationRow]
+deactivate SHARED
+REPO -> PG : SELECT ... FROM "Profiles"\nWHERE accountId = ANY(:accountIds)
+activate PG
+PG --> REPO : [ProfileRow]
+deactivate PG
+REPO -> SHARED : SELECT accountId, email FROM "Account"\nWHERE accountId = ANY(:accountIds)
+activate SHARED
+SHARED --> REPO : [AccountRow]
+deactivate SHARED
+REPO --> SVC : { entries, total }
+deactivate REPO
+SVC --> CTRL : { entries, total }
+deactivate SVC
+CTRL --> PAGE : 200 { entries, total }
+deactivate CTRL
+PAGE --> CO : renderYycList(filteredEntries, total)
+deactivate PAGE
+
+@enduml

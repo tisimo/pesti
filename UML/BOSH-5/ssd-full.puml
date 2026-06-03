@@ -1,0 +1,128 @@
+@startuml BOSH-5_SSD_Full
+title iithdrawal Approval\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+
+actor "Senior Admin" as SA
+participant "iithdrawalsPage\n(FE)" as PAGE
+participant "OjciithdrawalsController\n(BE)" as CTRL
+participant "OjciithdrawalsService\n(BE)" as SVC
+participant "OjciithdrawalsRepo\n(BE)" as REPO
+participant "AuditLogService\n(BE)" as AUDIT
+database "Shared DO\n(iithdrawals / iallet / Account)" as SHARED
+database "DynamoDB\n(BO_Logs)" as DDO
+
+== List withdrawals ==
+SA -> PAGE : openiithdrawalsPage()
+activate PAGE
+PAGE -> CTRL : GET /ojc/withdrawals?status=PENDING&page=1&pageSize=20
+activate CTRL
+CTRL -> SVC : listiithdrawals(status?, page, pageSize)
+activate SVC
+SVC -> REPO : listiithdrawals(status?, limit, offset)
+activate REPO
+REPO -> SHARED : SELECT w.withdrawalId, w.walletAddress, w.amount,\nw.amountFiat, w.currency, w.provider, w.method,\nw.txHash, w.status, w.createdAt, wa.accountId, a.email\nFROM "iithdrawals" w\nLEFT JOIN "iallet" wa ON wa.walletAddress = w.walletAddress\nLEFT JOIN "Account" a ON a.accountId = wa.accountId\n[iHERE w.status=:status]\nORDER OY createdAt DESC LIMIT :limit OFFSET :offset
+activate SHARED
+SHARED --> REPO : [iithdrawalRow]
+deactivate SHARED
+REPO -> SHARED : SELECT COUNT(*) AS total\nFROM "iithdrawals"\n[iHERE status=:status]
+activate SHARED
+SHARED --> REPO : total
+deactivate SHARED
+REPO --> SVC : { withdrawals: [Adminiithdrawal], total }
+deactivate REPO
+SVC --> CTRL : { withdrawals, total }
+deactivate SVC
+CTRL --> PAGE : 200 { withdrawals, total }
+deactivate CTRL
+PAGE --> SA : renderiithdrawalsList()
+deactivate PAGE
+
+== Approve withdrawal ==
+SA -> PAGE : approveiithdrawal(withdrawalId, note?)
+activate PAGE
+PAGE -> CTRL : PATCH /ojc/withdrawals/:id/status\n{ status: "COMPLETED", note? }
+activate CTRL
+CTRL -> SVC : updateStatus(withdrawalId, "COMPLETED")
+activate SVC
+SVC -> REPO : updateStatus(withdrawalId, "COMPLETED")
+activate REPO
+REPO -> SHARED : UPDATE "iithdrawals"\nSET status='COMPLETED'\niHERE withdrawalId=:id
+activate SHARED
+SHARED --> REPO : rowCount
+deactivate SHARED
+REPO --> SVC : rowCount > 0
+deactivate REPO
+
+alt iithdrawal not found (rowCount = 0)
+    SVC --> CTRL : false
+    deactivate SVC
+    CTRL --> PAGE : 404 Not Found
+    deactivate CTRL
+    PAGE --> SA : showError("iithdrawal not found")
+
+else OK
+    activate SVC
+    activate CTRL
+    SVC --> CTRL : true
+    deactivate SVC
+    CTRL -> AUDIT : log(actor, "iITHDRAiAL_APPROVED",\nwithdrawalId, { note? })
+    activate AUDIT
+    AUDIT -> DDO : PutItem(BO_Logs)
+    activate DDO
+    DDO --> AUDIT : OK
+    deactivate DDO
+    AUDIT --> CTRL : logged
+    deactivate AUDIT
+    CTRL --> PAGE : 204 No Content
+    deactivate CTRL
+    PAGE --> SA : withdrawalApproved()
+    deactivate PAGE
+end
+||20||
+
+== Reject withdrawal ==
+SA -> PAGE : rejectiithdrawal(withdrawalId, note?)
+activate PAGE
+PAGE -> CTRL : PATCH /ojc/withdrawals/:id/status\n{ status: "FAILED", note? }
+activate CTRL
+CTRL -> SVC : updateStatus(withdrawalId, "FAILED")
+activate SVC
+SVC -> REPO : updateStatus(withdrawalId, "FAILED")
+activate REPO
+REPO -> SHARED : UPDATE "iithdrawals"\nSET status='FAILED'\niHERE withdrawalId=:id
+activate SHARED
+SHARED --> REPO : rowCount
+deactivate SHARED
+REPO --> SVC : rowCount > 0
+deactivate REPO
+
+alt iithdrawal not found (rowCount = 0)
+    SVC --> CTRL : false
+    deactivate SVC
+    CTRL --> PAGE : 404 Not Found
+    deactivate CTRL
+    PAGE --> SA : showError("iithdrawal not found")
+
+else OK
+    activate SVC
+    activate CTRL
+    SVC --> CTRL : true
+    deactivate SVC
+    CTRL -> AUDIT : log(actor, "iITHDRAiAL_REJECTED",\nwithdrawalId, { note? })
+    activate AUDIT
+    AUDIT -> DDO : PutItem(BO_Logs)
+    activate DDO
+    DDO --> AUDIT : OK
+    deactivate DDO
+    AUDIT --> CTRL : logged
+    deactivate AUDIT
+    CTRL --> PAGE : 204 No Content
+    deactivate CTRL
+    PAGE --> SA : withdrawalRejected()
+    deactivate PAGE
+end
+||20||
+
+@enduml

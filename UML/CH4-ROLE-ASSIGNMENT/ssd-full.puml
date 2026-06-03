@@ -1,0 +1,153 @@
+@startuml CH4_ROLE_ASSIGNMENT_SSD_Full
+title User Role Assignment\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+
+actor "Backoffice Admin" as BA
+participant "AdminUsersPage\n(FE)" as PAGE
+participant "Users API client\n(FE)" as API
+participant "requirePermission\n(BE)" as GUARD
+participant "UserController\n(BE)" as UCTRL
+participant "UserService\n(BE)" as USVC
+participant "UserRepo\n(BE)" as UREPO
+participant "RoleRepo\n(BE)" as RREPO
+participant "AuditLogService\n(BE)" as AUDIT
+database "DynamoDB\n(BO_Users / BO_Roles / BO_Logs)" as DDB
+
+== Load assignable context ==
+BA -> PAGE : openAdminUsersPage()
+activate PAGE
+PAGE -> API : getUsers()
+activate API
+API -> GUARD : GET /users
+activate GUARD
+GUARD -> UCTRL : allow if manage_admins
+activate UCTRL
+UCTRL -> USVC : getAll()
+activate USVC
+USVC -> UREPO : findAll()
+activate UREPO
+UREPO -> DDB : Scan(BO_Users)
+activate DDB
+DDB --> UREPO : users
+deactivate DDB
+UREPO --> USVC : users
+deactivate UREPO
+USVC --> UCTRL : UserDTO[]
+deactivate USVC
+UCTRL --> GUARD : 200 UserDTO[]
+deactivate UCTRL
+GUARD --> API : response
+deactivate GUARD
+API --> PAGE : users
+deactivate API
+
+PAGE -> API : getRoles()
+activate API
+API -> GUARD : GET /roles
+activate GUARD
+GUARD -> UCTRL : allow if configure_roles or manage_admins
+activate UCTRL
+UCTRL -> RREPO : findAll()
+activate RREPO
+RREPO -> DDB : Scan(BO_Roles)
+activate DDB
+DDB --> RREPO : roles
+deactivate DDB
+RREPO --> UCTRL : RoleDTO[]
+deactivate RREPO
+UCTRL --> GUARD : 200 RoleDTO[]
+deactivate UCTRL
+GUARD --> API : response
+deactivate GUARD
+API --> PAGE : roles
+deactivate API
+PAGE --> BA : render role assignment modal
+deactivate PAGE
+
+== Save role assignment ==
+BA -> PAGE : updateUserRoles(userId, roleIds[])
+activate PAGE
+PAGE -> API : PUT /users/:id/roles\n{ roleIds }
+activate API
+API -> GUARD : require manage_admins
+activate GUARD
+GUARD -> UCTRL : allow request
+activate UCTRL
+UCTRL -> USVC : update(userId, { roleIds }, actor)
+activate USVC
+
+USVC -> UREPO : findById(userId)
+activate UREPO
+UREPO -> DDB : GetItem(BO_Users)
+activate DDB
+DDB --> UREPO : target user
+deactivate DDB
+UREPO --> USVC : target user
+deactivate UREPO
+
+USVC -> RREPO : findByIds(roleIds)
+activate RREPO
+RREPO -> DDB : BatchGet(BO_Roles)
+activate DDB
+DDB --> RREPO : selected roles
+deactivate DDB
+RREPO --> USVC : selected roles
+deactivate RREPO
+
+alt invalid role combination
+  USVC --> UCTRL : ROLE_APPLICATION_DUPLICATE\nor BACKOFFICE_ROLE_EXCLUSIVE
+  deactivate USVC
+  UCTRL --> GUARD : 400/403 error
+  deactivate UCTRL
+  GUARD --> API : error
+  deactivate GUARD
+  API --> PAGE : show validation message
+  deactivate API
+  PAGE --> BA : validation feedback
+
+else valid role combination
+  activate USVC
+  activate UCTRL
+  activate GUARD
+  activate API
+  note over USVC
+    UserService validates management scope,
+    Super Admin restrictions, one role per
+    application and exclusive backoffice roles.
+  end note
+
+  USVC -> UREPO : update(user with roleIds)
+  activate UREPO
+  UREPO -> DDB : PutItem(BO_Users)
+  activate DDB
+  DDB --> UREPO : updated user
+  deactivate DDB
+  UREPO --> USVC : updated user
+  deactivate UREPO
+  USVC --> UCTRL : updated user
+  deactivate USVC
+
+  UCTRL -> AUDIT : log(UPDATE_USER_ROLE,\ntarget=userId, { from, to })
+  activate AUDIT
+  AUDIT -> DDB : PutItem(BO_Logs)
+  activate DDB
+  DDB --> AUDIT : OK
+  deactivate DDB
+  AUDIT --> UCTRL : audit log persisted
+  deactivate AUDIT
+
+  UCTRL --> GUARD : 200 updated UserDTO
+  deactivate UCTRL
+  GUARD --> API : success
+  deactivate GUARD
+  API --> PAGE : refresh list and role badges
+  deactivate API
+  PAGE --> BA : saved role assignment
+  deactivate PAGE
+end
+||20||
+
+@enduml

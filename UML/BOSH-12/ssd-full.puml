@@ -1,0 +1,92 @@
+@startuml BOSH-12_SSD_Full
+title Create Admin User\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+
+actor "Super Admin" as SA
+participant "AdminUsersPage\n(FE)" as PAGE
+participant "AccountCognitoController\n(BE)" as CTRL
+participant "AccountCognitoService\n(BE)" as SVC
+participant "UserRepo\n(BE)" as UREP
+participant "RoleRepo\n(BE)" as RREP
+participant "AWS Cognito\n(AdminCreateUser)" as COG
+database "DynamoDB\n(BO_Users / BO_Roles)" as DDO
+
+== List admin users ==
+SA -> PAGE : openAdminUsersPage()
+activate PAGE
+PAGE -> PAGE : GET /ojc/admin-users\n[OjcAdminUsersController -> OjcAdminUsersRepo -> PostgreSQL]
+PAGE --> SA : renderAdminList()
+deactivate PAGE
+
+== Create admin user ==
+SA -> PAGE : submitNewUser(firstName, lastName, email)
+activate PAGE
+PAGE -> CTRL : POST /cognito\n{ firstName, lastName, email }
+activate CTRL
+
+CTRL -> SVC : create(firstName, lastName, email)
+activate SVC
+SVC -> SVC : validateEmailFormat(email)
+
+SVC -> UREP : findByEmail(email)
+activate UREP
+UREP -> DDO : Query(BO_Users, email)
+activate DDO
+DDO --> UREP : existing user | null
+deactivate DDO
+UREP --> SVC : existing user | null
+deactivate UREP
+
+alt E-mail already registered
+    SVC --> CTRL : 409 Conflict
+    deactivate SVC
+    CTRL --> PAGE : 409
+    deactivate CTRL
+    PAGE --> SA : showError("E-mail already exists")
+
+
+else E-mail available
+    activate SVC
+    activate CTRL
+
+    SVC -> RREP : findDefault()
+    activate RREP
+    RREP -> DDO : Scan(BO_Roles, isDefault=true)
+    activate DDO
+    DDO --> RREP : defaultRole
+    deactivate DDO
+    RREP --> SVC : defaultRole
+    deactivate RREP
+
+    SVC -> COG : AdminCreateUserCommand\n{ email, firstName, lastName, tempPassword }
+    activate COG
+    COG --> SVC : { UserSub (cognitoSub) }
+    deactivate COG
+
+    note over COG
+      Cognito automatically sends
+      a temporary password by e-mail
+      to the new administrator.
+    end note
+
+    SVC -> UREP : create(User{ email, cognitoSub, roleIds: [] })
+    activate UREP
+    UREP -> DDO : PutItem(BO_Users, userRecord)
+    activate DDO
+    DDO --> UREP : OK
+    deactivate DDO
+    UREP --> SVC : createdUser
+    deactivate UREP
+
+    SVC --> CTRL : { userId, cognitoSub, email, roleIds, status, firstName, lastName }
+    deactivate SVC
+    CTRL --> PAGE : 201 Created
+    deactivate CTRL
+    PAGE --> SA : showSuccess(userCreated)
+    deactivate PAGE
+end
+||20||
+
+@enduml

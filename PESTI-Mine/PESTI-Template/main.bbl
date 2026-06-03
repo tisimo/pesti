@@ -1,0 +1,521 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{OYI}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=082a68255f7b299c0a039b5a8ad2f032}{%
+           family={{OnlyHighIQ}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{fullhash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{fullhashraw}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{bibnamehash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{authorbibnamehash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{authornamehash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{authorfullhash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{authorfullhashraw}{082a68255f7b299c0a039b5a8ad2f032}
+      \field{extraname}{1}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://www.onlyhighiq.com}}
+      \field{note}{(Último acesso em 31/03/2026)}
+      \field{title}{OnlyHighIQ: Missão, Visão e Valores}
+      \field{year}{2025}
+    \endentry
+    \entry{BackofficeSpec}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=082a68255f7b299c0a039b5a8ad2f032}{%
+           family={{OnlyHighIQ}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{fullhash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{fullhashraw}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{bibnamehash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{authorbibnamehash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{authornamehash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{authorfullhash}{082a68255f7b299c0a039b5a8ad2f032}
+      \strng{authorfullhashraw}{082a68255f7b299c0a039b5a8ad2f032}
+      \field{extraname}{2}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Documento interno da empresa}
+      \field{note}{v1.0}
+      \field{title}{Backoffice Only High IQ Ecosystem: Organisation \& Full Feature Specification}
+      \field{year}{2026}
+    \endentry
+    \entry{Sachdeva2016Scrum}{article}{}{}
+      \name{author}{1}{}{%
+        {{hash=0339a8949679c75f76f705d828d75694}{%
+           family={Sachdeva},
+           familyi={S\bibinitperiod},
+           given={Sakshi},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{0339a8949679c75f76f705d828d75694}
+      \strng{fullhash}{0339a8949679c75f76f705d828d75694}
+      \strng{fullhashraw}{0339a8949679c75f76f705d828d75694}
+      \strng{bibnamehash}{0339a8949679c75f76f705d828d75694}
+      \strng{authorbibnamehash}{0339a8949679c75f76f705d828d75694}
+      \strng{authornamehash}{0339a8949679c75f76f705d828d75694}
+      \strng{authorfullhash}{0339a8949679c75f76f705d828d75694}
+      \strng{authorfullhashraw}{0339a8949679c75f76f705d828d75694}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{International Journal of Engineering and Computer Science}
+      \field{number}{6}
+      \field{title}{Scrum Methodology}
+      \field{volume}{5}
+      \field{year}{2016}
+      \field{pages}{16792\bibrangedash 16799}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.18535/ijecs/v5i6.11
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.18535/ijecs/v5i6.11
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.18535/ijecs/v5i6.11
+      \endverb
+    \endentry
+    \entry{OWASPAuthorizationCheatSheet}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=b0d7a4bf1a0878d4e92cdd7461e48710}{%
+           family={{OWASP Foundation}},
+           familyi={O\bibinitperiod}}}%
+      }
+      \strng{namehash}{b0d7a4bf1a0878d4e92cdd7461e48710}
+      \strng{fullhash}{b0d7a4bf1a0878d4e92cdd7461e48710}
+      \strng{fullhashraw}{b0d7a4bf1a0878d4e92cdd7461e48710}
+      \strng{bibnamehash}{b0d7a4bf1a0878d4e92cdd7461e48710}
+      \strng{authorbibnamehash}{b0d7a4bf1a0878d4e92cdd7461e48710}
+      \strng{authornamehash}{b0d7a4bf1a0878d4e92cdd7461e48710}
+      \strng{authorfullhash}{b0d7a4bf1a0878d4e92cdd7461e48710}
+      \strng{authorfullhashraw}{b0d7a4bf1a0878d4e92cdd7461e48710}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html}}
+      \field{note}{(Último acesso em 11/05/2026)}
+      \field{title}{Authorization Cheat Sheet}
+      \field{year}{2026}
+    \endentry
+    \entry{NISTABAC}{report}{}{}
+      \name{author}{7}{}{%
+        {{hash=527b83b3c8c6264ec6be8ccbec467dad}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Vincent\bibnamedelima C.},
+           giveni={V\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+        {{hash=35aedb704edc386c5cf58726c3d2833a}{%
+           family={Ferraiolo},
+           familyi={F\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod}}}%
+        {{hash=fbe58cf7fa55ebb352e9db3813f42842}{%
+           family={Kuhn},
+           familyi={K\bibinitperiod},
+           given={Rick},
+           giveni={R\bibinitperiod}}}%
+        {{hash=9135ef5fec9a35160ab24b76a853f279}{%
+           family={Schnitzer},
+           familyi={S\bibinitperiod},
+           given={Adam},
+           giveni={A\bibinitperiod}}}%
+        {{hash=568b6d50a5d52d693b4747afbb4f3cfb}{%
+           family={Sandlin},
+           familyi={S\bibinitperiod},
+           given={Kenneth},
+           giveni={K\bibinitperiod}}}%
+        {{hash=6e9ebbefbdc40e0ed98cbb49db36cb59}{%
+           family={Miller},
+           familyi={M\bibinitperiod},
+           given={Robert},
+           giveni={R\bibinitperiod}}}%
+        {{hash=6ea98e3682d33480471e822adaacdc41}{%
+           family={Scarfone},
+           familyi={S\bibinitperiod},
+           given={Karen},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{institution}{2}{%
+        {National Institute of Standards}%
+        {Technology}%
+      }
+      \strng{namehash}{64034bae70074c1316a85f0a3fb72019}
+      \strng{fullhash}{6a1aca66cccae99f7fd58d4a2693bd5e}
+      \strng{fullhashraw}{6a1aca66cccae99f7fd58d4a2693bd5e}
+      \strng{bibnamehash}{64034bae70074c1316a85f0a3fb72019}
+      \strng{authorbibnamehash}{64034bae70074c1316a85f0a3fb72019}
+      \strng{authornamehash}{64034bae70074c1316a85f0a3fb72019}
+      \strng{authorfullhash}{6a1aca66cccae99f7fd58d4a2693bd5e}
+      \strng{authorfullhashraw}{6a1aca66cccae99f7fd58d4a2693bd5e}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{(Último acesso em 11/05/2026)}
+      \field{number}{NIST Special Publication 800-162}
+      \field{title}{Guide to Attribute Based Access Control (ABAC) Definition and Considerations}
+      \field{type}{techreport}
+      \field{year}{2014}
+      \verb{doi}
+      \verb 10.6028/NIST.SP.800-162
+      \endverb
+      \verb{urlraw}
+      \verb https://csrc.nist.gov/pubs/sp/800/162/upd2/final
+      \endverb
+      \verb{url}
+      \verb https://csrc.nist.gov/pubs/sp/800/162/upd2/final
+      \endverb
+    \endentry
+    \entry{ShopifyStaffAccess}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=48b1feaa8b0d1805a23f59f268fc7c91}{%
+           family={{Shopify}},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{fullhash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{fullhashraw}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{bibnamehash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{authorbibnamehash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{authornamehash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{authorfullhash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{authorfullhashraw}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://help.shopify.com/en/manual/your-account/users/roles/permissions}}
+      \field{note}{(Último acesso em 11/05/2026)}
+      \field{title}{Shopify Help Center: Permissions}
+      \field{year}{2026}
+    \endentry
+    \entry{ShopifyAbout}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=48b1feaa8b0d1805a23f59f268fc7c91}{%
+           family={{Shopify}},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{fullhash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{fullhashraw}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{bibnamehash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{authorbibnamehash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{authornamehash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{authorfullhash}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \strng{authorfullhashraw}{48b1feaa8b0d1805a23f59f268fc7c91}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://www.shopify.com/about}}
+      \field{note}{(Último acesso em 31/03/2026)}
+      \field{title}{Shopify: About}
+      \field{year}{2024}
+    \endentry
+    \entry{StripeTeams}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=ce7566d1d08cc094b74cf283cf9c56a5}{%
+           family={{Stripe}},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{fullhash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{fullhashraw}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{bibnamehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authorbibnamehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authornamehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authorfullhash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authorfullhashraw}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \field{extraname}{1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://docs.stripe.com/get-started/account/teams}}
+      \field{note}{(Último acesso em 11/05/2026)}
+      \field{title}{Start a team}
+      \field{year}{2026}
+    \endentry
+    \entry{StripeUserRoles}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=ce7566d1d08cc094b74cf283cf9c56a5}{%
+           family={{Stripe}},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{fullhash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{fullhashraw}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{bibnamehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authorbibnamehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authornamehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authorfullhash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authorfullhashraw}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://docs.stripe.com/get-started/account/teams/roles}}
+      \field{note}{(Último acesso em 11/05/2026)}
+      \field{title}{User roles}
+      \field{year}{2026}
+    \endentry
+    \entry{StripeDashboard}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=ce7566d1d08cc094b74cf283cf9c56a5}{%
+           family={{Stripe}},
+           familyi={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{fullhash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{fullhashraw}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{bibnamehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authorbibnamehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authornamehash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authorfullhash}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \strng{authorfullhashraw}{ce7566d1d08cc094b74cf283cf9c56a5}
+      \field{extraname}{3}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://stripe.com/docs/dashboard}}
+      \field{note}{(Último acesso em 31/03/2026)}
+      \field{title}{Stripe Dashboard}
+      \field{year}{2024}
+    \endentry
+    \entry{DirectusPermissions}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=f4ce4f01ec1b554346709ac479bc50be}{%
+           family={{Directus}},
+           familyi={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{fullhash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{fullhashraw}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{bibnamehash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{authorbibnamehash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{authornamehash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{authorfullhash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{authorfullhashraw}{f4ce4f01ec1b554346709ac479bc50be}
+      \field{extraname}{1}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://directus.io/docs/api/permissions}}
+      \field{note}{(Último acesso em 11/05/2026)}
+      \field{title}{Directus Docs: Permissions}
+      \field{year}{2026}
+    \endentry
+    \entry{DirectusAbout}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=f4ce4f01ec1b554346709ac479bc50be}{%
+           family={{Directus}},
+           familyi={D\bibinitperiod}}}%
+      }
+      \strng{namehash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{fullhash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{fullhashraw}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{bibnamehash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{authorbibnamehash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{authornamehash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{authorfullhash}{f4ce4f01ec1b554346709ac479bc50be}
+      \strng{authorfullhashraw}{f4ce4f01ec1b554346709ac479bc50be}
+      \field{extraname}{2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://directus.io}}
+      \field{note}{(Último acesso em 31/03/2026)}
+      \field{title}{Directus: The Open Data Platform}
+      \field{year}{2024}
+    \endentry
+    \entry{AppsmithDocs}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=72012d22e2a811d1c19d50c2051492a6}{%
+           family={{Appsmith}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{fullhash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{fullhashraw}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{bibnamehash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{authorbibnamehash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{authornamehash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{authorfullhash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{authorfullhashraw}{72012d22e2a811d1c19d50c2051492a6}
+      \field{extraname}{1}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://docs.appsmith.com/}}
+      \field{note}{(Último acesso em 11/05/2026)}
+      \field{title}{Appsmith Documentation: Introduction}
+      \field{year}{2026}
+    \endentry
+    \entry{AppsmithAbout}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=72012d22e2a811d1c19d50c2051492a6}{%
+           family={{Appsmith}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{fullhash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{fullhashraw}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{bibnamehash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{authorbibnamehash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{authornamehash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{authorfullhash}{72012d22e2a811d1c19d50c2051492a6}
+      \strng{authorfullhashraw}{72012d22e2a811d1c19d50c2051492a6}
+      \field{extraname}{2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://www.appsmith.com}}
+      \field{note}{(Último acesso em 31/03/2026)}
+      \field{title}{Appsmith: Open source framework to build internal tools}
+      \field{year}{2024}
+    \endentry
+    \entry{DynamoDBTTL}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=3eb2c1a57a8160029f036e3dcbf84bf1}{%
+           family={{Amazon Web Services}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{fullhash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{fullhashraw}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{bibnamehash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{authorbibnamehash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{authornamehash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{authorfullhash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{authorfullhashraw}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \field{extraname}{1}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html}}
+      \field{note}{(Último acesso em 11/05/2026)}
+      \field{title}{Using time to live (TTL) in DynamoDB}
+      \field{year}{2026}
+    \endentry
+    \entry{AWSCognitoGroups}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=3eb2c1a57a8160029f036e3dcbf84bf1}{%
+           family={{Amazon Web Services}},
+           familyi={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{fullhash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{fullhashraw}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{bibnamehash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{authorbibnamehash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{authornamehash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{authorfullhash}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \strng{authorfullhashraw}{3eb2c1a57a8160029f036e3dcbf84bf1}
+      \field{extraname}{2}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-user-groups.html}}
+      \field{note}{(Último acesso em 11/05/2026)}
+      \field{title}{Adding groups to a user pool}
+      \field{year}{2026}
+    \endentry
+    \entry{C4Model}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=0653a11aad687a389587e0000e0f4a13}{%
+           family={Brown},
+           familyi={B\bibinitperiod},
+           given={Simon},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{0653a11aad687a389587e0000e0f4a13}
+      \strng{fullhash}{0653a11aad687a389587e0000e0f4a13}
+      \strng{fullhashraw}{0653a11aad687a389587e0000e0f4a13}
+      \strng{bibnamehash}{0653a11aad687a389587e0000e0f4a13}
+      \strng{authorbibnamehash}{0653a11aad687a389587e0000e0f4a13}
+      \strng{authornamehash}{0653a11aad687a389587e0000e0f4a13}
+      \strng{authorfullhash}{0653a11aad687a389587e0000e0f4a13}
+      \strng{authorfullhashraw}{0653a11aad687a389587e0000e0f4a13}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://c4model.com}}
+      \field{note}{(Último acesso em 31/03/2026)}
+      \field{title}{The C4 model for visualising software architecture}
+      \field{year}{2018}
+    \endentry
+    \entry{Rashid2024FURPSMoSCoW}{misc}{}{}
+      \name{author}{2}{}{%
+        {{hash=6786666da0b1bb4029c080af3b1c7c4a}{%
+           family={Rashid},
+           familyi={R\bibinitperiod},
+           given={E.},
+           giveni={E\bibinitperiod}}}%
+        {{hash=81b6b1cafa1f1a905af14f5254d9890d}{%
+           family={Mastorakis},
+           familyi={M\bibinitperiod},
+           given={N.\bibnamedelimi E.},
+           giveni={N\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \strng{namehash}{84b734f0aadb44c0ea17ac343360748b}
+      \strng{fullhash}{84b734f0aadb44c0ea17ac343360748b}
+      \strng{fullhashraw}{84b734f0aadb44c0ea17ac343360748b}
+      \strng{bibnamehash}{84b734f0aadb44c0ea17ac343360748b}
+      \strng{authorbibnamehash}{84b734f0aadb44c0ea17ac343360748b}
+      \strng{authornamehash}{84b734f0aadb44c0ea17ac343360748b}
+      \strng{authorfullhash}{84b734f0aadb44c0ea17ac343360748b}
+      \strng{authorfullhashraw}{84b734f0aadb44c0ea17ac343360748b}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Disponível em \url{https://housingscience.org/volume-45-issue-4/a-novel-complexity-scoring-model-for-non-functional-requirements-in-request-for-proposal-in-housing-industry-using-furps-quality-and-moscow-priority-model/}}
+      \field{note}{(Último acesso em 27/05/2026)}
+      \field{title}{A Novel Complexity Scoring Model for Non-Functional Requirements in Request for Proposal in Housing Industry Using FURPS Quality and Moscow Priority Model}
+      \field{year}{2024}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

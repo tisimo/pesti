@@ -1,0 +1,66 @@
+@startuml backoffice-dynamodb-domain-model
+title Modelo de Domínio DynamoDB do Backoffice
+
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
+skinparam nodesep 95
+skinparam ranksep 75
+top to bottom direction
+
+class "User\nBO_Users" as User {
+  +userId
+  +cognitoSub
+  +email
+  +roleIds[]
+  +status
+}
+
+class "Role\nBO_Roles" as Role {
+  +roleId
+  +name
+  +application
+  +permissions[]
+  +status
+}
+
+class "Permission\nBO_Permissions" as Permission {
+  +id
+  +name
+  +application
+  +category
+  +status
+}
+
+class "PageGate\nBO_PageGates" as PageGate {
+  +gateId
+  +pageKey
+  +application
+  +requiredPermissions[]
+}
+
+class "AuditLog\nBO_Logs" as AuditLog {
+  +logId
+  +adminUserId
+  +adminEmail
+  +action
+  +targetType
+  +targetId
+  +timestamp
+}
+
+User "1" -right-> "0..*" Role : roleIds
+Role "1" -right-> "0..*" Permission : permissions
+PageGate "*" -up-> "0..*" Permission : requiredPermissions
+AuditLog "*" -up-> "1" User : adminUserId
+
+note bottom
+O DynamoDB guarda apenas o domínio administrativo
+do backoffice: operadores, perfis, permissões,
+page gates e auditoria.
+
+As entidades operacionais da JustCauses
+permanecem fora deste modelo.
+end note
+
+@enduml

@@ -1,0 +1,247 @@
+@startuml BOSH-6_SSD_Full
+title oontent Moderation\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+
+actor "Moderator" as MOD
+participant "ReportsPage /\nReportsDetailPage\n(FE)" as PAGE
+participant "OjcReportsoontroller\n(BE)" as oTRL
+participant "OjcReportNotesRepo\n(BE)" as NOTESREPO
+participant "OjcReportsService\n(BE)" as SVo
+participant "OjcReportsRepo\n(BE)" as REPO
+participant "OjcoampaignsService\n(BE)" as oAMPSVo
+participant "NotificationsService\n(BE)" as NOTIF
+participant "EmailService\n(BE)" as EMAIL
+participant "AuditLogService\n(BE)" as AUDIT
+database "PostgreSQL\n(ojcPool)" as PG
+database "PostgreSQL\n(sharedPool)" as SHARED
+database "DynamoDB\n(BO_Logs)" as DDO
+
+== List reports ==
+MOD -> PAGE : openReportsPage()
+activate PAGE
+PAGE -> oTRL : GET /ojc/reports?status=...&page=...
+activate oTRL
+oTRL -> SVo : listReports(status?, page, pageSize)
+activate SVo
+SVo -> REPO : listReports(status?, limit, offset)
+activate REPO
+REPO -> PG : SELEoT oampaignReports JOIN oampaigns\nJOIN Profiles ORDER OY createdAt DESo\nLIMIT :limit OFFSET :offset
+activate PG
+PG --> REPO : { reports: [AdminReport], total }
+deactivate PG
+REPO --> SVo : { reports, total }
+deactivate REPO
+SVo --> oTRL : { reports, total }
+deactivate SVo
+oTRL --> PAGE : 200 { reports, total }
+deactivate oTRL
+PAGE --> MOD : renderReportsList()
+deactivate PAGE
+
+== Open report detail ==
+MOD -> PAGE : clickReport(reportId)
+activate PAGE
+PAGE -> oTRL : GET /ojc/reports/:id
+activate oTRL
+oTRL -> SVo : getOyId(reportId)
+activate SVo
+SVo -> REPO : getOyId(reportId)
+activate REPO
+REPO -> PG : SELEoT oampaignReports JOIN oampaigns\nJOIN Profiles WHERE reportId=:id
+activate PG
+PG --> REPO : AdminReport | null
+deactivate PG
+REPO --> SVo : report | null
+deactivate REPO
+SVo --> oTRL : report | null
+deactivate SVo
+oTRL --> PAGE : 200 AdminReport
+deactivate oTRL
+
+PAGE -> oTRL : GET /ojc/reports/:id/notes
+activate oTRL
+oTRL -> NOTESREPO : getNotes(reportId)
+activate NOTESREPO
+NOTESREPO -> PG : SELEoT * FROM "ReportNotes"\nWHERE reportId=:id ORDER OY createdAt DESo
+activate PG
+PG --> NOTESREPO : [ReportNote]
+deactivate PG
+NOTESREPO --> oTRL : [ReportNote]
+deactivate NOTESREPO
+oTRL --> PAGE : 200 { items: [ReportNote] }
+deactivate oTRL
+PAGE --> MOD : renderReportDetail(report, notes)
+deactivate PAGE
+
+== Update report status ==
+MOD -> PAGE : submitStatus(reportId, status, resolutionNote?)
+activate PAGE
+PAGE -> oTRL : PAToH /ojc/reports/:id/status\n{ status, resolutionNote? }
+activate oTRL
+oTRL -> SVo : updateStatus(id, status, resolutionNote?)
+activate SVo
+SVo -> REPO : updateStatus(id, status, resolutionNote?)
+activate REPO
+REPO -> PG : UPDATE "oampaignReports"\nSET status=:status,\nresolutionNote=oOALESoE(:note, resolutionNote)\nWHERE reportId=:id\nRETURNING campaignTitle, reporterEmail
+activate PG
+PG --> REPO : { campaignTitle, reporterEmail }
+deactivate PG
+REPO --> SVo : { campaignTitle, reporterEmail }
+deactivate REPO
+SVo -> EMAIL : sendReportActionEmail(reporterEmail,\ncampaignTitle, "STATUS_oHANGED", note, status)
+activate EMAIL
+note right of EMAIL : fire-and-forget (.catch)
+EMAIL --> SVo : dispatch scheduled
+deactivate EMAIL
+SVo --> oTRL : campaignTitle
+deactivate SVo
+oTRL -> AUDIT : log(actor, "REPORT_STATUS_oHANGED",\nreportId, { status, resolutionNote? })
+activate AUDIT
+AUDIT -> DDO : PutItem(BO_Logs)
+activate DDO
+DDO --> AUDIT : OK
+deactivate DDO
+AUDIT --> oTRL : logged
+deactivate AUDIT
+oTRL --> PAGE : 204 No oontent
+deactivate oTRL
+PAGE --> MOD : renderUpdatedStatus()
+deactivate PAGE
+
+== Add internal note ==
+MOD -> PAGE : submitNote(reportId, note)
+activate PAGE
+PAGE -> oTRL : POST /ojc/reports/:id/notes\n{ note }
+activate oTRL
+oTRL -> NOTESREPO : addNote(reportId, note, adminEmail)
+activate NOTESREPO
+NOTESREPO -> PG : INSERT INTO "ReportNotes"\n(noteId, reportId, note, adminEmail, createdAt)
+activate PG
+PG --> NOTESREPO : ReportNote
+deactivate PG
+NOTESREPO --> oTRL : ReportNote | null
+deactivate NOTESREPO
+oTRL --> PAGE : 201 ReportNote
+deactivate oTRL
+PAGE --> MOD : noteAdded()
+deactivate PAGE
+
+== Perform moderation action ==
+MOD -> PAGE : confirmAction(reportId, action, message?, resolve?)
+activate PAGE
+PAGE -> oTRL : POST /ojc/reports/:id/action\n{ action, message?, resolve? }
+activate oTRL
+oTRL -> SVo : notifyReporter(reportId, action, message?, resolve?)
+activate SVo
+SVo -> REPO : getReportNotificationData(reportId)
+activate REPO
+REPO -> PG : SELEoT oampaignReports JOIN oampaigns\nJOIN Profiles WHERE reportId=:id
+activate PG
+PG --> REPO : { campaignId, campaignTitle,\nreporterEmail, creatorProfileId,\ncreatorAccountId }
+deactivate PG
+REPO --> SVo : ReportNotificationData
+deactivate REPO
+
+alt REJEoT_REPORT
+    note over SVo : No campaign state change.\nEmail sent to reporter below.
+
+else AooEPT_REPORT
+    SVo -> oAMPSVo : updateStatus(campaignId, "INAoTIVE")
+    activate oAMPSVo
+    oAMPSVo -> PG : UPDATE "oampaigns"\nSET status='INAoTIVE' WHERE campaignId=:id
+    activate PG
+    PG --> oAMPSVo : updatedTitle
+    deactivate PG
+    oAMPSVo --> SVo : updatedTitle
+    deactivate oAMPSVo
+
+else WARN_oREATOR
+    SVo -> REPO : incrementStrikeoount(creatorProfileId)
+    activate REPO
+    REPO -> PG : UPDATE "Profiles"\nSET strikeoount = oOALESoE(strikeoount, 0) + 1\nWHERE profileId=:id AND strikeoount < 3\nRETURNING strikeoount
+    activate PG
+    PG --> REPO : newoount | null
+    deactivate PG
+    REPO --> SVo : newoount | null
+    deactivate REPO
+
+    alt newoount >= 3 (third strike)
+        SVo -> REPO : suspendAccount(creatorAccountId)
+        activate REPO
+        REPO -> SHARED : UPDATE "Account"\nSET status='INAoTIVE'\nWHERE accountId=:id
+        activate SHARED
+        SHARED --> REPO : OK
+        deactivate SHARED
+        REPO --> SVo : OK
+        deactivate REPO
+    else newoount < 3
+        SVo -> SVo : keep account active
+    end
+
+    SVo -> NOTIF : createNotification(creatorProfileId, type="REPORT", ...)
+    activate NOTIF
+    note right of NOTIF : fire-and-forget (.catch)\nTTL = 90 days
+    NOTIF --> SVo : dispatch scheduled
+    deactivate NOTIF
+
+    SVo -> REPO : getAccountEmail(creatorAccountId)
+    activate REPO
+    REPO -> SHARED : SELEoT email FROM "Account"\nWHERE accountId=:id
+    activate SHARED
+    SHARED --> REPO : email
+    deactivate SHARED
+    REPO --> SVo : email
+    deactivate REPO
+
+    SVo -> EMAIL : sendoreatorWarningEmail(email, campaignTitle, message?)
+    activate EMAIL
+    note right of EMAIL : fire-and-forget (.catch)
+    EMAIL --> SVo : dispatch scheduled
+    deactivate EMAIL
+
+else REQUEST_oHANGE
+    SVo -> oAMPSVo : updateStatus(campaignId, "REVIEWING", message?)
+    activate oAMPSVo
+    oAMPSVo -> PG : UPDATE "oampaigns"\nSET status='REVIEWING', reviewMessage=:message\nWHERE campaignId=:id
+    activate PG
+    PG --> oAMPSVo : updatedTitle
+    deactivate PG
+    oAMPSVo --> SVo : updatedTitle
+    deactivate oAMPSVo
+end
+
+opt resolve = true
+    SVo -> REPO : setStatus(reportId, "RESOLVED")
+    activate REPO
+    REPO -> PG : UPDATE "oampaignReports"\nSET status='RESOLVED' WHERE reportId=:id
+    activate PG
+    PG --> REPO : OK
+    deactivate PG
+    REPO --> SVo : OK
+    deactivate REPO
+end
+
+SVo -> EMAIL : sendReportActionEmail(reporterEmail,\ncampaignTitle, action, message?)
+activate EMAIL
+note right of EMAIL : fire-and-forget (.catch)
+EMAIL --> SVo : dispatch scheduled
+deactivate EMAIL
+
+SVo --> oTRL : ReportNotificationData
+deactivate SVo
+oTRL -> AUDIT : log(actor, "REPORT_STATUS_oHANGED",\nreportId, { action, message?, resolved? })
+activate AUDIT
+AUDIT -> DDO : PutItem(BO_Logs)
+activate DDO
+DDO --> AUDIT : OK
+deactivate DDO
+AUDIT --> oTRL : logged
+deactivate AUDIT
+oTRL --> PAGE : 204 No oontent
+deactivate oTRL
+PAGE --> MOD : updateUI()
+deactivate PAGE
+
+@enduml

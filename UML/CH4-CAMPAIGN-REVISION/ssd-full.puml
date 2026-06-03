@@ -1,0 +1,142 @@
+@startuml CH4_CAMPAIGN_REVISION_SSD_Full
+title Campaign Revision Thread\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+
+actor "JustCauses Operator" as OP
+participant "CampaignRevisionDetailPage\n(FE)" as PAGE
+participant "campaignRevisions.api.ts\n(FE)" as API
+participant "requirePermission\n(BE)" as GUARD
+participant "OjcCampaignRevisionController\n(BE)" as CTRL
+participant "OjcCampaignRevisionService\n(BE)" as SVC
+participant "OjcCampaignRevisionRepo\n(BE)" as REPO
+participant "NotificationsService\n(BE)" as NOTIFY
+participant "EmailService\n(BE)" as EMAIL
+participant "AuditLogService\n(BE)" as AUDIT
+database "PostgreSQL\n(JustCauses data)" as PG
+database "DynamoDB\n(BO_Logs / notifications)" as DDB
+participant "AWS SES" as SES
+
+== Open review thread ==
+OP -> PAGE : openRevisionThread(threadId)
+activate PAGE
+PAGE -> API : getThreadDetail(threadId)
+activate API
+API -> GUARD : GET /ojc/campaign-revision-threads/:threadId
+activate GUARD
+GUARD -> CTRL : allow if review permission exists
+activate CTRL
+CTRL -> SVC : getThreadDetail(threadId)
+activate SVC
+SVC -> REPO : getThreadDetail(threadId)
+activate REPO
+REPO -> PG : Load thread, submissions,\nmedia and decision history
+activate PG
+PG --> REPO : thread detail rows
+deactivate PG
+REPO --> SVC : thread detail
+deactivate REPO
+note over SVC
+  Review actors are enriched before
+  the detail is returned to the UI.
+end note
+SVC --> CTRL : enriched thread detail
+deactivate SVC
+CTRL --> GUARD : 200 thread detail
+deactivate CTRL
+GUARD --> API : thread detail
+deactivate GUARD
+API --> PAGE : thread detail
+deactivate API
+PAGE --> OP : render comparison, history and actions
+deactivate PAGE
+
+== Moderate thread ==
+OP -> PAGE : moderateThread(action, message)
+activate PAGE
+PAGE -> API : POST /:threadId/request-changes\nor /approve or /reject
+activate API
+API -> GUARD : require approve_reject
+activate GUARD
+GUARD -> CTRL : allow request
+activate CTRL
+CTRL -> SVC : moderateThread(threadId, action,\nactor.adminUserId, message)
+activate SVC
+
+SVC -> REPO : getModerationContext(threadId)
+activate REPO
+REPO -> PG : Load current state and creator contact
+activate PG
+PG --> REPO : moderation context
+deactivate PG
+REPO --> SVC : moderation context
+deactivate REPO
+
+alt thread is not pending
+  SVC --> CTRL : INVALID_STATE
+  deactivate SVC
+  CTRL --> GUARD : 409 error
+  deactivate CTRL
+  GUARD --> API : 409 error
+  deactivate GUARD
+  API --> PAGE : error
+  deactivate API
+  PAGE --> OP : show moderation error
+
+else pending thread
+  activate SVC
+  activate CTRL
+  activate GUARD
+  activate API
+  SVC -> REPO : applyModerationAction(threadId,\naction, actor, message)
+  activate REPO
+  REPO -> PG : Update thread state and append decision
+  activate PG
+  PG --> REPO : updated thread
+  deactivate PG
+  REPO --> SVC : updated thread
+  deactivate REPO
+
+  SVC -> NOTIFY : createNotification(CAMPAIGN-STATUS)
+  activate NOTIFY
+  NOTIFY -> DDB : PutItem(notification)
+  activate DDB
+  DDB --> NOTIFY : OK
+  deactivate DDB
+  NOTIFY --> SVC : notification persisted
+  deactivate NOTIFY
+
+  SVC -> EMAIL : sendCampaignRevisionOutcomeEmail(\ncreatorEmail, campaignTitle, action, message)
+  activate EMAIL
+  EMAIL -> SES : SendEmailCommand
+  activate SES
+  SES --> EMAIL : accepted
+  deactivate SES
+  EMAIL --> SVC : email dispatch requested
+  deactivate EMAIL
+
+  SVC --> CTRL : updated thread
+  deactivate SVC
+  CTRL -> AUDIT : log(CAMPAIGN_REVISION_*,\ntarget=threadId, details)
+  activate AUDIT
+  AUDIT -> DDB : PutItem(BO_Logs)
+  activate DDB
+  DDB --> AUDIT : OK
+  deactivate DDB
+  AUDIT --> CTRL : audit log persisted
+  deactivate AUDIT
+
+  CTRL --> GUARD : 200 updated detail
+  deactivate CTRL
+  GUARD --> API : 200 updated detail
+  deactivate GUARD
+  API --> PAGE : success
+  deactivate API
+  PAGE --> OP : render new state and decision history
+  deactivate PAGE
+end
+||20||
+
+@enduml

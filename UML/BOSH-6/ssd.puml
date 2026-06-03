@@ -1,0 +1,46 @@
+﻿@startuml Content_Moderation_SSD
+title Content Moderation\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "Moderator" as MOD
+participant ":System" as SYS
+
+MOD -> SYS : openReportsPage()
+SYS --> MOD : renderReportsList(reports, total)
+
+MOD -> SYS : openReport(reportId)
+SYS --> MOD : renderReportDetail(report, campaignContext, notes)
+
+alt Update report status
+    MOD -> SYS : updateStatus(reportId, newStatus, resolutionNote?)
+    SYS --> MOD : statusUpdated()\nnote: email sent to reporter (async)
+
+else Add internal note
+    MOD -> SYS : addNote(reportId, note)
+    SYS --> MOD : noteSaved()
+
+else Perform moderation action
+    MOD -> SYS : performAction(reportId, action, message?, resolve?)
+
+    alt REJECT_REPORT
+        SYS --> MOD : reportRejected()\nnote: email sent to reporter (async)
+
+    else ACCEPT_REPORT
+        SYS --> MOD : reportAccepted()\nnote: campaign set to INACTIVE\nemail sent to reporter (async)
+
+    else WARN_CREATOR
+        alt Third strike
+            SYS --> MOD : warningIssued()\nnote: creator account suspended\ncreator notified via email + in-app (async)
+        else Below three strikes
+            SYS --> MOD : warningIssued()\nnote: strike count incremented\ncreator notified via email + in-app (async)
+        end
+
+    else REQUEST_CHANGE
+        SYS --> MOD : changeRequested()\nnote: campaign set to REVIEWING\nemail sent to reporter (async)
+    end
+end
+
+@enduml

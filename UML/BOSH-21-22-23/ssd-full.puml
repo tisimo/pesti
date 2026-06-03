@@ -1,0 +1,142 @@
+@startuml BOSH-21-22-23_SSD_Full
+title Roles & Permissions Management\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+
+actor "Backoffice Admin" as OA
+participant "RolesPermissionsPage\n(FE)" as PAGE
+participant "useRoles\n(hook)" as HOOK
+participant "RolesService\n(FE)" as FSVC
+participant "RoleController\n(BE)" as RCTRL
+participant "RoleService\n(BE)" as RSVC
+participant "RoleRepo\n(BE)" as RREPO
+participant "PermissionController\n(BE)" as PCTRL
+participant "AuditLogService\n(BE)" as AUDIT
+database "DynamoDB\n(BO_Roles / BO_Permissions / BO_Logs)" as DDO
+
+== Load page ==
+OA -> PAGE : openRolesPermissionsPage()
+activate PAGE
+PAGE -> HOOK : useRoles()
+activate HOOK
+
+HOOK -> FSVC : getRoles()
+activate FSVC
+FSVC -> RCTRL : GET /roles
+activate RCTRL
+RCTRL -> RSVC : getAll()
+activate RSVC
+RSVC -> RREPO : findAll()
+activate RREPO
+RREPO -> DDO : Scan(BO_Roles, status=ACTIVE)
+activate DDO
+DDO --> RREPO : roles
+deactivate DDO
+RREPO --> RSVC : roles
+deactivate RREPO
+RSVC --> RCTRL : RoleDTO[]
+deactivate RSVC
+RCTRL --> FSVC : 200 RoleDTO[]
+deactivate RCTRL
+FSVC --> HOOK : sortedRoles
+deactivate FSVC
+
+HOOK -> FSVC : getPermissions()
+activate FSVC
+FSVC -> PCTRL : GET /permissions
+activate PCTRL
+PCTRL -> DDO : Scan(BO_Permissions, status=ACTIVE)
+activate DDO
+DDO --> PCTRL : permissions
+deactivate DDO
+PCTRL --> FSVC : 200 PermissionDTO[]
+deactivate PCTRL
+FSVC --> HOOK : permissions
+deactivate FSVC
+
+HOOK --> PAGE : { roles, permissions, reload }
+deactivate HOOK
+PAGE --> OA : render application tabs and role cards
+deactivate PAGE
+
+== Toggle permission locally ==
+OA -> PAGE : clickRoleCard(roleId)
+activate PAGE
+PAGE --> OA : renderPermissionToggles()
+deactivate PAGE
+
+OA -> PAGE : togglePermission(permissionName, newState)
+activate PAGE
+PAGE --> OA : renderUnsavedBadge()\nnote: local draft only; no API call
+deactivate PAGE
+
+== Save permission changes ==
+OA -> PAGE : saveChanges(roleId, draftPermissionNames)
+activate PAGE
+PAGE -> FSVC : updateRole(roleId, { permissions: [uuid, ...] })
+activate FSVC
+FSVC -> RCTRL : PUT /roles/:id\n{ permissions }
+activate RCTRL
+RCTRL -> RSVC : update(roleId, { permissions })
+activate RSVC
+
+alt isDefault role
+  RSVC --> RCTRL : 403 Forbidden
+  deactivate RSVC
+  RCTRL --> FSVC : 403 error
+  deactivate RCTRL
+  FSVC --> PAGE : error
+  deactivate FSVC
+  PAGE --> OA : showError("Default role cannot be modified")
+
+else valid role
+  activate RSVC
+  activate RCTRL
+  activate FSVC
+  RSVC -> RREPO : findById(roleId)
+  activate RREPO
+  RREPO -> DDO : GetItem(BO_Roles)
+  activate DDO
+  DDO --> RREPO : role
+  deactivate DDO
+  RREPO --> RSVC : role
+  deactivate RREPO
+
+  note over RSVC
+    Permission identifiers are resolved before the request.
+    The server keeps default roles immutable and persists
+    only the permissions accepted for the role.
+  end note
+
+  RSVC -> RREPO : update(role)
+  activate RREPO
+  RREPO -> DDO : PutItem(BO_Roles, updatedRole)
+  activate DDO
+  DDO --> RREPO : OK
+  deactivate DDO
+  RREPO --> RSVC : updatedRole
+  deactivate RREPO
+  RSVC --> RCTRL : updatedRole
+  deactivate RSVC
+
+  RCTRL -> AUDIT : log(UPDATE_PERMISSIONS,\nroleId, { added, removed })
+  activate AUDIT
+  AUDIT -> DDO : PutItem(BO_Logs)
+  activate DDO
+  DDO --> AUDIT : OK
+  deactivate DDO
+  AUDIT --> RCTRL : audit log persisted
+  deactivate AUDIT
+
+  RCTRL --> FSVC : 200 updatedRole
+  deactivate RCTRL
+  FSVC --> PAGE : success
+  deactivate FSVC
+  PAGE --> OA : renderSavedState()
+  deactivate PAGE
+end
+||20||
+
+@enduml

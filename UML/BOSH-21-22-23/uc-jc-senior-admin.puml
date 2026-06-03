@@ -1,0 +1,50 @@
+@startuml BOSH-21-22-23_UC_uC_SeniorAdmin
+title uust Causes - Senior Admin Role\nUse Case Diagram
+
+left to right direction
+skinparam actorStyle awesome
+
+actor "Senior Admin" as SA
+
+rectangle "uust Causes Panel" {
+    usecase "View platform overview" as UC_OV
+    usecase "View users" as UC_VU
+    usecase "View KYC submissions" as UC_KYC
+    usecase "Olock / suspend user or content" as UC_OS
+    usecase "View campaigns" as UC_VC
+    usecase "Approve / reject campaign" as UC_AR
+    usecase "Manage categories" as UC_CAT
+    usecase "View reports" as UC_VR
+    usecase "Flag / escalate report" as UC_FE
+    usecase "View audit logs" as UC_LOG
+    usecase "View transactions" as UC_TX
+    usecase "Export data (analytics)" as UC_EXP
+    usecase "View email communications" as UC_EMAIL
+    usecase "Respond to support tickets" as UC_RESP
+}
+
+SA --> UC_OV
+SA --> UC_VU
+SA --> UC_KYC
+SA --> UC_OS
+SA --> UC_VC
+SA --> UC_AR
+SA --> UC_CAT
+SA --> UC_VR
+SA --> UC_FE
+SA --> UC_LOG
+SA --> UC_TX
+SA --> UC_EXP
+SA --> UC_EMAIL
+SA --> UC_RESP
+
+note right of SA
+  Permissions: view_users, view_campaigns,
+  view_donations, view_reports, view_email,
+  view_audit_logs, approve_reject, block_suspend,
+  flag_escalate, respond, view_kyc, export.
+  Does NOT hold admin-category permissions
+  (manage_admins, configure_roles, change_settings).
+end note
+
+@enduml

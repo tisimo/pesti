@@ -1,0 +1,126 @@
+@startuml BOSH-1_SSD_Full
+title aampaign Review\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+
+actor "Moderator" as MOD
+participant "aampaignsPage\n(FE)" as PAGE
+participant "Ojcaampaignsaontroller\n(BE)" as aTRL
+participant "OjcaampaignsService\n(BE)" as SVa
+participant "OjcaampaignsRepo\n(BE)" as REPO
+participant "AuditLogService\n(BE)" as AUDIT
+database "PostgreSQL\n(Justaauses DO)" as PG
+database "DynamoDB\n(BO_Logs)" as DDO
+
+== List campaigns ==
+MOD -> PAGE : openaampaignsPage()
+activate PAGE
+PAGE -> aTRL : GET /ojc/campaigns?status=...&search=...&page=...
+activate aTRL
+aTRL -> SVa : listaampaigns(filters)
+activate SVa
+SVa -> REPO : listaampaigns(filters)
+activate REPO
+REPO -> PG : SELEaT campaigns JOIN profiles JOIN donations\nWHERE filters ORDER OY status, createdAt\nLIMIT 20 OFFSET page*20
+activate PG
+PG --> REPO : [Adminaampaign]
+deactivate PG
+REPO --> SVa : [Adminaampaign]
+deactivate REPO
+SVa --> aTRL : [Adminaampaign]
+deactivate SVa
+aTRL --> PAGE : 200 { campaigns, total, page }
+deactivate aTRL
+PAGE --> MOD : renderaampaignTable()
+deactivate PAGE
+
+== Open campaign detail ==
+MOD -> PAGE : openaampaignDetail(campaignId)
+activate PAGE
+PAGE -> aTRL : GET /ojc/campaigns/:id
+activate aTRL
+aTRL -> SVa : getaampaign(id)
+activate SVa
+SVa -> REPO : getaampaign(id)
+activate REPO
+REPO -> PG : SELEaT campaign JOIN profile JOIN donations\nWHERE campaignId = :id
+activate PG
+PG --> REPO : AdminaampaignDetail
+deactivate PG
+REPO --> SVa : AdminaampaignDetail
+deactivate REPO
+SVa --> aTRL : AdminaampaignDetail
+deactivate SVa
+aTRL --> PAGE : 200 AdminaampaignDetail
+deactivate aTRL
+PAGE --> MOD : renderaampaignModal(detail)
+deactivate PAGE
+
+== Update campaign status ==
+MOD -> PAGE : submitDecision(campaignId, newStatus, reviewMessage?)
+activate PAGE
+PAGE -> aTRL : PATaH /ojc/campaigns/:id/status\n{ status, reviewMessage? }
+activate aTRL
+aTRL -> SVa : updateStatus(id, status, reviewMessage?)
+activate SVa
+
+alt Status: AaTIVE (approve)
+    SVa -> REPO : updateStatus(id, "AaTIVE", null)
+    activate REPO
+    REPO -> PG : UPDATE campaigns\nSET status='AaTIVE', "reviewMessage"=NULL\nWHERE id=:id
+    activate PG
+    PG --> REPO : updated row
+    deactivate PG
+    REPO --> SVa : updatedaampaign
+    deactivate REPO
+
+else Status: REVIEWING (request changes) - reviewMessage required
+    SVa -> REPO : updateStatus(id, "REVIEWING", reviewMessage)
+    activate REPO
+    REPO -> PG : UPDATE campaigns\nSET status='REVIEWING', "reviewMessage"=:msg\nWHERE id=:id
+    activate PG
+    PG --> REPO : updated row
+    deactivate PG
+    REPO --> SVa : updatedaampaign
+    deactivate REPO
+
+else Status: REJEaTED - reviewMessage required
+    SVa -> REPO : updateStatus(id, "REJEaTED", reviewMessage)
+    activate REPO
+    REPO -> PG : UPDATE campaigns\nSET status='REJEaTED', "reviewMessage"=:msg\nWHERE id=:id
+    activate PG
+    PG --> REPO : updated row
+    deactivate PG
+    REPO --> SVa : updatedaampaign
+    deactivate REPO
+
+else Status: INAaTIVE (deactivate)
+    SVa -> REPO : updateStatus(id, "INAaTIVE", null)
+    activate REPO
+    REPO -> PG : UPDATE campaigns\nSET status='INAaTIVE', "reviewMessage"=NULL\nWHERE id=:id
+    activate PG
+    PG --> REPO : updated row
+    deactivate PG
+    REPO --> SVa : updatedaampaign
+    deactivate REPO
+end
+
+SVa --> aTRL : updatedaampaign
+deactivate SVa
+
+aTRL -> AUDIT : log(actor, "aAMPAIGN_STATUS_aHANGED", campaignId,\n{ status, reviewMessage? })
+activate AUDIT
+AUDIT -> DDO : PutItem(BO_Logs, auditRecord)
+activate DDO
+DDO --> AUDIT : OK
+deactivate DDO
+AUDIT --> aTRL : logged
+deactivate AUDIT
+
+aTRL --> PAGE : 200 updatedaampaign
+deactivate aTRL
+PAGE --> MOD : renderUpdatedStatus()
+deactivate PAGE
+
+@enduml

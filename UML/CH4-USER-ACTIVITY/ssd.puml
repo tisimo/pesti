@@ -1,0 +1,20 @@
+@startuml CH4_USER_ACTIVITY_SSD
+title User Activity Review\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "Admin Operator" as OP
+participant ":System" as SYS
+
+OP -> SYS : openUserActivity(userId)
+SYS --> OP : showAggregatedActivity()\nnote: audit logs and audit trail combined
+
+OP -> SYS : applyFilters(dateRange, action, result, application)
+SYS --> OP : showFilteredActivity()
+
+OP -> SYS : openActivityDetails(activityId)
+SYS --> OP : showActivityDetails()
+
+@enduml

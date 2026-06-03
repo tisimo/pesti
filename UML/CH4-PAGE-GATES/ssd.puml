@@ -1,0 +1,23 @@
+@startuml CH4_PAGE_GATES_SSD
+title Page Gates Configuration\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "Admin Operator" as OP
+participant ":System" as SYS
+
+OP -> SYS : openPageAccessConfiguration()
+SYS --> OP : showPagesGroupedByApplication()
+
+OP -> SYS : updatePageGate(pageKey, application, permissions)
+
+alt Page and permissions belong to the same application
+    SYS --> OP : pageGateUpdated()\nnote: audit log written
+
+else Permission from another application
+    SYS --> OP : showError("Permission does not belong to this application")
+end
+
+@enduml

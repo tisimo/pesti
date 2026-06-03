@@ -1,0 +1,144 @@
+\chapter{Introdução}
+\label{cap:introdução}
+
+Este capítulo apresenta o enquadramento do projeto desenvolvido no âmbito da \gls{UC} \gls{LEI-PROJ} da Licenciatura em Engenharia Informática do \gls{ISEP}, realizado nas instalações da empresa \textit{OnlyHighIQ}, sediada no Porto, com início a 23 de fevereiro de 2026. São ainda descritos o problema que motivou o trabalho, os objetivos definidos, a abordagem seguida, o planeamento estabelecido e os contributos alcançados. O capítulo termina com uma apresentação sucinta da estrutura do restante relatório.
+
+%----------------------------------------------------------------------------------------
+
+\section{Enquadramento}
+\label{sec:enquadramento}
+
+A \textit{OnlyHighIQ} é uma empresa de inovação tecnológica sediada no Porto. A empresa tem como objetivo principal construir um ecossistema de plataformas digitais que, através da tecnologia, permitam a pessoas de todo o mundo aceder a serviços e indústrias a que de outra forma não teriam acesso, suportado por um ecossistema próprio de transações financeiras. A missão, a visão e os valores que orientam esta ambição estão sintetizados na Tabela~\ref{tab:missao_visao_valores}. \cite{OYI}
+
+\begin{table}[H]
+\caption{Missão, Visão e Valores da OnlyHighIQ}
+\label{tab:missao_visao_valores}
+\begin{center}
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Missão} & \textit{``To create a dynamic community where brilliant minds collaborate to develop cutting-edge solutions and innovative platforms that transform visionary ideas into reality.''} \cite{OYI} \\ \hline
+\textbf{Visão} & \textit{``To create a limitless innovation landscape where the most brilliant minds, have the tools to build the future, ensuring that progress and opportunity are distributed to everyone, everywhere.''} \cite{OYI} \\ \hline
+\textbf{Valores} & \textit{``Innovation Without Borders, Collaborative Excellence, Impact with Purpose, Courage to Disrupt, Principle-Led Integrity''} \cite{OYI} \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+O ecossistema da \textit{OnlyHighIQ} é composto por aplicações que partilham uma camada de identidade global e um módulo de pagamentos comum. A principal aplicação operacional neste momento é a \textbf{JustCauses}, uma plataforma de \textit{crowdfunding} orientada ao apoio de causas sociais a nível global, já com uma base de código existente e necessidades concretas de operação interna. Estão ainda planeadas futuras aplicações para o ecossistema, nomeadamente a \textit{Only High Value} (investimento fracionado em ativos de valor elevado) e a \textit{Only Second Hand} (moda em segunda mão). \cite{BackofficeSpec}
+
+Neste contexto, o trabalho realizado no estágio não se limita a um painel isolado da JustCauses. O projeto consiste no desenvolvimento de uma base de \textit{backoffice} multiaplicação para a \textit{OnlyHighIQ}, motivada pela necessidade transversal de administrar aplicações digitais usadas em contexto real e preparada para receber várias aplicações da empresa. A JustCauses é a primeira aplicação integrada e o caso funcional mais desenvolvido no relatório; o próprio \textit{backoffice} também já foi lançado como sistema interno, ficando disponível para suportar a administração do ecossistema à medida que este crescer.
+
+A solução permite acompanhar campanhas, configurar o acesso dos operadores, gerir permissões, validar informação operacional sensível e manter rastreabilidade sobre ações críticas. Na JustCauses, os criadores podem ser utilizadores individuais ou organizações. Esta distinção é relevante porque os utilizadores individuais são tratados através de verificação de identidade (\gls{KYC}), enquanto as organizações exigem verificação própria de oficialidade e representação (\gls{KYB}). A arquitetura foi concebida para separar capacidades transversais, como autenticação, autorização e auditoria, dos módulos específicos de cada aplicação. A solução está alojada na \gls{AWS} e é desenvolvida em React com TypeScript e Vite no \textit{front-end} e em Node.js com Express e TypeScript no \textit{back-end}. A persistência encontra-se dividida entre bases relacionais \gls{PostgreSQL}, usadas pelos dados operacionais da JustCauses e pelo domínio partilhado do ecossistema, e DynamoDB, usado pelos dados administrativos do backoffice, nomeadamente perfis, permissões, configuração de acessos e auditoria.
+
+%----------------------------------------------------------------------------------------
+
+\section{Descrição do Problema}
+\label{sec:problema}
+
+Qualquer aplicação digital que pretenda ser usada em escala, por diferentes pessoas e para diferentes finalidades, precisa de uma camada de administração interna. Sem essa camada, as equipas responsáveis pela operação ficam dependentes de processos manuais, acesso direto a dados ou intervenções técnicas pouco adequadas a um produto em produção. Num ecossistema com várias aplicações, este problema torna-se ainda mais relevante, porque autenticação, autorização, auditoria e gestão de operadores tenderiam a ser repetidas em cada produto.
+
+No caso da \textit{OnlyHighIQ}, a JustCauses é a primeira aplicação operacional a evidenciar esta necessidade. Para além de publicar campanhas e receber doações, a plataforma exige revisão de submissões, acompanhamento de pedidos de levantamento, consulta do estado da operação e garantia de que cada membro da equipa interna acede apenas ao que lhe compete. Na ausência de um painel de administração dedicado, estas operações acabam por depender de processos pouco rastreáveis: a aprovação de campanhas não segue um fluxo claro, os pedidos de levantamento não têm acompanhamento consistente, a informação necessária para decidir fica dispersa e as ações dos operadores internos não são registadas de forma uniforme.
+
+O problema, contudo, não se esgota na JustCauses nem no domínio do \textit{crowdfunding}. Sem uma base comum de administração, cada nova aplicação da \textit{OnlyHighIQ} teria de repetir mecanismos de autenticação, autorização, gestão de operadores, auditoria e configuração de acessos. Essa duplicação aumentaria o custo de manutenção e tornaria mais difícil aplicar regras consistentes entre aplicações.
+
+Neste contexto, o controlo de acesso deixa de ser um detalhe técnico e passa a ser parte da própria solução. O painel tem de distinguir aplicações, páginas, ações e perfis de operador sem perder coerência entre \textit{front-end} e \textit{back-end}. Para isso, a arquitetura deve suportar perfis associados a aplicações, permissões com âmbito aplicacional e funções globais de backoffice para administração transversal. Esta separação permite operar a JustCauses no presente e, ao mesmo tempo, reutilizar a mesma base para futuras aplicações da \textit{OnlyHighIQ}.
+
+
+\section{Objetivos}
+
+Para dar resposta ao problema identificado, o trabalho desenvolvido durante o estágio foi orientado por um objetivo principal e por dois eixos de objetivos específicos. O primeiro eixo corresponde à estrutura transversal do \textit{backoffice}, reutilizável por várias aplicações. O segundo corresponde à aplicação dessa estrutura à JustCauses, enquanto primeira integração operacional. Esta organização permite retomar os objetivos nos capítulos seguintes e relacioná-los com requisitos, decisões de desenho, implementação e avaliação.
+
+\begin{description}
+    \item[\textbf{OP - Objetivo principal}] Conceber e implementar um \textit{backoffice} multiaplicação para o ecossistema \textit{OnlyHighIQ}, capaz de fornecer uma base comum de administração interna, controlo de acesso, auditoria e operação.
+\end{description}
+
+\textbf{OE1 - Estrutura transversal de administração}
+\begin{description}
+    \item[\textbf{OE1.1}] Integrar a autenticação dos operadores internos e resolver o respetivo contexto administrativo após o início de sessão.
+    \item[\textbf{OE1.2}] Definir um modelo de perfis e permissões por aplicação, com regras próprias para perfis globais de backoffice.
+    \item[\textbf{OE1.3}] Aplicar o controlo de acesso ao nível da aplicação, da página, da interface e da \gls{API}, mantendo coerência entre cliente e servidor.
+    \item[\textbf{OE1.4}] Registar ações relevantes, acessos negados e atividade dos operadores, garantindo rastreabilidade e responsabilização.
+    \item[\textbf{OE1.5}] Organizar a arquitetura e a persistência de forma a permitir a integração futura de novas aplicações sem redesenhar o núcleo do \textit{backoffice}.
+\end{description}
+
+\textbf{OE2 - Integração operacional da JustCauses}
+\begin{description}
+    \item[\textbf{OE2.1}] Integrar a JustCauses como primeira aplicação operacional do \textit{backoffice} multiaplicação.
+    \item[\textbf{OE2.2}] Suportar a revisão de campanhas, incluindo decisões administrativas, registo da decisão e notificação ao utilizador.
+    \item[\textbf{OE2.3}] Disponibilizar mecanismos de gestão de categorias e de outros dados operacionais necessários à organização da plataforma.
+    \item[\textbf{OE2.4}] Fornecer indicadores operacionais através de \textit{dashboard} e \textit{analytics}, apoiando a leitura do estado da aplicação.
+    \item[\textbf{OE2.5}] Suportar a verificação de identidade de utilizadores individuais e a verificação de oficialidade de organizações, com rastreabilidade das decisões tomadas.
+\end{description}
+
+As capacidades mais específicas são tratadas nos capítulos seguintes como requisitos, decisões de implementação ou evidências de concretização destes objetivos.
+
+
+\section{Abordagem}
+
+O desenvolvimento do painel segue uma metodologia ágil assente no \textbf{SCRUM}, adotada pela \textit{OnlyHighIQ} como forma de estruturar o trabalho em equipa e garantir entregas incrementais de valor. O SCRUM organiza o trabalho em \textit{sprints} de duração fixa e assenta em três pilares fundamentais: \textbf{Transparência}, \textbf{Inspeção} e \textbf{Adaptação}, promovendo uma comunicação constante entre os membros da equipa. \cite{Sachdeva2016Scrum} As tarefas são geridas no \textbf{Jira}, onde os \textit{sprints} são definidos pelo supervisor, com distribuição de trabalho e acompanhamento do progresso de cada membro.
+
+Do ponto de vista técnico, o painel de administração é uma aplicação exclusivamente \textit{web}, sem componente móvel neste sistema, cujo acesso é restrito a operadores internos. A solução assenta numa separação clara entre \textit{front-end} e \textit{back-end}. A implementação foi desenvolvida sobre a base tecnológica já adotada pela empresa: React com TypeScript e Vite no \textit{front-end}, Node.js com Express e TypeScript no \textit{back-end}, bases \gls{PostgreSQL} para dados relacionais e DynamoDB para configuração administrativa e auditoria. A solução integra ainda serviços \gls{AWS}, nomeadamente Cognito para autenticação, S3 para armazenamento de ficheiros, \gls{SES} para e-mail transacional e CloudWatch para monitorização. A adoção de práticas de \gls{CI/CD} e de controlo de versões com \textit{branching} faz parte do fluxo de trabalho estabelecido pela empresa.
+
+Uma parte relevante da estrutura base do \textit{backoffice} foi desenvolvida em colaboração com a colega de estágio Helena. As decisões estruturais que afetavam o restante sistema, como o modelo de aplicações, perfis, permissões e funcionamento geral do acesso, foram discutidas em conjunto para garantir coerência entre módulos. A partir dessa base comum, funcionalidades mais delimitadas foram implementadas com maior autonomia individual. Neste relatório, a análise incide sobretudo sobre a auditoria, a configuração de acesso por página, o modelo de permissões, as evidências de escalabilidade e os módulos da JustCauses abordados no âmbito deste trabalho.
+
+\section{Planeamento do trabalho}
+\label{sec:planeamento}
+
+O estágio teve início a 23 de fevereiro de 2026. Numa fase inicial, o foco incidiu na integração na equipa, na compreensão do código existente e no planeamento das funcionalidades a desenvolver. O trabalho subsequente foi organizado em \textit{sprints} pelo supervisor externo, Rui Cruz, com recurso ao Jira para distribuição e acompanhamento de tarefas. A partir de 13 de maio de 2026, o projeto entrou numa fase de testes, validação manual e estabilização dos módulos entregues. A Tabela~\ref{tab:planeamento} sintetiza a organização temporal do trabalho.
+
+\begin{table}[H]
+\caption{Planeamento do trabalho}
+\label{tab:planeamento}
+\begin{center}
+\begin{tabular}{|l|p{9cm}|}
+\hline
+\textbf{Período} & \textbf{Tarefa} \\ \hline
+23/02/2026 -- 03/03/2026 & Fase de integração, análise do código existente e planeamento \\ \hline
+04/03/2026 -- 16/03/2026 & \textbf{Sprint 1}: infraestrutura e DevOps; autenticação; base do modelo de autorização \\ \hline
+16/03/2026 -- 27/03/2026 & \textbf{Sprint 2}: seletor de aplicações; permissões por aplicação e página; auditoria de acessos \\ \hline
+27/03/2026 -- 08/04/2026 & \textbf{Sprint 3}: configuração administrativa do acesso; operadores internos; revisão de campanhas \\ \hline
+08/04/2026 -- 20/04/2026 & \textbf{Sprint 4}: dashboard de \textit{analytics}; observabilidade; consolidação de logs \\ \hline
+20/04/2026 -- 01/05/2026 & \textbf{Sprint 5}: gestão de categorias; validação de conteúdos submetidos; estabilização operacional \\ \hline
+01/05/2026 -- 13/05/2026 & \textbf{Sprint 6}: processamento de levantamentos; salvaguardas operacionais e tratamento de exceções \\ \hline
+13/05/2026 -- 10/06/2026 & \textbf{Sprint 7}: testes, validação manual, correções finais e estabilização dos módulos entregues \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+\section{Contributos}
+
+Os contributos deste estágio organizam-se em três dimensões:
+
+\textbf{Tecnológicos}: implementação de uma base de \textit{backoffice} multiaplicação, com a JustCauses como primeira aplicação operacional integrada; desenvolvimento de módulos de operação da plataforma, mecanismo transversal de autorização, auditoria de ações internas, verificação \gls{KYC}/\gls{KYB}, indicadores operacionais e gestão de perfis e permissões por aplicação; integração da solução no processo de validação e qualidade da empresa.
+
+\textbf{Organizacionais}: a \textit{OnlyHighIQ} passa a dispor de ferramentas para operar a \textbf{JustCauses} de forma controlada e auditável. A mesma base suporta futuras aplicações sem repetir mecanismos de autenticação, autorização e auditoria.
+
+\textbf{Pedagógicos}: aplicação prática de conhecimentos em desenvolvimento \textit{full-stack}, sistemas de autorização e controlo de acesso, arquitetura \textit{cloud} e metodologias ágeis, numa equipa profissional e num contexto real de produto.
+
+\paragraph{Síntese dos contributos:}
+\begin{itemize}
+    \item Consolidação de uma base de \textit{backoffice} multiaplicação para a \textit{OnlyHighIQ}.
+    \item Implementação de um modelo de acesso coerente entre \textit{login}, navegação, interface e \gls{API}.
+    \item Suporte a perfis e permissões por aplicação, com regras específicas para perfis globais de backoffice.
+    \item Sistema de auditoria para ações relevantes, tentativas de acesso recusadas e atividade individual dos operadores.
+    \item Suporte à revisão de campanhas, gestão de categorias, verificação \gls{KYC}/\gls{KYB} e acompanhamento de indicadores da JustCauses.
+    \item Arquitetura extensível e compatível com o crescimento do ecossistema da \textit{OnlyHighIQ}.
+    \item Validação manual dos fluxos desenvolvidos e articulação com os testes de qualidade realizados pela empresa.
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+
+\section{Estrutura do relatório}
+\label{sec:estrutura}
+
+Para além da Introdução, este documento contém mais quatro capítulos, que acompanham as várias etapas do trabalho desenvolvido.
+
+No Capítulo~\ref{cap:estado_da_arte} é apresentado o estado da arte, com foco em sistemas de administração, controlo de acesso, auditoria, segurança e abordagens usadas em backoffices de plataformas digitais.
+
+No Capítulo~\ref{cap:analise_desenho} descreve-se a análise e o desenho da solução: arquitetura do painel, requisitos funcionais e não funcionais, modelo multiaplicação, modelo de permissões, modelo de dados e principais decisões de desenho.
+
+No Capítulo~\ref{cap:implementação} detalha-se a implementação. São apresentadas evidências funcionais dos módulos da JustCauses e evidências técnicas do mecanismo de autorização, auditoria, escalabilidade, testes e avaliação da solução.
+
+No Capítulo~\ref{cap:conclusão} é apresentada a síntese global do trabalho, com uma reflexão sobre os resultados obtidos, as limitações encontradas e as perspetivas de trabalho futuro, incluindo a possibilidade de avaliar micro-frontends quando o ecossistema tiver mais aplicações em produção.
+
+Em síntese, este capítulo delimitou o contexto, o problema, os objetivos, a abordagem e o planeamento do estágio, estabelecendo a base para a análise técnica apresentada nos capítulos seguintes.

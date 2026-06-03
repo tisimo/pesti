@@ -1,0 +1,107 @@
+@startuml CH4_PAGE_GATES_SSD_Full
+title Page Gate Configuration\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+
+actor "Backoffice Admin" as BA
+participant "PageGatesPage\n(FE)" as PAGE
+participant "PageGate API client\n(FE)" as API
+participant "requirePermission\n(BE)" as GUARD
+participant "PageGateController\n(BE)" as CTRL
+participant "PageGateService\n(BE)" as SVC
+participant "PageGateRepo\n(BE)" as REPO
+participant "AuditLogService\n(BE)" as AUDIT
+database "DynamoDB\n(BO_PageGates / BO_Logs)" as DDB
+
+== Load gates by application ==
+BA -> PAGE : openPageAccessConfig()
+activate PAGE
+PAGE -> API : getPageGates(application="just_causes")
+activate API
+API -> CTRL : GET /page-gates?application=just_causes
+activate CTRL
+CTRL -> SVC : getAll("just_causes")
+activate SVC
+SVC -> REPO : findByApplication("just_causes")
+activate REPO
+REPO -> DDB : Query/Scan(BO_PageGates)
+activate DDB
+DDB --> REPO : page gates
+deactivate DDB
+REPO --> SVC : page gates
+deactivate REPO
+SVC --> CTRL : page gates
+deactivate SVC
+CTRL --> API : 200 page gates
+deactivate CTRL
+API --> PAGE : page gates
+deactivate API
+PAGE --> BA : render pages and required permissions
+deactivate PAGE
+
+== Update required permissions ==
+BA -> PAGE : saveRequiredPermissions(gateId, requiredPermissions)
+activate PAGE
+PAGE -> API : updatePageGate(gateId, requiredPermissions)
+activate API
+API -> GUARD : PUT /page-gates/:id\n{ requiredPermissions }
+activate GUARD
+GUARD -> CTRL : allow if configure_roles
+activate CTRL
+
+CTRL -> SVC : getAll()
+activate SVC
+SVC -> REPO : findAll()
+activate REPO
+REPO -> DDB : Scan(BO_PageGates)
+activate DDB
+DDB --> REPO : all gates
+deactivate DDB
+REPO --> SVC : all gates
+deactivate REPO
+SVC --> CTRL : existing gate
+deactivate SVC
+
+CTRL -> SVC : update(gateId, requiredPermissions)
+activate SVC
+SVC -> REPO : findById(gateId)
+activate REPO
+REPO -> DDB : GetItem(BO_PageGates)
+activate DDB
+DDB --> REPO : gate
+deactivate DDB
+REPO --> SVC : gate
+deactivate REPO
+
+SVC -> REPO : save(updated gate)
+activate REPO
+REPO -> DDB : PutItem(BO_PageGates)
+activate DDB
+DDB --> REPO : updated gate
+deactivate DDB
+REPO --> SVC : updated gate
+deactivate REPO
+SVC --> CTRL : updated gate
+deactivate SVC
+
+CTRL -> AUDIT : log(PAGE_GATE_UPDATED,\n{ previous, next, added, removed })
+activate AUDIT
+AUDIT -> DDB : PutItem(BO_Logs)
+activate DDB
+DDB --> AUDIT : OK
+deactivate DDB
+AUDIT --> CTRL : audit log persisted
+deactivate AUDIT
+
+CTRL --> GUARD : 200 updated gate
+deactivate CTRL
+GUARD --> API : 200 updated gate
+deactivate GUARD
+API --> PAGE : success
+deactivate API
+PAGE --> BA : render saved configuration
+deactivate PAGE
+
+@enduml

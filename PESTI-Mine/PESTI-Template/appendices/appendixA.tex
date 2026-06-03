@@ -1,0 +1,148 @@
+\chapter{Diagramas de sequência}
+\label{app:sd_detalhados}
+
+Este apêndice reúne os diagramas de sequência detalhados (\gls{SD}) que expandem os \glspl{SSD} apresentados no Capítulo~\ref{cap:analise_desenho}. A sua colocação em anexo permite documentar os principais fluxos sem interromper a leitura das evidências visuais do Capítulo~\ref{cap:implementação}. Os modelos de domínio e as demonstrações da interface mantêm-se no texto principal, uma vez que são necessários para compreender diretamente a solução desenvolvida. As Figuras~\ref{fig:sd_login_full} a~\ref{fig:sd_kyb_verification_full} apresentam os fluxos detalhados correspondentes.
+
+%----------------------------------------------------------------------------------------
+
+\section{Autenticação e resolução de acesso}
+\label{app:sd_login_full}
+
+A Figura~\ref{fig:sd_login_full} detalha a autenticação do operador e a resolução inicial do seu contexto de acesso.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.85\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd-full}
+\caption{SD detalhado: autenticação e resolução inicial do operador}
+\label{fig:sd_login_full}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+
+\section{Criação de operadores administrativos}
+\label{app:sd_create_admin_full}
+
+A Figura~\ref{fig:sd_create_admin_full} detalha a criação de um operador administrativo e o registo da ação.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.85\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/create-admin-user/ssd-full}
+\caption{SD detalhado: criação de operador administrativo}
+\label{fig:sd_create_admin_full}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+
+\section{Atribuição de perfis por aplicação}
+\label{app:sd_role_assignment_full}
+
+A Figura~\ref{fig:sd_role_assignment_full} detalha a validação e a persistência da atribuição de perfis por aplicação.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.85\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/CH4-ROLE-ASSIGNMENT/ssd-full}
+\caption{SD detalhado: atribuição de perfis a um operador}
+\label{fig:sd_role_assignment_full}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+
+\section{Gestão de perfis e permissões}
+\label{app:sd_roles_permissions_full}
+
+A Figura~\ref{fig:sd_roles_permissions_full} detalha o carregamento, edição e gravação de perfis e permissões.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.85\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/roles-permissions/ssd-full}
+\caption{SD detalhado: carregamento e edição de perfis e permissões}
+\label{fig:sd_roles_permissions_full}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+
+\section{Configuração de page gates}
+\label{app:sd_page_gates_full}
+
+A Figura~\ref{fig:sd_page_gates_full} detalha a configuração administrativa das permissões necessárias para aceder a páginas.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.85\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/CH4-PAGE-GATES/ssd-full}
+\caption{SD detalhado: configuração administrativa de page gates}
+\label{fig:sd_page_gates_full}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+
+\section{Atividade individual de operadores}
+\label{app:sd_user_activity_full}
+
+A Figura~\ref{fig:sd_user_activity_full} detalha a agregação dos registos de atividade associados a um operador.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.85\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/CH4-USER-ACTIVITY/ssd-full}
+\caption{SD detalhado: agregação de atividade de um operador}
+\label{fig:sd_user_activity_full}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+
+\section{Revisão de campanhas e comunicação}
+\label{app:sd_campaign_revision_full}
+
+A Figura~\ref{fig:sd_campaign_revision_full} detalha a decisão de revisão de campanha, a notificação e o envio de e-mail.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.85\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd-full}
+\caption{SD detalhado: thread de revisão de campanha com notificação e e-mail}
+\label{fig:sd_campaign_revision_full}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+
+\section{Gestão de categorias}
+\label{app:sd_categories_full}
+
+A Figura~\ref{fig:sd_categories_full} detalha as operações de gestão de categorias e respetiva auditoria.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.85\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/manage-categories/ssd-full}
+\caption{SD detalhado: gestão de categorias}
+\label{fig:sd_categories_full}
+\end{figure}
+
+%----------------------------------------------------------------------------------------
+
+\section{Verificação KYC de utilizadores individuais}
+\label{app:sd_kyc_verification_full}
+
+A Figura~\ref{fig:sd_kyc_verification_full} detalha o fluxo de verificação KYC de utilizadores individuais.
+
+\IfFileExists{frontmatter/assets/backoffice/ch3/uml/kyc-verification/ssd-full.png}{
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.85\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/kyc-verification/ssd-full}
+\caption{SD detalhado: verificação KYC de utilizadores individuais}
+\label{fig:sd_kyc_verification_full}
+\end{figure}
+}{}
+
+%----------------------------------------------------------------------------------------
+
+\section{Verificação KYB de organizações}
+\label{app:sd_kyb_verification_full}
+
+A Figura~\ref{fig:sd_kyb_verification_full} detalha o fluxo de verificação KYB de organizações.
+
+\IfFileExists{frontmatter/assets/backoffice/ch3/uml/kyb-verification/ssd-full.png}{
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth, height=0.85\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/kyb-verification/ssd-full}
+\caption{SD detalhado: verificação KYB de organizações}
+\label{fig:sd_kyb_verification_full}
+\end{figure}
+}{}

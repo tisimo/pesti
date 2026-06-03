@@ -1,0 +1,122 @@
+@startuml KYC_VERIFICATION_SD_FULL
+title KYC Verification Queue\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+autoactivate on
+
+actor "JustCauses Operator" as OP
+participant "KycQueuePage\n(FE)" as PAGE
+participant "apiBackoffice\n(FE)" as API
+participant "requirePermission\n(BE)" as GUARD
+participant "OjcKycController\n(BE)" as CTRL
+participant "OjcKycService\n(BE)" as SVC
+participant "OjcKycRepo\n(BE)" as REPO
+participant "OjcUsersService\n(BE)" as USERS
+participant "NotificationsService\n(BE)" as NOTIFY
+participant "EmailService\n(BE)" as EMAIL
+participant "AuditLogService\n(BE)" as AUDIT
+database "PostgreSQL\n(shared and OJC)" as PG
+database "DynamoDB\n(BO_Logs)" as DDB
+participant "AWS SES" as SES
+
+== Load KYC queue ==
+OP -> PAGE : openKycQueue(filters)
+PAGE -> API : GET /ojc/kyc?filters
+API -> GUARD : requirePermission("view_kyc")
+GUARD -> CTRL : list(req, res)
+CTRL -> SVC : list(filters, page, pageSize)
+SVC -> REPO : list(filters, pageSize, offset)
+REPO -> PG : Load Verifications,\nVerificationData and Profiles
+PG --> REPO : verification rows
+REPO --> SVC : KycPage
+SVC --> CTRL : KycPage
+CTRL --> GUARD : 200 KycPage
+GUARD --> API : KycPage
+API --> PAGE : KycPage
+PAGE --> OP : render entries, stats,\nfilters and comparison data
+
+== Review KYC entry ==
+OP -> PAGE : applyKycAction(action, message)
+
+alt action = send mismatch warning
+  PAGE -> API : POST /ojc/kyc/:verificationId/mismatch-warning
+  API -> GUARD : requirePermission("view_kyc")
+  GUARD -> CTRL : sendMismatchWarning(req, res)
+  CTRL -> SVC : sendMismatchWarningEmail(verificationId, message)
+  SVC -> REPO : getByVerificationId(verificationId)
+  REPO -> PG : Load verification and linked profile
+  PG --> REPO : KycEntry
+  REPO --> SVC : KycEntry
+  SVC -> EMAIL : sendKycProfileMismatchWarningEmail(email, message)
+  EMAIL -> SES : SendEmailCommand
+  SES --> EMAIL : accepted
+  EMAIL --> SVC : email dispatch requested
+  SVC --> CTRL : KycEntry
+  CTRL -> AUDIT : log(KYC_MISMATCH_WARNING_SENT)
+  AUDIT -> DDB : PutItem(BO_Logs)
+  DDB --> AUDIT : OK
+  AUDIT --> CTRL : audit log persisted
+  CTRL --> GUARD : 200 { ok, entry }
+  GUARD --> API : success
+  API --> PAGE : updated entry
+  PAGE --> OP : show warning sent
+
+else action = reset stale pending verification
+  PAGE -> API : POST /ojc/kyc/:verificationId/reset-stale
+  API -> GUARD : requirePermission("view_kyc")
+  GUARD -> CTRL : resetStaleSubmission(req, res)
+  CTRL -> SVC : resetStalePendingSubmission(verificationId)
+  SVC -> REPO : resetPendingVerification(verificationId)
+  REPO -> PG : Delete stale pending verification
+  PG --> REPO : removed KycEntry
+  REPO --> SVC : removed KycEntry
+  SVC -> NOTIFY : createNotification(VERIFICATION)
+  NOTIFY --> SVC : notification requested
+  SVC -> EMAIL : sendKycVerificationResetEmail(email)
+  EMAIL -> SES : SendEmailCommand
+  SES --> EMAIL : accepted
+  EMAIL --> SVC : email dispatch requested
+  SVC --> CTRL : removed KycEntry
+  CTRL -> AUDIT : log(KYC_VERIFICATION_RESET)
+  AUDIT -> DDB : PutItem(BO_Logs)
+  DDB --> AUDIT : OK
+  AUDIT --> CTRL : audit log persisted
+  CTRL --> GUARD : 200 { ok, removedVerificationId, entry }
+  GUARD --> API : success
+  API --> PAGE : reset result
+  PAGE --> OP : remove entry from queue
+
+else action = update account status
+  PAGE -> API : POST /ojc/kyc/:verificationId/deactivate\nor /activate
+  API -> GUARD : requirePermission("view_kyc")
+  GUARD -> CTRL : deactivateAccount(req, res)\nor activateAccount(req, res)
+  CTRL -> SVC : deactivateAccount(verificationId, message)\nor activateAccount(verificationId)
+  SVC -> REPO : getByVerificationId(verificationId)
+  REPO -> PG : Load verification and account
+  PG --> REPO : KycEntry
+  REPO --> SVC : KycEntry
+  SVC -> USERS : updateUserStatus(accountId, status)
+  USERS --> SVC : next status
+  SVC --> CTRL : updated KycEntry
+  CTRL -> AUDIT : log(KYC_ACCOUNT_DEACTIVATED\nor KYC_ACCOUNT_ACTIVATED)
+  AUDIT -> DDB : PutItem(BO_Logs)
+  DDB --> AUDIT : OK
+  AUDIT --> CTRL : audit log persisted
+  CTRL --> GUARD : 200 { ok, entry }
+  GUARD --> API : success
+  API --> PAGE : updated entry
+  PAGE --> OP : show account status update
+
+else invalid request
+  PAGE -> API : POST invalid KYC action
+  API -> GUARD : requirePermission("view_kyc")
+  GUARD -> CTRL : handler(req, res)
+  CTRL --> GUARD : 400/404 error
+  GUARD --> API : error
+  API --> PAGE : error
+  PAGE --> OP : show error message
+end
+
+@enduml

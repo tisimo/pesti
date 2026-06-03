@@ -1,0 +1,67 @@
+@startuml auth-authorization-flow
+title Authentication and Authorization Flow
+
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Operator" as Operator
+participant "FrontEnd\nAuthProvider" as FE
+participant "AWS Cognito" as Cognito
+participant "BackEnd\nBE API" as BE
+database "BO DB\nUsers, Roles, Permissions" as BODB
+collections "EffectiveAccess\nbuildEffectiveAccess()" as Access
+
+Operator -> FE : Sign in
+activate FE
+FE -> Cognito : authenticate with MFA
+activate Cognito
+Cognito --> FE : accessToken JWT
+deactivate Cognito
+
+FE -> BE : GET /users/me
+activate BE
+BE -> Cognito : validate JWT\nJWKS, token_use, client_id
+activate Cognito
+Cognito --> BE : token valid
+deactivate Cognito
+BE -> BODB : load BO_Users, BO_Roles,\nBO_Permissions
+activate BODB
+BODB --> BE : user, roles, permissions
+deactivate BODB
+BE -> Access : resolve roles and permissions
+activate Access
+Access --> BE : appsAccessible,\npermissionsByApplication,\npermissions
+deactivate Access
+BE --> FE : AuthUser context
+deactivate BE
+
+FE -> FE : BackofficeRoute / PanelRoute\nand usePermission filter UI
+activate FE
+FE --> FE : visible applications,\npages and actions
+deactivate FE
+FE --> Operator : show available workspace
+
+Operator -> FE : Execute protected action
+FE -> BE : REST request
+activate BE
+BE -> Access : requirePermission(...)
+activate Access
+Access --> BE : authorization result
+deactivate Access
+alt permission exists or Super Admin
+  BE --> FE : 2xx response
+else missing effective permission
+  BE --> FE : 403 INSUFFICIENT_PERMISSIONS
+end
+deactivate BE
+FE --> Operator : show operation result
+deactivate FE
+
+note right of Access
+Cognito authenticates the operator.
+The BackEnd makes the authorization decision
+from the backoffice data model.
+end note
+
+@enduml

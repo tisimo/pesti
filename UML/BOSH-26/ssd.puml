@@ -1,0 +1,36 @@
+﻿@startuml Login_Authentication_SSD
+title Login & Authentication\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "Operator" as OP
+participant ":System" as SYS
+
+OP -> SYS : openLoginPage()
+SYS --> OP : renderLoginForm()
+
+OP -> SYS : submitCredentials(email, password)
+
+alt Credentials valid - new password required (first access)
+    SYS --> OP : redirectToSetPasswordPage()
+    OP -> SYS : submitNewPassword(newPassword)
+    SYS --> OP : redirectToDashboard()
+
+else Credentials valid - MFA required
+    SYS --> OP : redirectToMfaPage()
+    OP -> SYS : submitMfaCode(code)
+    SYS --> OP : redirectToDashboard()
+
+else Credentials valid - normal access
+    SYS --> OP : redirectToDashboard()
+
+else Account not confirmed
+    SYS --> OP : showError("Please confirm your e-mail before signing in")
+
+else Invalid credentials
+    SYS --> OP : showError("Incorrect e-mail or password")
+end
+
+@enduml

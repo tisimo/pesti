@@ -1,0 +1,34 @@
+﻿@startuml Campaign_Review_SSD
+title Campaign Review\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "Moderator" as MOD
+participant ":System" as SYS
+
+MOD -> SYS : openCampaignsPage()
+SYS --> MOD : campaignList(pending first)
+
+MOD -> SYS : openCampaignDetail(campaignId)
+SYS --> MOD : campaignDetail()
+
+MOD -> SYS : submitDecision(campaignId, newStatus, [reviewMessage])
+
+alt Approve - status: ACTIVE
+    SYS --> MOD : campaignActivated()\nnote: review message cleared
+
+else Request Changes - status: REVIEWING
+    note over MOD, SYS: reviewMessage is required
+    SYS --> MOD : campaignUnderReview()
+
+else Reject - status: REJECTED
+    note over MOD, SYS: reviewMessage is required
+    SYS --> MOD : campaignRejected()
+
+else Deactivate - status: INACTIVE
+    SYS --> MOD : campaignDeactivated()
+end
+
+@enduml

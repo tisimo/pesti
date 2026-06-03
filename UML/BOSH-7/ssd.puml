@@ -1,0 +1,39 @@
+﻿@startuml Manage_Categories_SSD
+title Manage Categories\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "Administrator" as ADM
+participant ":System" as SYS
+
+ADM -> SYS : openCategoriesPage()
+SYS --> ADM : renderCategoriesList()
+
+alt Create category
+    ADM -> SYS : submitNewCategory(name, iconName?, description?)
+    alt Name already exists
+        SYS --> ADM : showError(409 Conflict)
+    else Name available
+        SYS --> ADM : categoryCreated()
+    end
+
+else Edit category
+    ADM -> SYS : submitChanges(categoryId, name?, iconName?, description?, isActive?)
+    alt Name conflict
+        SYS --> ADM : showError(409 Conflict)
+    else OK
+        SYS --> ADM : success()
+    end
+
+else Delete category
+    ADM -> SYS : deleteCategory(categoryId)
+    alt Category has active campaigns
+        SYS --> ADM : showError(409 Conflict)
+    else OK
+        SYS --> ADM : categoryDeleted()
+    end
+end
+
+@enduml

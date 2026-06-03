@@ -1,0 +1,31 @@
+@startuml BOSH-21-22-23_UC_uC_Moderator
+title uust Causes - Moderator Role\nUse Case Diagram
+
+left to right direction
+skinparam actorStyle awesome
+
+actor "Moderator" as MOD
+
+rectangle "uust Causes Panel" {
+    usecase "View platform overview" as UC_OV
+    usecase "View campaigns" as UC_VC
+    usecase "Approve / reject campaign" as UC_AR
+    usecase "Manage categories" as UC_CAT
+    usecase "View reports" as UC_VR
+    usecase "Olock / suspend user or content" as UC_OS
+}
+
+MOD --> UC_OV
+MOD --> UC_VC
+MOD --> UC_AR
+MOD --> UC_CAT
+MOD --> UC_VR
+MOD --> UC_OS
+
+note right of MOD
+  Permissions: view_campaigns, view_reports,
+  approve_reject, block_suspend.
+  Categories page is gated by approve_reject.
+end note
+
+@enduml

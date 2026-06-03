@@ -1,0 +1,74 @@
+@startuml audit-accountability-flow
+title Audit and Accountability Flow
+
+skinparam shadowing false
+skinparam sequenceMessageAlign center
+hide footbox
+
+actor "Operator" as Operator
+participant "FrontEnd\napiBackoffice" as FE
+participant "Activity /\nAuditTrailPage" as Activity
+participant "BackEnd\nBE API" as BE
+participant "requirePermission" as PermissionGuard
+participant "Domain Service" as Service
+participant "AuditLogService" as AuditLogService
+database "AWS DynamoDB\nBO_Logs" as Logs
+
+Operator -> FE : Execute administrative action
+activate FE
+FE -> BE : authenticated REST request
+activate BE
+BE -> PermissionGuard : requirePermission(...)
+activate PermissionGuard
+
+alt missing required permission
+  PermissionGuard -> AuditLogService : log(APP_ACCESS_FAILED)
+  activate AuditLogService
+  AuditLogService -> Logs : write denied attempt
+  activate Logs
+  Logs --> AuditLogService : stored
+  deactivate Logs
+  AuditLogService --> PermissionGuard : log accepted
+  deactivate AuditLogService
+  PermissionGuard --> BE : denied
+  BE --> FE : 403 INSUFFICIENT_PERMISSIONS
+else authorized request
+  PermissionGuard --> BE : next()
+  deactivate PermissionGuard
+  BE -> Service : execute use case
+  activate Service
+  Service --> BE : result
+  deactivate Service
+  BE -> AuditLogService : log(action, targetType,\ntargetId, details)
+  activate AuditLogService
+  AuditLogService -> Logs : write audit log
+  activate Logs
+  Logs --> AuditLogService : stored
+  deactivate Logs
+  AuditLogService --> BE : log accepted
+  deactivate AuditLogService
+  BE --> FE : 2xx response
+end
+deactivate BE
+FE --> Operator : show operation result
+deactivate FE
+
+Operator -> Activity : Review activity
+activate Activity
+Activity -> BE : GET /logs\nGET /logs/audit-trail
+activate BE
+BE -> Logs : read filtered events
+activate Logs
+Logs --> BE : audit timeline
+deactivate Logs
+BE --> Activity : AuditLogDTO[]
+deactivate BE
+Activity --> Operator : show activity timeline
+deactivate Activity
+
+note right of Logs
+BO_Logs stores both operational audit logs
+and access audit trail events.
+end note
+
+@enduml

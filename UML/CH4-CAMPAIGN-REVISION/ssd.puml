@@ -1,0 +1,29 @@
+@startuml CH4_CAMPAIGN_REVISION_SSD
+title Campaign Revision Thread\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "JustCauses Operator" as OP
+participant ":System" as SYS
+
+OP -> SYS : openRevisionThread(threadId)
+SYS --> OP : showSubmittedChangesAndHistory()
+
+OP -> SYS : moderateThread(action, message)
+
+alt Approve changes
+    SYS --> OP : threadApproved()\nnote: creator notified;\naudit log written
+
+else Request changes
+    SYS --> OP : changesRequested()\nnote: review message sent by notification and e-mail
+
+else Reject changes
+    SYS --> OP : threadRejected()\nnote: creator notified;\naudit log written
+
+else Missing permission or invalid state
+    SYS --> OP : showError("Action not available")
+end
+
+@enduml

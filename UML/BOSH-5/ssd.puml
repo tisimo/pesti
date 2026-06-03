@@ -1,0 +1,35 @@
+﻿@startuml Withdrawal_Approval_SSD
+title Withdrawal Approval\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "Senior Admin" as SA
+participant ":System" as SYS
+
+SA -> SYS : openWithdrawalsPage()
+SYS --> SA : renderWithdrawalsList(withdrawals, total)\nnote: defaults to PENDING filter
+
+alt Filter by status
+    SA -> SYS : filterByStatus(status)
+    SYS --> SA : renderWithdrawalsList(filteredWithdrawals, total)
+
+else Approve withdrawal
+    SA -> SYS : approveWithdrawal(withdrawalId, note?)
+    alt Withdrawal not found
+        SYS --> SA : showError(404 Not Found)
+    else OK
+        SYS --> SA : withdrawalApproved()\nnote: audit log written (WITHDRAWAL_APPROVED)
+    end
+
+else Reject withdrawal
+    SA -> SYS : rejectWithdrawal(withdrawalId, note?)
+    alt Withdrawal not found
+        SYS --> SA : showError(404 Not Found)
+    else OK
+        SYS --> SA : withdrawalRejected()\nnote: audit log written (WITHDRAWAL_REJECTED)
+    end
+end
+
+@enduml

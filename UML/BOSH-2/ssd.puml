@@ -1,0 +1,23 @@
+﻿@startuml KYC_Queue_SSD
+title KYC Queue\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "Compliance Officer" as CO
+participant ":System" as SYS
+
+CO -> SYS : openKycQueue()
+SYS --> CO : renderKycList(entries, total)\nnote: defaults to PENDING filter
+
+alt Filter by status
+    CO -> SYS : filterByStatus(status)
+    SYS --> CO : renderKycList(filteredEntries, total)
+
+else Paginate
+    CO -> SYS : goToPage(page)
+    SYS --> CO : renderKycList(entries, total)
+end
+
+@enduml

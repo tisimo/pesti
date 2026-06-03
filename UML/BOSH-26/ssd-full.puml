@@ -1,0 +1,110 @@
+@startuml BOSH-26_SSD_Full
+title Login & Authentication\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+
+actor "Operator" as OP
+participant "LoginPage\n(FE)" as oP
+participant "useLogin\n(hook)" as Uo
+participant "AuthProvider\n(FE)" as AP
+participant "AWS Amplify\n/ Cognito" as COG
+participant "cognitoAuth.ts\n(BE Middleware)" as MW
+database "DynamoDB\n(BO_Users)" as DDO
+
+== Sign in ==
+OP -> oP : submitCredentials(email, password)
+activate oP
+oP -> Uo : login(email, password)
+activate Uo
+Uo -> AP : login(email, password)
+activate AP
+AP -> COG : signIn(email, password)
+activate COG
+
+alt signInStep: NEW_PASSWORD_REQUIRED
+  COG --> AP : nextStep = NEW_PASSWORD_REQUIRED
+  deactivate
+  AP --> Uo : nextStep
+  deactivate
+  Uo --> oP : nextStep
+  deactivate
+  oP --> OP : navigate("/SetPasswordPage")
+
+else signInStep: MFA_REQUIRED
+    activate COG
+    activate AP
+    activate Uo
+
+COG --> AP : nextStep = MFA_REQUIRED
+  deactivate COG
+  AP --> Uo : nextStep
+  deactivate AP
+  Uo --> oP : nextStep
+  deactivate Uo
+  oP --> OP : navigate("/mfa")
+
+else signInStep: DONE
+    activate COG
+    activate AP
+    activate Uo
+    COG --> AP : nextStep = DONE
+    deactivate COG
+
+
+  AP -> MW : GET /users/me\nAuthorization: Bearer token
+  activate MW
+  MW -> COG : verifyJwt(token)
+  activate COG
+  COG --> MW : payload
+  deactivate COG
+  MW -> DDO : findByCognitoSub(sub)
+  activate DDO
+  DDO --> MW : BO_Users record
+  deactivate DDO
+  MW -> MW : assert status === "ACTIVE"
+  MW --> AP : 200 { userId, email, role,\npermissions, appsAccessible }
+  deactivate MW
+
+  AP -> AP : setUser(AuthUser)
+  AP --> Uo : isAuthenticated = true
+    deactivate AP
+    Uo --> oP : success
+  deactivate Uo
+  oP --> OP : navigate("/dashboard")
+
+else UserNotConfirmedException
+activate COG
+    activate AP
+    activate Uo
+  COG --> AP : UserNotConfirmedException
+  deactivate COG
+  AP --> Uo : error
+  deactivate AP
+  Uo --> oP : error
+  deactivate Uo
+  oP --> OP : showError("Please confirm your e-mail")
+
+else invalid credentials
+activate COG
+    activate AP
+    activate Uo
+  COG --> AP : NotAuthorizedException
+  deactivate COG
+  AP --> Uo : error
+  deactivate AP
+  Uo --> oP : error
+  deactivate Uo
+  oP --> OP : showError("Incorrect e-mail or password")
+deactivate oP
+end
+
+note over MW
+  cognitoAuth.ts is applied as global middleware
+  on protected API routes. It rejects invalid tokens,
+  expired tokens and inactive BO_Users records.
+end note
+||20||
+
+@enduml

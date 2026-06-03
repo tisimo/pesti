@@ -1,0 +1,84 @@
+\chapter{Conclusões}
+\label{cap:conclusão}
+
+%----------------------------------------------------------------------------------------
+
+\section{Objetivos concretizados}
+\label{sec:objetivos_concretizados}
+
+Este capítulo avalia o grau de concretização dos objetivos definidos no início do estágio, com base nos resultados efetivamente alcançados. A análise retoma o objetivo principal e os objetivos específicos definidos na introdução, usando as capacidades implementadas como evidência da sua concretização. A Tabela~\ref{tab:objetivos} sintetiza essa correspondência.
+
+\begin{table}[H]
+\caption{Grau de concretização dos objetivos}
+\label{tab:objetivos}
+\begin{center}
+\scriptsize
+\begin{tabular}{|p{1.5cm}|p{4.1cm}|p{1.4cm}|p{5cm}|}
+\hline
+\textbf{Objetivo} & \textbf{Descrição} & \textbf{Estado} & \textbf{Evidências principais} \\ \hline
+OP & Backoffice multiaplicação para o ecossistema OnlyHighIQ & Concluído & Sistema interno operacional, separação entre backoffice de gestão e JustCauses, autenticação centralizada, autorização, auditoria e validação da solução \\ \hline
+OE1.1 & Autenticação e contexto administrativo & Concluído & Cognito, gestão de sessão, validação JWT e resolução do operador interno \\ \hline
+OE1.2 & Perfis e permissões por aplicação & Concluído & Modelo com um perfil por aplicação, permissões associadas à aplicação e regras próprias para perfis globais de backoffice \\ \hline
+OE1.3 & Controlo de acesso coerente & Concluído & Guardas de rota, \textit{page gates}, ações condicionadas na interface e validação por \texttt{requirePermission} \\ \hline
+OE1.4 & Auditoria e responsabilização & Concluído & \textit{Audit logs}, \textit{audit trail}, registo de acessos negados e consulta de atividade por operador \\ \hline
+OE1.5 & Arquitetura extensível & Concluído & Separação entre dados administrativos do backoffice e dados operacionais da JustCauses, com suporte a novas aplicações \\ \hline
+OE2.1 & Integração da JustCauses & Concluído & Aplicação acessível a partir do seletor e separada do backoffice de gestão \\ \hline
+OE2.2 & Revisão de campanhas & Concluído & Fluxo de aprovação, rejeição, pedido de alterações, auditoria e notificação ao criador \\ \hline
+OE2.3 & Gestão de categorias & Concluído & Criação, edição, desativação e validações operacionais sobre categorias \\ \hline
+OE2.4 & Indicadores operacionais & Concluído & Dashboard e \textit{analytics} com métricas agregadas da aplicação \\ \hline
+OE2.5 & Verificação KYC/KYB & Concluído & Fila de verificações individuais, análise documental de organizações, notificações, e-mails e auditoria das decisões \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+A análise dos objetivos definidos permite concluir que os elementos estruturantes, autenticação, autorização, controlo de acesso a páginas, auditoria e base arquitetural para crescimento do sistema, ficaram concluídos e coerentes entre si. A evolução para perfis e permissões por aplicação reforçou os objetivos OE1.2 e OE1.5, porque permite administrar a JustCauses sem limitar o backoffice a uma única aplicação. Os módulos operacionais da JustCauses demonstram os objetivos OE2.1 a OE2.5 e funcionam como primeira validação real do OP. A verificação \gls{KYC}/\gls{KYB} reforça esta leitura por combinar dados sensíveis, permissões específicas, decisão administrativa, comunicação externa e auditoria.
+
+%----------------------------------------------------------------------------------------
+
+\section{Limitações e trabalho futuro}
+\label{sec:limitacoes_trabalho_futuro}
+
+\subsection{Limitações identificadas}
+\label{subsec:limitacoes}
+
+As limitações do trabalho realizado distribuem-se por três dimensões: delimitação do âmbito funcional, natureza da avaliação descrita neste relatório e integração com módulos externos.
+
+\textbf{Âmbito funcional.} O backoffice ficou concluído no âmbito definido para o estágio, mas nem todos os fluxos possíveis do ecossistema da \textit{OnlyHighIQ} foram tratados com o mesmo grau de detalhe. A JustCauses foi a aplicação operacional prioritária e concentrou a maior parte do desenvolvimento funcional. Outros módulos do produto, embora relevantes para a operação futura, ficaram fora do foco principal ou dependiam de decisões de produto e integrações externas que não estavam estabilizadas durante o estágio.
+
+\textbf{Natureza da avaliação.} Durante o estágio, a validação da contribuição própria foi feita manualmente módulo a módulo, através de utilização direta da aplicação, confirmação dos estados apresentados na interface e verificação das respostas das \glspl{API}. A responsabilidade pelos testes automatizados estava atribuída a outro elemento da empresa, mas os artefactos de \gls{QA} disponíveis permitiram caracterizar o conjunto de testes sobre o backoffice, incluindo 319 testes Playwright concluídos com sucesso e 127 testes de integração definidos. Não foi disponibilizada uma medição final de cobertura de código por linhas ou instruções. Também não foi realizado um inquérito formal aos operadores internos nem uma campanha dedicada de testes de carga ou acessibilidade. Assim, a avaliação apresentada combina validação funcional, evidência automatizada de qualidade e observação operacional, mas não pretende substituir uma avaliação quantitativa completa de desempenho, usabilidade e cobertura.
+
+\textbf{Integração com serviços externos.} Não foi possível confirmar, no âmbito do estágio, a captura de eventos de \textit{login} bem-sucedido e falhado no fluxo de autenticação do AWS Cognito previsto para auditoria de autenticação. Por esse motivo, a \texttt{AuditTrailPage} filtra apenas eventos gerados após a autenticação. A integração com o AWS Rekognition para moderação automática de imagens foi identificada como desejável, mas não foi incluída no âmbito deste estágio.
+
+\subsection{Trabalho futuro}
+\label{subsec:trabalho_futuro}
+
+As direções de trabalho futuro são as seguintes:
+
+\begin{itemize}
+  \item \textbf{Extensão do ecossistema}: integrar novas aplicações do ecossistema da \textit{OnlyHighIQ} no mesmo painel de administração, aproveitando a separação já existente entre módulos transversais e módulos específicos de cada aplicação.
+
+  \item \textbf{Avaliação de micro-frontends}: estudar, numa fase futura, a possibilidade de separar cada aplicação integrada num micro-frontend próprio. Esta alternativa aumentaria o isolamento e a independência de evolução por aplicação, mas também traria mais custos de infraestrutura, \textit{deploy}, manutenção e coordenação técnica. Por esse motivo, não foi adotada nesta fase.
+
+  \item \textbf{Notificações em tempo real}: implementar um canal de notificações para operadores baseado em \gls{SSE} ou WebSocket, que informe em tempo real sobre eventos operacionais relevantes.
+
+  \item \textbf{Exportação e apoio à auditoria}: acrescentar exportação para \gls{PDF} e \gls{CSV} nos módulos operacionais e de observabilidade, reforçando o suporte a auditorias internas e externas.
+
+  \item \textbf{Avaliação operacional contínua}: recolher métricas de utilização, feedback estruturado de operadores internos, medições automáticas de desempenho e auditorias formais de acessibilidade.
+
+  \item \textbf{Integrações inteligentes}: avaliar a integração do AWS Rekognition e de serviços semelhantes para triagem automática de conteúdo e deteção precoce de padrões anómalos.
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+
+\section{Apreciação final}
+\label{sec:apreciacao_final}
+
+O estágio na \textit{OnlyHighIQ} permitiu aplicar conhecimentos técnicos e metodológicos num contexto profissional de produto. Ao longo de aproximadamente 14 semanas, foi possível conceber, arquitetar e implementar um sistema de administração multiaplicação, validado através da integração operacional com uma plataforma de \textit{crowdfunding} real e preparado para crescer com o restante ecossistema da empresa.
+
+Do ponto de vista técnico, o principal desafio foi a integração entre múltiplas bases de dados (PostgreSQL partilhado da JustCauses e DynamoDB para configuração e auditoria) e a gestão de permissões multiaplicação com um único sistema de autenticação Cognito. A implementação da resolução central de acesso, baseada em \texttt{roleIds}, permissões por aplicação e validação no \textit{middleware} \texttt{requirePermission}, exigiu um entendimento aprofundado do ciclo de pedido HTTP do Express 5 e das garantias de consistência eventual do DynamoDB. A gestão de múltiplos \textit{connection pools} PostgreSQL (partilhado e OJC) com TypeDI exigiu também estudo e iteração.
+
+O desenvolvimento do modelo de permissões ultrapassou uma abordagem centrada apenas em operações \gls{CRUD}. A solução exigiu alinhar Cognito, dados internos de utilizadores, navegação React, \textit{page gates} configuráveis, perfis globais de backoffice, permissões por aplicação e registo de tentativas falhadas com controlo de redundância na auditoria. Esta componente aproximou o projeto de um sistema de produção, com regras transversais aplicadas de forma consistente entre cliente, servidor e persistência.
+
+A nível profissional, o trabalho em metodologia SCRUM com \textit{sprints} semanais e gestão de tarefas no Jira reforçou competências de entrega iterativa. A necessidade de comunicar bloqueadores ao supervisor, estimar esforço de implementação e documentar decisões de design em comentários de \textit{issue} contribuiu para o desenvolvimento progressivo de práticas de trabalho em equipa.
+
+A experiência na \textit{OnlyHighIQ} permitiu trabalhar num contexto de autonomia técnica e responsabilidade individual. O facto de trabalhar sobre uma base de código existente, com decisões de arquitetura já tomadas e padrões a respeitar, exigiu compreender o sistema antes de o estender. O resultado final é um backoffice operacional, utilizável pela JustCauses e preparado para crescer com o ecossistema da empresa, com autenticação centralizada, controlo de acesso consistente, auditoria e módulos operacionais prioritários já disponíveis, incluindo revisão de campanhas, categorias, indicadores operacionais e verificação \gls{KYC}/\gls{KYB}.

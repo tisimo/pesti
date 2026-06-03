@@ -1,0 +1,28 @@
+@startuml BOSH-21-22-23_UC_uC_SupportStaff
+title uust Causes - Support Staff Role\nUse Case Diagram
+
+left to right direction
+skinparam actorStyle awesome
+
+actor "Support Staff" as SS
+
+rectangle "uust Causes Panel" {
+    usecase "View platform overview" as UC_OV
+    usecase "View users" as UC_VU
+    usecase "Flag / escalate report" as UC_FE
+    usecase "View email communications" as UC_EMAIL
+    usecase "Respond to support tickets" as UC_RESP
+}
+
+SS --> UC_OV
+SS --> UC_VU
+SS --> UC_FE
+SS --> UC_EMAIL
+SS --> UC_RESP
+
+note right of SS
+  Permissions: view_users, view_email,
+  flag_escalate, respond.
+end note
+
+@enduml

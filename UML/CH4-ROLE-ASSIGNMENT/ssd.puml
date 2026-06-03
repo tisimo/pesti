@@ -1,0 +1,26 @@
+@startuml CH4_ROLE_ASSIGNMENT_SSD
+title Application Role Assignment\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "Admin Operator" as OP
+participant ":System" as SYS
+
+OP -> SYS : openUserRoleAssignment(userId)
+SYS --> OP : showCurrentRolesByApplication()
+
+OP -> SYS : updateUserRoles(userId, roleIds[])
+
+alt Valid hierarchy and application role
+    SYS --> OP : roleAssigned()\nnote: previous role for the same application replaced;\naudit log written
+
+else Backoffice role assigned
+    SYS --> OP : backofficeRoleAssigned()\nnote: application roles removed;\nbackoffice role is global and exclusive
+
+else Invalid hierarchy or role combination
+    SYS --> OP : showError("Role assignment not allowed")
+end
+
+@enduml

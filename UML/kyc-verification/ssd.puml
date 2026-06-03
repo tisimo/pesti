@@ -1,0 +1,29 @@
+@startuml KYC_VERIFICATION_SSD
+title KYC Verification Queue\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "JustCauses Operator" as OP
+participant ":System" as SYS
+
+OP -> SYS : openKycQueue(filters)
+SYS --> OP : showKycEntriesWithComparison()
+
+OP -> SYS : reviewKycEntry(verificationId)
+SYS --> OP : showProfileAndProviderData()
+
+OP -> SYS : applyKycAction(action, message)
+
+alt Send mismatch warning
+    SYS --> OP : warningEmailSent()\nnote: audit log written
+else Reset stale pending verification
+    SYS --> OP : verificationReset()\nnote: user notified;\naudit log written
+else Update account status
+    SYS --> OP : accountStatusUpdated()\nnote: operational consequence;\naudit log written
+else Missing permission or invalid state
+    SYS --> OP : showError("Action not available")
+end
+
+@enduml

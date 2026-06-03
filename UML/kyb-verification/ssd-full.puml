@@ -1,0 +1,148 @@
+@startuml KYB_VERIFICATION_SD_FULL
+title KYB Organization Verification\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+autoactivate on
+
+actor "JustCauses Operator" as OP
+participant "OrganizationsPage\n(FE)" as PAGE
+participant "apiBackoffice\n(FE)" as API
+participant "requirePermission\n(BE)" as GUARD
+participant "OjcOrganizationsController\n(BE)" as CTRL
+participant "OjcOrganizationsService\n(BE)" as ORG_SVC
+participant "OjcOrganizationKybService\n(BE)" as KYB_SVC
+participant "OjcOrganizationKybRepo\n(BE)" as KYB_REPO
+participant "NotificationsService\n(BE)" as NOTIFY
+participant "EmailService\n(BE)" as EMAIL
+participant "AuditLogService\n(BE)" as AUDIT
+database "PostgreSQL\n(JustCauses data)" as PG
+database "DynamoDB\n(BO_Logs)" as DDB
+participant "AWS SES" as SES
+
+== Load organizations ==
+OP -> PAGE : openOrganizations(filters)
+PAGE -> API : GET /ojc/organizations?filters
+API -> GUARD : requirePermission("view_organizations", "view_kyb")
+GUARD -> CTRL : list(req, res)
+CTRL -> ORG_SVC : listOrganizations(filters, page, pageSize)
+ORG_SVC -> PG : Load organization profiles\nand account status
+PG --> ORG_SVC : organization rows
+ORG_SVC --> CTRL : OrganizationsResponse
+CTRL --> GUARD : 200 OrganizationsResponse
+GUARD --> API : organizations
+API --> PAGE : organizations
+PAGE --> OP : render organization cards
+
+== Open KYB submission ==
+OP -> PAGE : openOrganization(profileId)
+PAGE -> API : GET /ojc/organizations/:profileId/kyb
+API -> GUARD : requirePermission("view_kyb")
+GUARD -> CTRL : getKyb(req, res)
+CTRL -> KYB_SVC : getByProfileId(profileId)
+KYB_SVC -> KYB_REPO : getByProfileId(profileId)
+KYB_REPO -> PG : Load OrganizationKycSubmissions\nand profile data
+PG --> KYB_REPO : KybSubmission
+KYB_REPO --> KYB_SVC : KybSubmission
+KYB_SVC --> CTRL : KybSubmission
+CTRL --> GUARD : 200 KybSubmission
+GUARD --> API : submission
+API --> PAGE : submission
+PAGE --> OP : render documents and decision actions
+
+== Decide KYB ==
+OP -> PAGE : decideKyb(decision, adminNote)
+
+alt decision = approve
+  PAGE -> API : POST /ojc/organizations/:profileId/kyb/approve
+  API -> GUARD : requirePermission("view_kyb")
+  GUARD -> CTRL : approveKyb(req, res)
+  CTRL -> KYB_SVC : approve(profileId, adminNote, actor)
+  KYB_SVC -> KYB_REPO : review(profileId, "approved", adminNote)
+  KYB_REPO -> PG : Update submission and\nprofile verificationStatus
+  PG --> KYB_REPO : approved KybSubmission
+  KYB_REPO --> KYB_SVC : approved KybSubmission
+  KYB_SVC -> AUDIT : log(KYB_APPROVED)
+  AUDIT -> DDB : PutItem(BO_Logs)
+  DDB --> AUDIT : OK
+  AUDIT --> KYB_SVC : audit log persisted
+  KYB_SVC -> NOTIFY : createNotification(VERIFICATION)
+  NOTIFY --> KYB_SVC : notification requested
+  KYB_SVC -> KYB_REPO : getEmailByAccountId(accountId)
+  KYB_REPO --> KYB_SVC : organization email
+  KYB_SVC -> EMAIL : sendKybDecisionEmail(email, legalName,\n"approved", adminNote)
+  EMAIL -> SES : SendEmailCommand
+  SES --> EMAIL : accepted
+  EMAIL --> KYB_SVC : email dispatch requested
+  KYB_SVC --> CTRL : approved KybSubmission
+  CTRL --> GUARD : 200 submission
+  GUARD --> API : success
+  API --> PAGE : updated submission
+  PAGE --> OP : show organization verified
+
+else decision = reject
+  PAGE -> API : POST /ojc/organizations/:profileId/kyb/reject
+  API -> GUARD : requirePermission("view_kyb")
+  GUARD -> CTRL : rejectKyb(req, res)
+  CTRL -> KYB_SVC : reject(profileId, adminNote, actor)
+  KYB_SVC -> KYB_REPO : review(profileId, "rejected", adminNote)
+  KYB_REPO -> PG : Update submission and\nprofile verificationStatus
+  PG --> KYB_REPO : rejected KybSubmission
+  KYB_REPO --> KYB_SVC : rejected KybSubmission
+  KYB_SVC -> AUDIT : log(KYB_REJECTED)
+  AUDIT -> DDB : PutItem(BO_Logs)
+  DDB --> AUDIT : OK
+  AUDIT --> KYB_SVC : audit log persisted
+  KYB_SVC -> NOTIFY : createNotification(VERIFICATION)
+  NOTIFY --> KYB_SVC : notification requested
+  KYB_SVC -> KYB_REPO : getEmailByAccountId(accountId)
+  KYB_REPO --> KYB_SVC : organization email
+  KYB_SVC -> EMAIL : sendKybDecisionEmail(email, legalName,\n"rejected", adminNote)
+  EMAIL -> SES : SendEmailCommand
+  SES --> EMAIL : accepted
+  EMAIL --> KYB_SVC : email dispatch requested
+  KYB_SVC --> CTRL : rejected KybSubmission
+  CTRL --> GUARD : 200 submission
+  GUARD --> API : success
+  API --> PAGE : updated submission
+  PAGE --> OP : show organization rejected
+
+else decision = reject stale pending
+  PAGE -> API : POST /ojc/organizations/:profileId/kyb/reject-stale
+  API -> GUARD : requirePermission("view_kyb")
+  GUARD -> CTRL : rejectStaleKyb(req, res)
+  CTRL -> KYB_SVC : rejectStalePending(profileId, actor)
+  KYB_SVC -> KYB_REPO : getByProfileId(profileId)
+  KYB_REPO -> PG : Load pending submission
+  PG --> KYB_REPO : KybSubmission
+  KYB_REPO --> KYB_SVC : KybSubmission
+  note over KYB_SVC
+    Validates that the submission is pending
+    and older than 7 days.
+  end note
+  KYB_SVC -> KYB_REPO : review(profileId, "rejected", default note)
+  KYB_REPO -> PG : Update stale submission
+  PG --> KYB_REPO : rejected KybSubmission
+  KYB_REPO --> KYB_SVC : rejected KybSubmission
+  KYB_SVC -> AUDIT : log(KYB_REJECTED)
+  AUDIT -> DDB : PutItem(BO_Logs)
+  DDB --> AUDIT : OK
+  AUDIT --> KYB_SVC : audit log persisted
+  KYB_SVC --> CTRL : rejected KybSubmission
+  CTRL --> GUARD : 200 submission
+  GUARD --> API : success
+  API --> PAGE : updated submission
+  PAGE --> OP : show stale submission rejected
+
+else invalid request
+  PAGE -> API : POST invalid KYB action
+  API -> GUARD : requirePermission("view_kyb")
+  GUARD -> CTRL : handler(req, res)
+  CTRL --> GUARD : 400/404/409 error
+  GUARD --> API : error
+  API --> PAGE : error
+  PAGE --> OP : show error message
+end
+
+@enduml

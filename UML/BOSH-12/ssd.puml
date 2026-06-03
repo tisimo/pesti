@@ -1,0 +1,29 @@
+﻿@startuml Create_Admin_User_SSD
+title Create Admin User\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+autoactivate on
+
+actor "Super Admin" as SA
+participant ":System" as SYS
+
+SA -> SYS : openAdminUsersPage()
+SYS --> SA : renderAdminList()
+
+SA -> SYS : initiateCreateUser()
+SYS --> SA : renderCreationForm(firstName, lastName, email)
+
+SA -> SYS : submitNewUser(firstName, lastName, email)
+
+alt Valid data and available e-mail
+    SYS --> SA : userCreated(userId)\nnote: default role assigned automatically;\ntemporary password sent by e-mail via Cognito
+
+else E-mail already registered
+    SYS --> SA : showError("E-mail already exists")
+
+else Invalid data
+    SYS --> SA : showValidationErrors()
+end
+
+@enduml

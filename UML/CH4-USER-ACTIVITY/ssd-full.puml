@@ -1,0 +1,90 @@
+@startuml CH4_USER_ACTIVITY_SSD_Full
+title User Activity Aggregation\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+
+actor "Backoffice Admin" as BA
+participant "AdminUsersPage\n(FE)" as PAGE
+participant "fetchAllActivityPages\n(FE)" as FETCH
+participant "requirePermission\n(BE)" as GUARD
+participant "AuditLogController\n(BE)" as CTRL
+participant "AuditLogService\n(BE)" as SVC
+participant "AuditLogRepo\n(BE)" as REPO
+participant "UserService\n(BE)" as USVC
+database "DynamoDB\n(BO_Logs / BO_Users /\nBO_Roles / BO_Permissions)" as DDB
+
+BA -> PAGE : openUserActivityModal(user)
+activate PAGE
+PAGE -> FETCH : loadActivity(user.adminUserId)
+activate FETCH
+
+== Administrative logs ==
+FETCH -> GUARD : GET /logs?adminUserId=:id
+activate GUARD
+GUARD -> CTRL : allow if view_audit_logs\nor view_admin_logs
+activate CTRL
+CTRL -> SVC : getAll(filters)
+activate SVC
+SVC -> REPO : findAll(filters)
+activate REPO
+REPO -> DDB : Query/Scan(BO_Logs)
+activate DDB
+DDB --> REPO : audit log items
+deactivate DDB
+REPO --> SVC : audit log page
+deactivate REPO
+SVC --> CTRL : audit log page
+deactivate SVC
+
+CTRL -> USVC : resolveAppsAccessible(adminUserId)
+activate USVC
+USVC -> DDB : Load user, roles and permissions
+activate DDB
+DDB --> USVC : access context source data
+deactivate DDB
+USVC --> CTRL : appsAccessible
+deactivate USVC
+CTRL --> GUARD : 200 { items, pagination }
+deactivate CTRL
+GUARD --> FETCH : administrative activity page
+deactivate GUARD
+
+== Authentication and access trail ==
+FETCH -> GUARD : GET /logs/audit-trail?adminUserId=:id\n&actionIn=LOGIN_SUCCESS,...
+activate GUARD
+GUARD -> CTRL : allow if view_admin_logs
+activate CTRL
+CTRL -> SVC : getAll(auditTrailFilters)
+activate SVC
+SVC -> REPO : findAll(auditTrailFilters)
+activate REPO
+REPO -> DDB : Query/Scan(BO_Logs)
+activate DDB
+DDB --> REPO : audit trail items
+deactivate DDB
+REPO --> SVC : audit trail page
+deactivate REPO
+SVC --> CTRL : audit trail page
+deactivate SVC
+
+note over CTRL
+  The controller removes immediate duplicate
+  LOGIN_SUCCESS events before responding.
+end note
+CTRL --> GUARD : 200 { items, pagination }
+deactivate CTRL
+GUARD --> FETCH : audit trail activity page
+deactivate GUARD
+
+note over PAGE
+  The modal tags each source, deduplicates,
+  sorts and applies local filters.
+end note
+FETCH --> PAGE : adminLogs + auditTrailLogs
+deactivate FETCH
+PAGE --> BA : render activity table and counters
+deactivate PAGE
+
+@enduml

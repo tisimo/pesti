@@ -1,0 +1,153 @@
+% we include the glossary here (frontmatter is included with \input, so this command is as if it was in main.tex)
+\input{frontmatter/glossary}
+
+\frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
+
+\pagestyle{plain} % Default to the plain heading style until the thesis style is called for the body content
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\maketitlepage
+
+
+%----------------------------------------------------------------------------------------
+%	STATEMENT of INTEGRITY
+%----------------------------------------------------------------------------------------
+\integritystatement
+
+%----------------------------------------------------------------------------------------
+%	DEDICATION  (optional)
+%----------------------------------------------------------------------------------------
+%
+%\dedicatory{For/Dedicated to/To my\ldots}
+\begin{dedicatory}
+\vspace{70mm}
+
+\textit{Dedico este trabalho à minha avó}
+\end{dedicatory}
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+
+Este relatório documenta o desenvolvimento de uma plataforma de transmissão em direto no âmbito da unidade curricular Projeto/Estágio (PESTI) do curso de Engenharia Informática do Instituto Superior de Engenharia do Porto, concebida no escritorio da empresa OnlyHighIQ. O projeto nasce da ambição de simplificar a experiência de \textit{livestreaming}, reduzindo a dependência de ferramentas de terceiros e tornando o processo acessível a criadores com níveis de literacia tecnológica distintos.
+
+A solução materializou-se na criação de canais dedicados por criador, com controlo de acesso por \textit{tiers}, e na integração de mecanismos de interação com a comunidade. Foram desenvolvidas interfaces específicas para criadores e para utilizadores, um \textit{player} responsivo com um chat de baixa latência suportado por WebSockets. A arquitetura, ancorada em boas práticas de engenharia de software e em metodologia \textit{Scrum}, foi validada através de testes de domínio e de ponta a ponta (end-to-end).
+
+Os resultados atingidos confirmam os objetivos delineados, e reforçam competências técnicas e profissionais que culminaram na entrega de um \textit{MVP} funcional. Embora persistam algumas limitações e um conjunto claro de melhorias a realizar, o projeto demonstrou a viabilidade de incorporar funcionalidades de \textit{livestreaming} numa plataforma própria.
+
+\vspace{20mm} %5mm vertical space
+
+\textbf{Palavras-chave (Tema)}:	Transmissão ao vivo, Interação em tempo real, Rede social.
+
+\textbf{Palavras-chave (Tecnologias)}: 	AWS, RTMP, React, CI/CD.
+
+\end{abstract}
+
+\begin{abstractotherlanguage}
+
+This report documents the development of a live-streaming platform within the scope of the Projeto/Estágio (PESTI) curricular unit of the Bachelor's Degree in Informatics Engineering at the Instituto Superior de Engenharia do Porto, conceived at the office of the company OnlyHighIQ. The project stems from the ambition to simplify the \textit{livestreaming} experience, reducing dependence on third-party tools and making the process accessible to creators with different levels of technological literacy.
+
+The solution materialised in the creation of dedicated channels per creator, with access control by \textit{tiers}, and in the integration of mechanisms for interaction with the community. Specific interfaces for creators and for users were developed, as well as a responsive \textit{player} with a low-latency chat supported by WebSockets. The architecture, anchored in software engineering best practices and in the \textit{Scrum} methodology, was validated through domain tests and end-to-end testing.
+
+The results achieved confirm the outlined objectives and strengthen technical and professional competences that culminated in the delivery of a functional \textit{MVP}. Although some limitations persist and there is a clear set of improvements to be made, the project demonstrated the feasibility of incorporating \textit{livestreaming} functionalities into a proprietary platform.
+
+\vspace{20mm}
+
+\textbf{Keywords (Theme)}:	Livestreaming, Real Time Interaction, Social Media.
+
+\textbf{Keywords (Tecnologies)}: 	AWS, RTMP, React, CI/CD.
+
+\end{abstractotherlanguage}
+
+%----------------------------------------------------------------------------------------
+%	ACKNOWLEDGEMENTS (optional)
+%----------------------------------------------------------------------------------------
+
+\begin{acknowledgements}
+
+Começo por agradecer à professora Paula Tavares, pela sua disponibilidade para acompanhar o meu trabalho e por ajudar sempre que necessário.
+
+Agradeço à OnlyHighIQ pela oportunidade e pela confiança que depositou nos meus ombros, sinto que dentro da empresa cresci, convivi, ri e conheci pessoas que espero levar para o resto da minha jornada. Devo um especial agradecimento ao meu supervisor externo, Carlos Lima, que conseguiu retirar o melhor de mim, colocando sempre o meu bem estar em primeiro lugar.
+
+Quero agradecer ao Instituto Superior de Engenharia do Porto pelas oportunidades dadas nestes longos três anos, pela exelente qualidade de formação, e pela escolha brilhande de funcionarios e docentes.
+
+Num plano mais íntimo, agradeço à minha família pelo amor e confiança que me deram.
+
+Ao meu pai, pela sua sabedoria, pela força e pela perseverança. Obrigado por sempre me ensinares a importância de lutar pelos meus sonhos. Sempre me disseste para nunca deixar de estudar, porque querias um futuro melhor para mim, mas nunca soube como responder a esse comentario vindo de um homem que nunca me deixou sem apoio.
+
+À minha mãe, pelo carinho, paciência e amor que me mostrou. A tua dedicação e esforço foram fundamentais para eu conhecer as verdadeiras cores do mundo. Sou grato por tudo o que fizeste por mim, mesmo nos momentos mais difíceis. 
+
+Aos meus amigos Tiago Marques, Bruno Lourenço, Vasco Martins, Pedro Fonseca e Gaspar Lima, poucas palavras descrevem o carinho e a alegria que sinto por vocês, apenas quero que saibam que não seria o mesmo Pedro, alegre e sorridente que conhecem sem vocês.
+
+\end{acknowledgements}
+
+
+%----------------------------------------------------------------------------------------
+%    LIST OF CONTENTS/FIGURES/TABLES PAGES
+%----------------------------------------------------------------------------------------
+
+\tableofcontents % Prints the main table of contents
+
+\listoffigures % Prints the list of figures
+
+\listoftables % Prints the list of tables
+
+\iflanguage{portuguese}{
+\renewcommand{\lstlistlistingname}{Lista de C\'odigo}
+\renewcommand{\lstlistingname}{Listagem}
+}
+
+\cleardoublepage
+\phantomsection
+\addchaptertocentry{\lstlistlistingname} % adiciona ao Índice (TOC)
+\lstlistoflistings
+
+
+%----------------------------------------------------------------------------------------
+%	ABBREVIATIONS
+%----------------------------------------------------------------------------------------
+%\begin{abbreviations}{ll} % Include a list of abbreviations (a table of two columns)
+%%\textbf{LAH} & \textbf{L}ist \textbf{A}bbreviations \textbf{H}ere\\
+%%\textbf{WSF} & \textbf{W}hat (it) \textbf{S}tands \textbf{F}or\\
+%\end{abbreviations}
+
+%----------------------------------------------------------------------------------------
+%	SYMBOLS
+%----------------------------------------------------------------------------------------
+
+%\begin{symbols}{lll} % Include a list of Symbols (a three column table)
+
+%$a$ & distance & \si{\meter} \\
+%$P$ & power & \si{\watt} (\si{\joule\per\second}) \\
+%%Symbol & Name & Unit \\
+
+%\addlinespace % Gap to separate the Roman symbols from the Greek
+
+%$\omega$ & angular frequency & \si{\radian} \\
+
+%\end{symbols}
+
+%----------------------------------------------------------------------------------------
+%	ACRONYMS
+%----------------------------------------------------------------------------------------
+
+\newcommand{\listacronymname}{List of Acronyms}
+\iflanguage{portuguese}{
+\renewcommand{\listacronymname}{Lista de Acr\'onimos}
+}
+
+%Use GLS
+\glsresetall
+\printglossary[title=\listacronymname,type=\acronymtype,style=long]
+
+%----------------------------------------------------------------------------------------
+%	DONE
+%----------------------------------------------------------------------------------------
+
+\mainmatter % Begin numeric (1,2,3...) page numbering
+\pagestyle{thesis} % Return the page headers back to the "thesis" style

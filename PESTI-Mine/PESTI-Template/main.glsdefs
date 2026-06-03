@@ -1,0 +1,924 @@
+\glsdefs@newdocentry{ISEP}%
+{%
+name={\acronymfont {\glsentryshort {ISEP}}},%
+sort={ISEP},%
+type={acronym},%
+first={ISEP},%
+firstplural={ISEPs},%
+text={ISEP},%
+plural={ISEPs},%
+description={Instituto Superior de Engenharia do Porto},%
+descriptionplural={Instituto Superior de Engenharia do Porto},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Instituto Superior de Engenharia do Porto},%
+longplural={Instituto Superior de Engenharia do Portos},%
+short={ISEP},%
+shortplural={ISEPs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{UC}%
+{%
+name={\acronymfont {\glsentryshort {UC}}},%
+sort={UC},%
+type={acronym},%
+first={UC},%
+firstplural={UCs},%
+text={UC},%
+plural={UCs},%
+description={Unidade Curricular},%
+descriptionplural={Unidade Curricular},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Unidade Curricular},%
+longplural={Unidade Curriculars},%
+short={UC},%
+shortplural={UCs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{PESTI}%
+{%
+name={\acronymfont {\glsentryshort {PESTI}}},%
+sort={PESTI},%
+type={acronym},%
+first={PESTI},%
+firstplural={PESTIs},%
+text={PESTI},%
+plural={PESTIs},%
+description={Projeto/Estágio},%
+descriptionplural={Projeto/Estágio},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Projeto/Estágio},%
+longplural={Projeto/Estágios},%
+short={PESTI},%
+shortplural={PESTIs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{LEI-PROJ}%
+{%
+name={\acronymfont {\glsentryshort {LEI-PROJ}}},%
+sort={LEI-PROJ},%
+type={acronym},%
+first={LEI-PROJ},%
+firstplural={LEI-PROJs},%
+text={LEI-PROJ},%
+plural={LEI-PROJs},%
+description={Projeto em Licenciatura em Engenharia Informática},%
+descriptionplural={Projeto em Licenciatura em Engenharia Informática},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Projeto em Licenciatura em Engenharia Informática},%
+longplural={Projeto em Licenciatura em Engenharia Informáticas},%
+short={LEI-PROJ},%
+shortplural={LEI-PROJs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{AWS}%
+{%
+name={\acronymfont {\glsentryshort {AWS}}},%
+sort={AWS},%
+type={acronym},%
+first={AWS},%
+firstplural={AWSs},%
+text={AWS},%
+plural={AWSs},%
+description={Amazon Web Services},%
+descriptionplural={Amazon Web Services},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Amazon Web Services},%
+longplural={Amazon Web Servicess},%
+short={AWS},%
+shortplural={AWSs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{CI/CD}%
+{%
+name={\acronymfont {\glsentryshort {CI/CD}}},%
+sort={CI/CD},%
+type={acronym},%
+first={CI/CD},%
+firstplural={CI/CDs},%
+text={CI/CD},%
+plural={CI/CDs},%
+description={Continuous Integration / Continuous Deployment},%
+descriptionplural={Continuous Integration / Continuous Deployment},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Continuous Integration / Continuous Deployment},%
+longplural={Continuous Integration / Continuous Deployments},%
+short={CI/CD},%
+shortplural={CI/CDs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{SES}%
+{%
+name={\acronymfont {\glsentryshort {SES}}},%
+sort={SES},%
+type={acronym},%
+first={SES},%
+firstplural={SESs},%
+text={SES},%
+plural={SESs},%
+description={Simple Email Service},%
+descriptionplural={Simple Email Service},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Simple Email Service},%
+longplural={Simple Email Services},%
+short={SES},%
+shortplural={SESs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{WAF}%
+{%
+name={\acronymfont {\glsentryshort {WAF}}},%
+sort={WAF},%
+type={acronym},%
+first={WAF},%
+firstplural={WAFs},%
+text={WAF},%
+plural={WAFs},%
+description={Web Application Firewall},%
+descriptionplural={Web Application Firewall},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Web Application Firewall},%
+longplural={Web Application Firewalls},%
+short={WAF},%
+shortplural={WAFs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{JWKS}%
+{%
+name={\acronymfont {\glsentryshort {JWKS}}},%
+sort={JWKS},%
+type={acronym},%
+first={JWKS},%
+firstplural={JWKSs},%
+text={JWKS},%
+plural={JWKSs},%
+description={JSON Web Key Set},%
+descriptionplural={JSON Web Key Set},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={JSON Web Key Set},%
+longplural={JSON Web Key Sets},%
+short={JWKS},%
+shortplural={JWKSs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{API}%
+{%
+name={\acronymfont {\glsentryshort {API}}},%
+sort={API},%
+type={acronym},%
+first={API},%
+firstplural={APIs},%
+text={API},%
+plural={APIs},%
+description={Application Programming Interface},%
+descriptionplural={Application Programming Interface},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Application Programming Interface},%
+longplural={Application Programming Interfaces},%
+short={API},%
+shortplural={APIs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{REST}%
+{%
+name={\acronymfont {\glsentryshort {REST}}},%
+sort={REST},%
+type={acronym},%
+first={REST},%
+firstplural={RESTs},%
+text={REST},%
+plural={RESTs},%
+description={Representational State Transfer},%
+descriptionplural={Representational State Transfer},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Representational State Transfer},%
+longplural={Representational State Transfers},%
+short={REST},%
+shortplural={RESTs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{CRUD}%
+{%
+name={\acronymfont {\glsentryshort {CRUD}}},%
+sort={CRUD},%
+type={acronym},%
+first={CRUD},%
+firstplural={CRUDs},%
+text={CRUD},%
+plural={CRUDs},%
+description={Create, Read, Update, Delete},%
+descriptionplural={Create, Read, Update, Delete},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Create, Read, Update, Delete},%
+longplural={Create, Read, Update, Deletes},%
+short={CRUD},%
+shortplural={CRUDs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{E2E}%
+{%
+name={\acronymfont {\glsentryshort {E2E}}},%
+sort={E2E},%
+type={acronym},%
+first={E2E},%
+firstplural={E2Es},%
+text={E2E},%
+plural={E2Es},%
+description={End to End},%
+descriptionplural={End to End},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={End to End},%
+longplural={End to Ends},%
+short={E2E},%
+shortplural={E2Es},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{FURPS+}%
+{%
+name={\acronymfont {\glsentryshort {FURPS+}}},%
+sort={FURPS+},%
+type={acronym},%
+first={FURPS+},%
+firstplural={FURPS+s},%
+text={FURPS+},%
+plural={FURPS+s},%
+description={Functionality, Usability, Reliability, Performance, Supportability},%
+descriptionplural={Functionality, Usability, Reliability, Performance, Supportability},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Functionality, Usability, Reliability, Performance, Supportability},%
+longplural={Functionality, Usability, Reliability, Performance, Supportabilitys},%
+short={FURPS+},%
+shortplural={FURPS+s},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{MVP}%
+{%
+name={\acronymfont {\glsentryshort {MVP}}},%
+sort={MVP},%
+type={acronym},%
+first={MVP},%
+firstplural={MVPs},%
+text={MVP},%
+plural={MVPs},%
+description={Minimum Viable Product},%
+descriptionplural={Minimum Viable Product},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Minimum Viable Product},%
+longplural={Minimum Viable Products},%
+short={MVP},%
+shortplural={MVPs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{UI}%
+{%
+name={\acronymfont {\glsentryshort {UI}}},%
+sort={UI},%
+type={acronym},%
+first={UI},%
+firstplural={UIs},%
+text={UI},%
+plural={UIs},%
+description={User Interface},%
+descriptionplural={User Interface},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={User Interface},%
+longplural={User Interfaces},%
+short={UI},%
+shortplural={UIs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{UX}%
+{%
+name={\acronymfont {\glsentryshort {UX}}},%
+sort={UX},%
+type={acronym},%
+first={UX},%
+firstplural={UXs},%
+text={UX},%
+plural={UXs},%
+description={User Experience},%
+descriptionplural={User Experience},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={User Experience},%
+longplural={User Experiences},%
+short={UX},%
+shortplural={UXs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{QA}%
+{%
+name={\acronymfont {\glsentryshort {QA}}},%
+sort={QA},%
+type={acronym},%
+first={QA},%
+firstplural={QAs},%
+text={QA},%
+plural={QAs},%
+description={Quality Assurance},%
+descriptionplural={Quality Assurance},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Quality Assurance},%
+longplural={Quality Assurances},%
+short={QA},%
+shortplural={QAs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{IA}%
+{%
+name={\acronymfont {\glsentryshort {IA}}},%
+sort={IA},%
+type={acronym},%
+first={IA},%
+firstplural={IAs},%
+text={IA},%
+plural={IAs},%
+description={Inteligência Artificial},%
+descriptionplural={Inteligência Artificial},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Inteligência Artificial},%
+longplural={Inteligência Artificials},%
+short={IA},%
+shortplural={IAs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{PostgreSQL}%
+{%
+name={\acronymfont {\glsentryshort {PostgreSQL}}},%
+sort={PostgreSQL},%
+type={acronym},%
+first={PostgreSQL},%
+firstplural={PostgreSQLs},%
+text={PostgreSQL},%
+plural={PostgreSQLs},%
+description={PostgreSQL Relational Database},%
+descriptionplural={PostgreSQL Relational Database},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={PostgreSQL Relational Database},%
+longplural={PostgreSQL Relational Databases},%
+short={PostgreSQL},%
+shortplural={PostgreSQLs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{KYC}%
+{%
+name={\acronymfont {\glsentryshort {KYC}}},%
+sort={KYC},%
+type={acronym},%
+first={KYC},%
+firstplural={KYCs},%
+text={KYC},%
+plural={KYCs},%
+description={Know Your Customer},%
+descriptionplural={Know Your Customer},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Know Your Customer},%
+longplural={Know Your Customers},%
+short={KYC},%
+shortplural={KYCs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{KYB}%
+{%
+name={\acronymfont {\glsentryshort {KYB}}},%
+sort={KYB},%
+type={acronym},%
+first={KYB},%
+firstplural={KYBs},%
+text={KYB},%
+plural={KYBs},%
+description={Know Your Business},%
+descriptionplural={Know Your Business},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Know Your Business},%
+longplural={Know Your Businesss},%
+short={KYB},%
+shortplural={KYBs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{MFA}%
+{%
+name={\acronymfont {\glsentryshort {MFA}}},%
+sort={MFA},%
+type={acronym},%
+first={MFA},%
+firstplural={MFAs},%
+text={MFA},%
+plural={MFAs},%
+description={Multi-Factor Authentication},%
+descriptionplural={Multi-Factor Authentication},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Multi-Factor Authentication},%
+longplural={Multi-Factor Authentications},%
+short={MFA},%
+shortplural={MFAs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{RBAC}%
+{%
+name={\acronymfont {\glsentryshort {RBAC}}},%
+sort={RBAC},%
+type={acronym},%
+first={RBAC},%
+firstplural={RBACs},%
+text={RBAC},%
+plural={RBACs},%
+description={Role-Based Access Control},%
+descriptionplural={Role-Based Access Control},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Role-Based Access Control},%
+longplural={Role-Based Access Controls},%
+short={RBAC},%
+shortplural={RBACs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{TTL}%
+{%
+name={\acronymfont {\glsentryshort {TTL}}},%
+sort={TTL},%
+type={acronym},%
+first={TTL},%
+firstplural={TTLs},%
+text={TTL},%
+plural={TTLs},%
+description={Time To Live},%
+descriptionplural={Time To Live},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Time To Live},%
+longplural={Time To Lives},%
+short={TTL},%
+shortplural={TTLs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{KPI}%
+{%
+name={\acronymfont {\glsentryshort {KPI}}},%
+sort={KPI},%
+type={acronym},%
+first={KPI},%
+firstplural={KPIs},%
+text={KPI},%
+plural={KPIs},%
+description={Key Performance Indicator},%
+descriptionplural={Key Performance Indicator},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Key Performance Indicator},%
+longplural={Key Performance Indicators},%
+short={KPI},%
+shortplural={KPIs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{HTTP}%
+{%
+name={\acronymfont {\glsentryshort {HTTP}}},%
+sort={HTTP},%
+type={acronym},%
+first={HTTP},%
+firstplural={HTTPs},%
+text={HTTP},%
+plural={HTTPs},%
+description={Hypertext Transfer Protocol},%
+descriptionplural={Hypertext Transfer Protocol},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Hypertext Transfer Protocol},%
+longplural={Hypertext Transfer Protocols},%
+short={HTTP},%
+shortplural={HTTPs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{SD}%
+{%
+name={\acronymfont {\glsentryshort {SD}}},%
+sort={SD},%
+type={acronym},%
+first={SD},%
+firstplural={SDs},%
+text={SD},%
+plural={SDs},%
+description={Sequence Diagram},%
+descriptionplural={Sequence Diagram},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Sequence Diagram},%
+longplural={Sequence Diagrams},%
+short={SD},%
+shortplural={SDs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{SSD}%
+{%
+name={\acronymfont {\glsentryshort {SSD}}},%
+sort={SSD},%
+type={acronym},%
+first={SSD},%
+firstplural={SSDs},%
+text={SSD},%
+plural={SSDs},%
+description={System Sequence Diagram},%
+descriptionplural={System Sequence Diagram},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={System Sequence Diagram},%
+longplural={System Sequence Diagrams},%
+short={SSD},%
+shortplural={SSDs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{SSE}%
+{%
+name={\acronymfont {\glsentryshort {SSE}}},%
+sort={SSE},%
+type={acronym},%
+first={SSE},%
+firstplural={SSEs},%
+text={SSE},%
+plural={SSEs},%
+description={Server-Sent Events},%
+descriptionplural={Server-Sent Events},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Server-Sent Events},%
+longplural={Server-Sent Eventss},%
+short={SSE},%
+shortplural={SSEs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{CSV}%
+{%
+name={\acronymfont {\glsentryshort {CSV}}},%
+sort={CSV},%
+type={acronym},%
+first={CSV},%
+firstplural={CSVs},%
+text={CSV},%
+plural={CSVs},%
+description={Comma-Separated Values},%
+descriptionplural={Comma-Separated Values},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Comma-Separated Values},%
+longplural={Comma-Separated Valuess},%
+short={CSV},%
+shortplural={CSVs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{OJC}%
+{%
+name={\acronymfont {\glsentryshort {OJC}}},%
+sort={OJC},%
+type={acronym},%
+first={OJC},%
+firstplural={OJCs},%
+text={OJC},%
+plural={OJCs},%
+description={Only Just Causes},%
+descriptionplural={Only Just Causes},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Only Just Causes},%
+longplural={Only Just Causess},%
+short={OJC},%
+shortplural={OJCs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{PDF}%
+{%
+name={\acronymfont {\glsentryshort {PDF}}},%
+sort={PDF},%
+type={acronym},%
+first={PDF},%
+firstplural={PDFs},%
+text={PDF},%
+plural={PDFs},%
+description={Portable Document Format},%
+descriptionplural={Portable Document Format},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Portable Document Format},%
+longplural={Portable Document Formats},%
+short={PDF},%
+shortplural={PDFs},%
+counter={page},%
+parent={},%
+%
+}%
+

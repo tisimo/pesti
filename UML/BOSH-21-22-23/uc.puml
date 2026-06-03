@@ -1,0 +1,50 @@
+﻿@startuml Roles_Permissions_Backoffice_Diagram
+title Roles & Permissions Management\nUse Case Diagram - Backoffice Application
+
+left to right direction
+skinparam actorStyle awesome
+
+actor "Super Admin" as SA
+actor "Backoffice Admin" as BA
+
+SA --|> BA : <<extends>>
+
+rectangle "Backoffice - Roles & Permissions" {
+    usecase "View backoffice roles" as UC1
+    usecase "View just_causes roles" as UC2
+    usecase "Toggle permission on/off (draft)" as UC3
+    usecase "Save permission changes" as UC4
+    usecase "Discard permission changes" as UC5
+    usecase "Create new role" as UC6
+    usecase "Deactivate role" as UC7
+    usecase "View role assignments" as UC8
+    usecase "Filter assignments by role" as UC9
+    usecase "Transfer Super Admin" as UC10
+}
+
+BA --> UC1
+BA --> UC2
+BA --> UC3
+BA --> UC4
+BA --> UC5
+BA --> UC6
+BA --> UC7
+BA --> UC8
+BA --> UC9
+SA --> UC10
+
+note right of UC3
+  Super Admin role card is visible but
+  non-interactive: header click is disabled
+  and the permissions body never renders.
+  Default role is filtered from the list entirely
+  and does not appear on this page.
+end note
+
+note right of UC10
+  3-step confirmation modal requiring
+  the new Super Admin's e-mail to be typed.
+  Current actor is logged out on success.
+end note
+
+@enduml

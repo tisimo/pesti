@@ -1,0 +1,28 @@
+@startuml BOSH-21-22-23_UC_uC_TechLead
+title uust Causes - Tech Lead Role\nUse Case Diagram
+
+left to right direction
+skinparam actorStyle awesome
+
+actor "Tech Lead" as TL
+
+rectangle "uust Causes Panel" {
+    usecase "View platform overview" as UC_OV
+    usecase "View reports" as UC_VR
+    usecase "Flag / escalate report" as UC_FE
+    usecase "View audit logs" as UC_LOG
+    usecase "Export data (analytics)" as UC_EXP
+}
+
+TL --> UC_OV
+TL --> UC_VR
+TL --> UC_FE
+TL --> UC_LOG
+TL --> UC_EXP
+
+note right of TL
+  Permissions: view_reports, view_audit_logs,
+  flag_escalate, export.
+end note
+
+@enduml

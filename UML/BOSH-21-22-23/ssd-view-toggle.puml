@@ -1,0 +1,36 @@
+﻿@startuml View_Edit_Permissions_SSD
+title View & Edit Permissions\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+autoactivate on
+
+actor "Backoffice Admin" as BA
+participant ":System" as SYS
+
+BA -> SYS : openRolesPermissionsPage()
+return renderApplicationTabs(Backoffice / Just Causes)
+
+BA -> SYS : selectApplicationTab(application)
+return renderRoleCards()\nnote: Default role filtered out;\nSuper Admin card shown but non-interactive
+
+BA -> SYS : clickRoleCard(roleId)
+return renderPermissionToggles(draftPermissions)
+
+note over SYS
+  If the selected role is Super Admin,
+  the card body is not opened and no
+  permission toggle is rendered.
+end note
+
+BA -> SYS : togglePermission(permissionName, newState)
+return draftStateUpdated()\nnote: local only - no API call
+
+BA -> SYS : saveChanges(roleId, draftPermissions)
+return permissionsSaved()
+
+BA -> SYS : discardChanges(roleId)
+return stateReverted(lastSavedPermissions)
+
+@enduml

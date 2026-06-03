@@ -1,0 +1,45 @@
+% 
+\chapter{Conclusões} 
+\label{chap:Conc} % For referencing the chapter elsewhere, use Chapter~\ref{Conc}
+
+O capítulo final, sintetiza as principais conclusões que se obteve neste projeto. Serão analisados os objetivos do capítulo ~\ref{chap:Introdução}.
+
+%-------------------------------------------------------------------------------
+
+\section{Objetivos concretizados} 
+\label{sec:desc} %For referencing this section elsewhere, use Section~\ref{sec:desc}
+
+Na Tabela~\ref{tab:grau} encontram-se os objetivos e o grau de conclusão dos mesmos.
+
+\begin{table}[H]
+\caption{Grau de Conclusão dos Objetivos}
+\label{tab:grau}
+\begin{center}
+\begin{tabular}{|p{8cm}|c|}
+\hline
+\textbf{Objetivo} & \textbf{Conclusão} \\ \hline
+Modelação e criação de escalões de acesso para controlar o acesso à transmissão & Concluído \\ \hline
+Criação de canal único por criador & Concluído \\ \hline
+Desenvolvimento da interface do criador & Maioritariamente Concluído \\ \hline
+Desenvolvimento da interface do utilizador & Maioritariamente Concluído \\ \hline
+Garantia de privacidade do Criador & Concluído \\ \hline
+Implementação do \textit{chat} em direto & Concluído \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{Limitações e trabalho futuro} 
+
+Mesmo que a maior parte dos objetivos tenham sido concretizados, persistem limitações na experiência “ao vivo” relacionadas com latência e consistência de reprodução. A solução baseada em HLS de baixa latência é adequada para difusão massiva, mas não para interações sub-segundo. Recomenda-se a normalização do uso do \textit{IVS Player} e a reserva de \textit{hls.js} apenas como \textit{fallback} controlado. Propõe-se a criação de \textit{dashboards} operacionais com métricas de \textit{player} e rede do utilizador.
+
+No \textit{chat} em tempo real, a arquitetura com API Gateway WebSocket e DynamoDB cumpre os requisitos, mas pode ser otimizada. Sugere-se \textit{heartbeats} periódicos para detetar ligações obsoletas e limitação de taxa por canal para mitigar \textit{backpressure}. A moderação pode evoluir de regras básicas para muting, \textit{rate limits} adaptativos e filtragem de \textit{spam}.
+
+\section{Apreciação final} 
+
+Em termos globais, considera-se que os objetivos principais do MVP são atingidos. O objetivo principal foi alcançado: realizar uma transmição em direto com poucos cliques. As restantes funcionalidades como os \textit{tiers}, o \textit{chat} e o menu de opções operam com tempos de resposta adequados e fornecem uma base sólida para evolução. 
+
+O estágio permitiu ajustar e melhorar as boas práticas que desenvolvi ao longo do curso (DDD, CI/CD). Para além disso proporcionou uma experiencial de trabalho com a AWS, um serviço de computação na \textit{cloud}. Os serviços da AWS estendem-se para diversos ramos, \textit{data}, \textit{DevOps}, cibersegurança...
+
+Por fim, a participação neste projeto de uma \textit{start-up}, trouxe momentos 
+
+Por fim, a convivência direta na construção de uma \textit{start-up} proporcionou ganhos difíceis de reproduzir em contextos mais estáveis: proximidade real com a definição do produto e das prioridades, ciclos de iteração curtos orientados ao valor, gestão consciente dos compromissos entre rapidez e qualidade e responsabilidade ponta-a-ponta: do desenho ao \textit{deploy} e à monitorização. Essas aprendizagens, técnicas e organizacionais, sustentam a evolução futura do sistema e da equipa. 

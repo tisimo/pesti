@@ -1,0 +1,95 @@
+\babel@toc {portuguese}{}\relax 
+\contentsline {chapter}{Lista de Figuras}{xv}{section*.7}%
+\contentsline {chapter}{Lista de Tabelas}{xvii}{section*.9}%
+\contentsline {chapter}{\numberline {1}Introdução}{1}{chapter.12}%
+\contentsline {section}{\numberline {1.1}Enquadramento}{1}{section.13}%
+\contentsline {section}{\numberline {1.2}Descrição do Problema}{2}{section.15}%
+\contentsline {section}{\numberline {1.3}Objetivos}{3}{section.16}%
+\contentsline {section}{\numberline {1.4}Abordagem}{4}{section.17}%
+\contentsline {section}{\numberline {1.5}Planeamento do trabalho}{4}{section.18}%
+\contentsline {section}{\numberline {1.6}Contributos}{5}{section.20}%
+\contentsline {paragraph}{Síntese dos contributos:}{5}{section*.21}%
+\contentsline {section}{\numberline {1.7}Estrutura do relatório}{6}{section.22}%
+\contentsline {chapter}{\numberline {2}Estado da Arte}{7}{chapter.23}%
+\contentsline {section}{\numberline {2.1}Critérios de análise}{7}{section.24}%
+\contentsline {section}{\numberline {2.2}Trabalhos relacionados}{8}{section.26}%
+\contentsline {subsection}{\numberline {2.2.1}Shopify Admin}{8}{subsection.27}%
+\contentsline {paragraph}{Contributos para o projeto}{9}{section*.29}%
+\contentsline {paragraph}{Limitações}{9}{section*.30}%
+\contentsline {subsection}{\numberline {2.2.2}Stripe Dashboard}{9}{subsection.31}%
+\contentsline {paragraph}{Contributos para o projeto}{10}{section*.33}%
+\contentsline {paragraph}{Limitações}{10}{section*.34}%
+\contentsline {subsection}{\numberline {2.2.3}Directus}{10}{subsection.35}%
+\contentsline {paragraph}{Contributos para o projeto}{11}{section*.37}%
+\contentsline {paragraph}{Limitações}{11}{section*.38}%
+\contentsline {subsection}{\numberline {2.2.4}Appsmith}{11}{subsection.39}%
+\contentsline {paragraph}{Contributos para o projeto}{12}{section*.41}%
+\contentsline {paragraph}{Limitações}{12}{section*.42}%
+\contentsline {subsection}{\numberline {2.2.5}Análise comparativa}{12}{subsection.43}%
+\contentsline {section}{\numberline {2.3}Princípios técnicos relevantes}{13}{section.45}%
+\contentsline {subsection}{\numberline {2.3.1}Autenticação, autorização e separação de responsabilidades}{13}{subsection.46}%
+\contentsline {subsection}{\numberline {2.3.2}Auditoria operacional}{14}{subsection.47}%
+\contentsline {subsection}{\numberline {2.3.3}Ferramenta genérica ou implementação à medida}{14}{subsection.48}%
+\contentsline {section}{\numberline {2.4}Tecnologias enquadradoras do projeto}{14}{section.49}%
+\contentsline {section}{\numberline {2.5}Análise e seleção da abordagem}{15}{section.50}%
+\contentsline {section}{\numberline {2.6}Sumário}{15}{section.51}%
+\contentsline {chapter}{\numberline {3}Análise e Desenho da Solução}{17}{chapter.52}%
+\contentsline {section}{\numberline {3.1}Requisitos}{17}{section.53}%
+\contentsline {section}{\numberline {3.2}Análise}{20}{section.55}%
+\contentsline {subsection}{\numberline {3.2.1}Modelo de aplicação}{20}{subsection.56}%
+\contentsline {section}{\numberline {3.3}Arquitetura da solução}{22}{section.59}%
+\contentsline {subsection}{\numberline {3.3.1}Nível 1: contexto do sistema}{23}{subsection.60}%
+\contentsline {subsection}{\numberline {3.3.2}Nível 2: contentores e vista física}{23}{subsection.62}%
+\contentsline {subsubsection}{\numberline {3.3.2.1}Vista física}{24}{subsubsection.64}%
+\contentsline {subsection}{\numberline {3.3.3}Nível 3: componentes, implementação e dados}{27}{subsection.67}%
+\contentsline {subsubsection}{\numberline {3.3.3.1}Componentes do \textit {back-end}}{27}{subsubsection.68}%
+\contentsline {subsubsection}{\numberline {3.3.3.2}Componentes do \textit {front-end}}{29}{subsubsection.71}%
+\contentsline {subsubsection}{\numberline {3.3.3.3}Fluxos de sistema e diagramas de sequência}{30}{subsubsection.73}%
+\contentsline {subsubsection}{\numberline {3.3.3.4}Modelo de dados administrativo}{36}{subsubsection.84}%
+\contentsline {subsubsection}{\numberline {3.3.3.5}Modelo de permissões}{38}{subsubsection.87}%
+\contentsline {section}{\numberline {3.4}Sumário}{39}{section.89}%
+\contentsline {chapter}{\numberline {4}Implementação da Solução}{41}{chapter.90}%
+\contentsline {section}{\numberline {4.1}Ambiente e estrutura do projeto}{41}{section.91}%
+\contentsline {section}{\numberline {4.2}Autenticação e controlo de acesso}{41}{section.92}%
+\contentsline {subsection}{\numberline {4.2.1}Passo 1: autenticar e resolver o contexto do operador}{42}{subsection.93}%
+\contentsline {subsection}{\numberline {4.2.2}Passo 2: decidir o acesso à aplicação e à página}{43}{subsection.130}%
+\contentsline {subsection}{\numberline {4.2.3}Passo 3: limitar ações dentro da interface}{43}{subsection.131}%
+\contentsline {subsection}{\numberline {4.2.4}Passo 4: revalidar cada pedido no servidor}{44}{subsection.132}%
+\contentsline {section}{\numberline {4.3}Módulos transversais ao ecossistema}{45}{section.161}%
+\contentsline {subsection}{\numberline {4.3.1}Seletor de aplicações}{45}{subsection.162}%
+\contentsline {subsection}{\numberline {4.3.2}Gestão de operadores, perfis e permissões}{45}{subsection.163}%
+\contentsline {subsection}{\numberline {4.3.3}Configuração administrativa do acesso}{46}{subsection.200}%
+\contentsline {subsection}{\numberline {4.3.4}Sistema de auditoria}{46}{subsection.201}%
+\contentsline {section}{\numberline {4.4}Módulos operacionais da JustCauses}{47}{section.202}%
+\contentsline {subsection}{\numberline {4.4.1}Dashboard e métricas}{47}{subsection.203}%
+\contentsline {subsection}{\numberline {4.4.2}Gestão de campanhas}{47}{subsection.204}%
+\contentsline {subsection}{\numberline {4.4.3}Gestão de categorias}{48}{subsection.205}%
+\contentsline {subsection}{\numberline {4.4.4}Verificação KYC e KYB}{48}{subsection.206}%
+\contentsline {subsection}{\numberline {4.4.5}Comunicação por e-mail e notificações}{49}{subsection.207}%
+\contentsline {subsection}{\numberline {4.4.6}\textit {Analytics}}{50}{subsection.209}%
+\contentsline {section}{\numberline {4.5}Perspetivas de utilização e evidências}{50}{section.210}%
+\contentsline {section}{\numberline {4.6}Testes}{58}{section.226}%
+\contentsline {subsection}{\numberline {4.6.1}Validação manual por módulo}{59}{subsection.227}%
+\contentsline {subsection}{\numberline {4.6.2}Testes de código no processo de qualidade}{60}{subsection.230}%
+\contentsline {section}{\numberline {4.7}Avaliação da solução}{62}{section.268}%
+\contentsline {subsection}{\numberline {4.7.1}Avaliação operacional e critérios complementares}{62}{subsection.269}%
+\contentsline {subsection}{\numberline {4.7.2}Estado final da solução}{63}{subsection.271}%
+\contentsline {section}{\numberline {4.8}Sumário}{64}{section.273}%
+\contentsline {chapter}{\numberline {5}Conclusões}{67}{chapter.274}%
+\contentsline {section}{\numberline {5.1}Objetivos concretizados}{67}{section.275}%
+\contentsline {section}{\numberline {5.2}Limitações e trabalho futuro}{68}{section.277}%
+\contentsline {subsection}{\numberline {5.2.1}Limitações identificadas}{68}{subsection.278}%
+\contentsline {subsection}{\numberline {5.2.2}Trabalho futuro}{68}{subsection.279}%
+\contentsline {section}{\numberline {5.3}Apreciação final}{69}{section.280}%
+\contentsline {chapter}{Bibliografia}{71}{chapter*.281}%
+\contentsline {chapter}{\numberline {A}Diagramas de sequência}{73}{appendix.282}%
+\contentsline {section}{\numberline {A.1}Autenticação e resolução de acesso}{73}{section.283}%
+\contentsline {section}{\numberline {A.2}Criação de operadores administrativos}{74}{section.285}%
+\contentsline {section}{\numberline {A.3}Atribuição de perfis por aplicação}{75}{section.287}%
+\contentsline {section}{\numberline {A.4}Gestão de perfis e permissões}{76}{section.289}%
+\contentsline {section}{\numberline {A.5}Configuração de page gates}{77}{section.291}%
+\contentsline {section}{\numberline {A.6}Atividade individual de operadores}{78}{section.293}%
+\contentsline {section}{\numberline {A.7}Revisão de campanhas e comunicação}{79}{section.295}%
+\contentsline {section}{\numberline {A.8}Gestão de categorias}{80}{section.297}%
+\contentsline {section}{\numberline {A.9}Verificação KYC de utilizadores individuais}{81}{section.299}%
+\contentsline {section}{\numberline {A.10}Verificação KYB de organizações}{82}{section.301}%

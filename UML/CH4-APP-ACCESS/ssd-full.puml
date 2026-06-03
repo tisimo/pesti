@@ -1,0 +1,89 @@
+@startuml CH4_APP_ACCESS_SSD_Full
+title Application Selector & Access Audit\nDetailed Sequence Diagram
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+
+actor "Operator" as OP
+participant "AppSelector\n(FE)" as PAGE
+participant "AuthProvider\n(FE)" as AUTH
+participant "UserController\n(BE)" as UCTRL
+participant "UserService\n(BE)" as USVC
+participant "UserRepo\n(BE)" as UREPO
+participant "RoleRepo\n(BE)" as RREPO
+participant "PermissionRepo\n(BE)" as PREPO
+participant "accessControl.ts\n(BE)" as ACCESS
+participant "AuditLogController\n(BE)" as LCTRL
+participant "AuditLogService\n(BE)" as LOGSVC
+database "DynamoDB\n(BO_Users / BO_Roles /\nBO_Permissions / BO_Logs)" as DDB
+
+== Resolve operator context ==
+OP -> PAGE : openDashboard()
+activate PAGE
+PAGE -> AUTH : readAuthenticatedUser()
+activate AUTH
+AUTH -> UCTRL : GET /users/me
+activate UCTRL
+UCTRL -> USVC : getMe(auth.userId)
+activate USVC
+USVC -> UREPO : findById(userId)
+activate UREPO
+UREPO -> DDB : GetItem(BO_Users)
+activate DDB
+DDB --> UREPO : user item
+deactivate DDB
+UREPO --> USVC : user
+deactivate UREPO
+
+USVC -> RREPO : findById(roleId) for each roleIds
+activate RREPO
+RREPO -> DDB : GetItem/BatchGet(BO_Roles)
+activate DDB
+DDB --> RREPO : roles
+deactivate DDB
+RREPO --> USVC : assigned roles
+deactivate RREPO
+
+USVC -> PREPO : findAll()
+activate PREPO
+PREPO -> DDB : Scan(BO_Permissions)
+activate DDB
+DDB --> PREPO : permissions
+deactivate DDB
+PREPO --> USVC : active permissions
+deactivate PREPO
+
+USVC -> ACCESS : buildEffectiveAccess(roles, permissions)
+activate ACCESS
+ACCESS --> USVC : appsAccessible, permissionsByApplication
+deactivate ACCESS
+USVC --> UCTRL : user access context
+deactivate USVC
+UCTRL --> AUTH : 200 { user, appsAccessible,\npermissionsByApplication }
+deactivate UCTRL
+AUTH --> PAGE : authenticated user
+deactivate AUTH
+PAGE --> OP : render accessible application cards
+deactivate PAGE
+
+== Select application ==
+OP -> PAGE : selectApplication("ojc")
+activate PAGE
+PAGE -> LCTRL : POST /logs/access-attempt\n{ app: "ojc", result: "success" }
+activate LCTRL
+LCTRL -> LOGSVC : log(APP_ACCESS_SUCCESS,\ntarget="only_just_causes")
+activate LOGSVC
+LOGSVC -> DDB : PutItem(BO_Logs)
+activate DDB
+DDB --> LOGSVC : OK
+deactivate DDB
+LOGSVC --> LCTRL : audit log persisted
+deactivate LOGSVC
+LCTRL --> PAGE : 201 { success: true }
+deactivate LCTRL
+PAGE -> PAGE : store last_accessed and last URL
+PAGE --> OP : navigate to JustCauses module
+deactivate PAGE
+
+@enduml

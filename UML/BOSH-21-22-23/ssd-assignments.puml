@@ -1,0 +1,23 @@
+﻿@startuml View_Role_Assignments_SSD
+title View Role Assignments\nSystem Sequence Diagram (Simplified)
+
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+autoactivate on
+
+actor "Backoffice Admin" as BA
+participant ":System" as SYS
+
+BA -> SYS : openAssignmentsTab()
+return renderAdminList(name, role, application, lastAccess)
+
+alt Filter by role
+  BA -> SYS : filterByRole(roleName)
+  return renderFilteredAdmins()
+else No filter
+  BA -> SYS : clearRoleFilter()
+  return renderAllAdmins()
+end
+
+@enduml

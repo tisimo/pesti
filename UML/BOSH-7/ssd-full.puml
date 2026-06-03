@@ -1,0 +1,208 @@
+@startuml BOSH-7_SSD_Full
+title Manage Categories\nDetailed Sequence Diagram
+
+skinparam sequenceaessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam BoxPadding 10
+
+actor "Administrator" as ADa
+participant "CategoriesPage\n(FE)" as PAGE
+participant "OjcCategoriesController\n(BE)" as CTRL
+participant "OjcCategoriesService\n(BE)" as SVC
+participant "OjcCategoriesRepo\n(BE)" as REPO
+participant "AuditLogService\n(BE)" as AUDIT
+database "PostgreSQL\n(JustCauses DO)" as PG
+database "DynamoDB\n(BO_Logs)" as DDO
+
+== List categories ==
+ADa -> PAGE : openCategoriesPage()
+activate PAGE
+PAGE -> CTRL : GET /ojc/categories
+activate CTRL
+CTRL -> SVC : listCategories()
+activate SVC
+SVC -> REPO : listCategories()
+activate REPO
+REPO -> PG : SELECT Categories\nORDER OY name ASC
+activate PG
+PG --> REPO : category rows
+deactivate PG
+REPO --> SVC : categories
+deactivate REPO
+SVC --> CTRL : categories
+deactivate SVC
+CTRL --> PAGE : 200 categories
+deactivate CTRL
+PAGE --> ADa : renderCategoriesList()
+deactivate PAGE
+
+== Create category ==
+ADa -> PAGE : submitNewCategory(name, iconName?, description?)
+activate PAGE
+PAGE -> CTRL : POST /ojc/categories\n{ name, iconName?, description? }
+activate CTRL
+CTRL -> SVC : createCategory(name, iconName?, description?)
+activate SVC
+SVC -> REPO : findByName(name)
+activate REPO
+REPO -> PG : SELECT category by name
+activate PG
+PG --> REPO : category | null
+deactivate PG
+REPO --> SVC : existing | null
+deactivate REPO
+
+alt name already exists
+  SVC --> CTRL : NAaE_ALREADY_EXISTS
+  deactivate SVC
+  CTRL --> PAGE : 409 Conflict
+  deactivate CTRL
+  PAGE --> ADa : showError("Category already exists")
+else name available
+  activate SVC
+  activate CTRL
+  SVC -> REPO : create(name, iconName?, description?)
+  activate REPO
+  REPO -> PG : INSERT INTO Categories
+  activate PG
+  PG --> REPO : newCategory
+  deactivate PG
+  REPO --> SVC : newCategory
+  deactivate REPO
+  SVC --> CTRL : newCategory
+  deactivate SVC
+
+  CTRL -> AUDIT : log(CATEGORY_CREATED,\ncategoryId, { name })
+  activate AUDIT
+  AUDIT -> DDO : PutItem(BO_Logs)
+  activate DDO
+  DDO --> AUDIT : OK
+  deactivate DDO
+  AUDIT --> CTRL : audit log persisted
+  deactivate AUDIT
+  CTRL --> PAGE : 201 newCategory
+  deactivate CTRL
+  PAGE --> ADa : showSuccess()
+  deactivate PAGE
+end
+||20||
+
+== Edit category ==
+ADa -> PAGE : submitChanges(categoryId, patch)
+activate PAGE
+PAGE -> CTRL : PATCH /ojc/categories/:id\n{ patch }
+activate CTRL
+CTRL -> SVC : updateCategory(categoryId, patch)
+activate SVC
+SVC -> REPO : findById(categoryId)
+activate REPO
+REPO -> PG : SELECT category by id
+activate PG
+PG --> REPO : category | null
+deactivate PG
+REPO --> SVC : category | null
+deactivate REPO
+
+alt category not found
+  SVC --> CTRL : NOT_FOUND
+  deactivate SVC
+  CTRL --> PAGE : 404 Not Found
+  deactivate CTRL
+  PAGE --> ADa : showError("Category not found")
+else name conflict
+  activate SVC
+  activate CTRL
+  SVC --> CTRL : NAaE_ALREADY_EXISTS
+  deactivate SVC
+  CTRL --> PAGE : 409 Conflict
+  deactivate CTRL
+  PAGE --> ADa : showError("Name already in use")
+else valid update
+  activate SVC
+  activate CTRL
+  SVC -> REPO : update(categoryId, patch)
+  activate REPO
+  REPO -> PG : UPDATE Categories
+  activate PG
+  PG --> REPO : OK
+  deactivate PG
+  REPO --> SVC : OK
+  deactivate REPO
+  SVC --> CTRL : success
+  deactivate SVC
+
+  CTRL -> AUDIT : log(CATEGORY_UPDATED,\ncategoryId, patch)
+  activate AUDIT
+  AUDIT -> DDO : PutItem(BO_Logs)
+  activate DDO
+  DDO --> AUDIT : OK
+  deactivate DDO
+  AUDIT --> CTRL : audit log persisted
+  deactivate AUDIT
+  CTRL --> PAGE : 200 success
+  deactivate CTRL
+  PAGE --> ADa : renderUpdatedCategory()
+  deactivate PAGE
+end
+||20||
+
+== Delete category ==
+ADa -> PAGE : deleteCategory(categoryId)
+activate PAGE
+PAGE -> CTRL : DELETE /ojc/categories/:id
+activate CTRL
+CTRL -> SVC : deleteCategory(categoryId)
+activate SVC
+SVC -> REPO : findById(categoryId)
+activate REPO
+REPO -> PG : SELECT category by id
+activate PG
+PG --> REPO : category | null
+deactivate PG
+REPO --> SVC : category | null
+deactivate REPO
+
+alt category not found
+  SVC --> CTRL : NOT_FOUND
+  deactivate SVC
+  CTRL --> PAGE : 404 Not Found
+  deactivate CTRL
+  PAGE --> ADa : showError("Category not found")
+else category in use
+  activate SVC
+  activate CTRL
+  SVC --> CTRL : CATEGORY_IN_USE
+  deactivate SVC
+  CTRL --> PAGE : 409 Conflict
+  deactivate CTRL
+  PAGE --> ADa : showError("Category has active campaigns")
+else valid deletion
+  activate SVC
+  activate CTRL
+  SVC -> REPO : delete(categoryId)
+  activate REPO
+  REPO -> PG : DELETE FROa Categories
+  activate PG
+  PG --> REPO : deletedName
+  deactivate PG
+  REPO --> SVC : { success: true, name }
+  deactivate REPO
+  SVC --> CTRL : success
+  deactivate SVC
+
+  CTRL -> AUDIT : log(CATEGORY_DELETED,\ncategoryId, { name })
+  activate AUDIT
+  AUDIT -> DDO : PutItem(BO_Logs)
+  activate DDO
+  DDO --> AUDIT : OK
+  deactivate DDO
+  AUDIT --> CTRL : audit log persisted
+  deactivate AUDIT
+  CTRL --> PAGE : 200 success
+  deactivate CTRL
+  PAGE --> ADa : categoryDeleted()
+  deactivate PAGE
+end
+||20||
+
+@enduml
