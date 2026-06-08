@@ -1,19 +1,19 @@
 \chapter{Diagramas de sequência}
 \label{app:sd_detalhados}
 
-Este apêndice reúne os diagramas de sequência detalhados (\gls{SD}) que expandem os \glspl{SSD} apresentados no Capítulo~\ref{cap:analise_desenho}. A sua colocação em anexo permite documentar os principais fluxos sem interromper a leitura das evidências visuais do Capítulo~\ref{cap:implementação}. Os modelos de domínio e as demonstrações da interface mantêm-se no texto principal, uma vez que são necessários para compreender diretamente a solução desenvolvida. As Figuras~\ref{fig:sd_login_full} a~\ref{fig:sd_kyb_verification_full} apresentam os fluxos detalhados correspondentes.
+Este apêndice reúne diagramas de sequência detalhados (\gls{SD}) associados aos componentes de Nível 3 apresentados no Capítulo~\ref{cap:analise_desenho}. No corpo do capítulo são apresentados apenas dois \glspl{SSD} de Nível 1, escolhidos por representarem o núcleo transversal de acesso/autorização e um fluxo operacional da JustCauses. Os diagramas deste apêndice expandem esses e outros fluxos concretos ao nível técnico, mostrando a interação entre interface, rotas, controladores, serviços, repositórios, persistência, auditoria e serviços externos. A sua colocação em apêndice permite documentar a implementação sem interromper a leitura principal da arquitetura. As Figuras~\ref{fig:sd_login_full} a~\ref{fig:sd_kyb_verification_full} apresentam esses fluxos detalhados.
 
 %----------------------------------------------------------------------------------------
 
-\section{Autenticação e resolução de acesso}
+\section{Resolução de acesso após autenticação}
 \label{app:sd_login_full}
 
-A Figura~\ref{fig:sd_login_full} detalha a autenticação do operador e a resolução inicial do seu contexto de acesso.
+A Figura~\ref{fig:sd_login_full} detalha a passagem entre a autenticação do operador e a resolução inicial do seu contexto de autorização no backoffice.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth, height=0.85\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd-full}
-\caption{SD detalhado: autenticação e resolução inicial do operador}
+\caption{SD detalhado: resolução de acesso após autenticação}
 \label{fig:sd_login_full}
 \end{figure}
 

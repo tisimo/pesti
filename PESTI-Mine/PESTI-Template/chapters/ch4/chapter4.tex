@@ -1,36 +1,32 @@
 \chapter{Implementação da Solução}
 \label{cap:implementação}
 
-Neste capítulo descreve-se a implementação do backoffice multiaplicação, apresentando as soluções técnicas adotadas e evidências do trabalho desenvolvido. A JustCauses é a primeira aplicação operacional integrada e, por isso, recebe maior detalhe funcional. A estrutura do capítulo começa pelos módulos transversais ao ecossistema, como autenticação, controlo de acesso, gestão de operadores e auditoria, e depois descreve os módulos operacionais da JustCauses. No final, são apresentados os testes e a avaliação da solução, separando a descrição do que foi implementado da análise sobre como esse trabalho foi validado.
+Neste capítulo descreve-se a implementação do backoffice multiaplicação e demonstra-se de que forma o desenho apresentado no Capítulo~\ref{cap:analise_desenho} foi concretizado no código e na interface. A organização segue a separação arquitetural já definida: primeiro apresenta-se a implementação do \textit{back-end}, onde a identidade autenticada é integrada com autorização, regras de domínio, persistência, auditoria e comunicação externa; depois apresenta-se a implementação do \textit{front-end}, onde essas decisões se tornam visíveis para o operador. No final, descrevem-se os testes e a avaliação da solução, distinguindo a validação manual realizada pelo autor dos testes automatizados conduzidos no processo de \gls{QA} da empresa.
 
 %----------------------------------------------------------------------------------------
 
-\section{Ambiente e estrutura do projeto}
+\section{Implementação do back-end}
+\label{sec:impl_backend}
+
+O \textit{back-end} materializa a vista de componentes e a vista de processo apresentadas nas Figuras~\ref{fig:c4_level3_be}, \ref{fig:c4_level3_implementation} e \ref{fig:backend_process_view}. A regra central é a mesma descrita no Capítulo~\ref{cap:analise_desenho}: o pedido entra pela \gls{API}, é encaminhado por rotas, adaptado por controladores, processado por serviços de domínio e persistido através de repositórios. Esta organização permite que a interface não decida sozinha operações sensíveis e que o núcleo de autorização do backoffice seja reutilizável por futuras aplicações.
+
+\subsection{Estrutura por camadas e injeção de dependências}
 \label{sec:ambiente_infraestrutura}
 
-O repositório está organizado em duas pastas raiz independentes: \texttt{be/} para o \textit{back-end} e \texttt{fe/} para o \textit{front-end}, cada uma com a sua configuração de dependências e de compilação. O \textit{back-end} arranca com \texttt{ts-node} em modo de desenvolvimento e compila para JavaScript em produção; o \textit{front-end} usa o servidor de desenvolvimento do Vite com \textit{Hot Module Replacement}. O controlo de versões segue uma estratégia de \textit{branching} com ramos de funcionalidade (\texttt{feature/*}) e revisão de código por \textit{pull request} antes da integração no ramo principal.
+O repositório está organizado em duas pastas raiz independentes: \texttt{be/} para o \textit{back-end} e \texttt{fe/} para o \textit{front-end}. No \textit{back-end}, a estrutura segue a separação descrita no Nível 3 da arquitetura: rotas, controladores, serviços, repositórios, modelos de domínio e objetos de transferência de dados. O servidor arranca com \texttt{ts-node} em desenvolvimento e compila para JavaScript em produção.
 
-A injeção de dependências no \textit{back-end} é configurada no ficheiro \texttt{be/src/loaders/index.ts}, que regista todos os repositórios, serviços e controladores no contentor do TypeDI antes de o Express montar as rotas. Esta separação garante que as dependências são resolvidas em tempo de arranque e não em tempo de pedido, evitando instanciações desnecessárias.
+A injeção de dependências é configurada no ficheiro \texttt{be/src/loaders/index.ts}, que regista repositórios, serviços e controladores no contentor do TypeDI antes de o Express montar as rotas. Esta opção corresponde à vista de implementação do \textit{back-end}: as dependências são resolvidas no arranque e não durante cada pedido, reduzindo acoplamento entre módulos e evitando que controladores conheçam detalhes concretos de persistência. Assim, um controlador de campanhas, categorias ou verificações KYC/KYB trabalha sobre serviços e interfaces já registados, mantendo a regra de negócio fora da camada HTTP.
 
-A entrega para o ambiente de desenvolvimento está parcialmente automatizada com Bitbucket Pipelines, em fluxos separados para o \textit{front-end} e para o \textit{back-end}. No \textit{front-end}, cada atualização ao ramo \texttt{developer} instala as dependências, executa a \textit{build} com Vite, publica a pasta \texttt{dist/} num \textit{bucket} Amazon S3 dedicado ao ambiente de desenvolvimento e invalida a distribuição CloudFront para garantir a propagação imediata dos novos \textit{assets}. No \textit{back-end}, o pipeline constrói uma imagem Docker da aplicação, autentica-se no Amazon ECR através da AWS CLI, aplica uma etiqueta imutável baseada em \textit{timestamp} UTC e publica tanto essa versão como a etiqueta \texttt{latest}. Esta separação permitiu iterar a interface e a \gls{API} com ritmos diferentes sem introduzir acoplamento desnecessário no processo de entrega.
+A entrega para o ambiente de desenvolvimento está parcialmente automatizada com Bitbucket Pipelines. No \textit{back-end}, a \textit{pipeline} constrói uma imagem Docker, autentica-se no Amazon ECR através da AWS CLI, aplica uma etiqueta imutável baseada em \textit{timestamp} UTC e publica tanto essa versão como a etiqueta \texttt{latest}. Esta forma de entrega acompanha a vista física do Capítulo~\ref{cap:analise_desenho}: o código da \gls{API} é empacotado como unidade executável e disponibilizado na infraestrutura AWS sem depender do ciclo de publicação do \textit{front-end}.
 
-%----------------------------------------------------------------------------------------
-
-\section{Autenticação e controlo de acesso}
+\subsection{Integração da identidade autenticada e contexto de autorização}
 \label{sec:autenticacao_impl}
 
-A autenticação é gerida pelo AWS Cognito com o fluxo OAuth 2.0 / JWT padrão. No entanto, o elemento central da implementação não é apenas o \textit{login}; é a sequência de decisões que ocorre depois: identificar o operador, determinar a que aplicação pode aceder, definir que páginas pode abrir e decidir que pedidos o \textit{back-end} deve aceitar ou rejeitar. Para tornar este mecanismo mais claro, a sua implementação é descrita aqui por passos.
+A autenticação é gerida pelo AWS Cognito com validação de tokens JWT e constitui uma dependência transversal do sistema. A contribuição descrita neste relatório começa no passo seguinte: ligar essa identidade autenticada ao modelo interno de autorização do backoffice. Depois de validar o token, o \textit{middleware} \texttt{cognitoAuth.ts} localiza o operador no backoffice, confirma o estado da conta, resolve os perfis guardados em \texttt{roleIds} e calcula o acesso efetivo. O resultado é anexado a \texttt{req.auth}, incluindo \texttt{roles}, \texttt{permissions}, \texttt{permissionsByApplication}, \texttt{appsAccessible} e \texttt{isSuperAdmin}.
 
-\subsection{Passo 1: autenticar e resolver o contexto do operador}
-\label{subsec:auth_step1}
+A Listagem~\ref{lst:effective_access} apresenta o ponto em que a autorização passa a depender simultaneamente da aplicação associada ao perfil e da aplicação associada à permissão. Esta listagem é a implementação direta da regra descrita no modelo de permissões: perfis aplicacionais só recebem permissões da sua própria aplicação, enquanto perfis de backoffice seguem regras globais próprias.
 
-No \textit{front-end}, a sessão é gerida pelo AWS Amplify. Depois de uma autenticação bem-sucedida, o \texttt{AuthProvider} não fica apenas com os dados básicos devolvidos pelo Cognito. Faz também um pedido ao endpoint \texttt{/users/me} para obter o contexto interno do operador: identificador no backoffice, perfis atribuídos, aplicações acessíveis, permissões efetivas e permissões agrupadas por aplicação. Esta segunda leitura é necessária, porque o token Cognito identifica a sessão, mas não descreve sozinho as regras de autorização do painel.
-
-No \textit{back-end}, esse contexto é montado no \textit{middleware} \texttt{cognitoAuth.ts}. O token Bearer é validado contra o \textit{JWKS} público do Cognito, o \texttt{token\_use} tem de ser \texttt{access}, o \texttt{client\_id} tem de coincidir com a configuração da aplicação e o \texttt{sub} do Cognito é usado para localizar o operador na base de dados interna. Só depois disso o sistema resolve os perfis guardados em \texttt{roleIds}, lê as permissões disponíveis e calcula o acesso efetivo através de uma função central. O resultado é anexado a \texttt{req.auth}, incluindo \texttt{roles}, \texttt{permissions}, \texttt{permissionsByApplication}, \texttt{appsAccessible} e \texttt{isSuperAdmin}. Se a conta não existir no backoffice ou estiver desativada, o pedido é rejeitado logo neste ponto.
-
-O excerto da Listagem~\ref{lst:effective_access} mostra o ponto onde a autorização passa a depender também da aplicação associada a cada perfil e a cada permissão.
-
-\begin{lstlisting}[caption={Excerto do cálculo do acesso efetivo por aplicação}, label={lst:effective_access}]
+\begin{lstlisting}[float, caption={Excerto do cálculo do acesso efetivo por aplicação}, label={lst:effective_access}]
 const backofficeRole =
   roles.find(role => role.application === "backoffice") ?? null;
 const isSuperAdmin =
@@ -68,38 +64,16 @@ const permissionsByApplication =
   toPlainPermissions(permissionsByApplicationSets);
 \end{lstlisting}
 
-A Listagem~\ref{lst:effective_access} mostra que a autorização é calculada no servidor e devolvida já separada por aplicação. O Super Admin recebe todas as permissões; um perfil de backoffice recebe automaticamente permissões das aplicações operacionais e apenas as permissões administrativas de backoffice que estiverem associadas ao próprio perfil; um perfil aplicacional só recebe permissões da sua aplicação. Assim, uma nova aplicação pode usar o mesmo mecanismo de autenticação e autorização sem criar uma matriz fixa de acessos no cliente.
+A Listagem~\ref{lst:effective_access} evidencia duas decisões importantes para a escalabilidade. Primeiro, a matriz de permissões é calculada no servidor e devolvida já agrupada por aplicação, evitando que o cliente reconstrua regras a partir do token Cognito. Segundo, uma nova aplicação não exige uma nova estratégia de autorização: basta registar as suas permissões, criar perfis associados e configurar as páginas correspondentes. Esta implementação concretiza os requisitos RF02, RF03 e RF07.
 
-Há três exceções públicas a esta regra global, relacionadas com verificação de estado da \gls{API}, registo de falhas de autenticação e registo de tentativas de acesso. Mesmo nesses casos, a implementação tenta anexar autenticação opcional quando existe um token, sem bloquear o pedido se ele faltar ou for inválido.
-
-\subsection{Passo 2: decidir o acesso à aplicação e à página}
-\label{subsec:auth_step2}
-
-O roteamento protegido do \textit{front-end} está dividido em quatro guardas: \texttt{ProtectedRoute}, \texttt{PublicRoute}, \texttt{BackofficeRoute} e \texttt{PanelRoute}. A diferença relevante está nas duas últimas: uma controla o acesso ao backoffice administrativo e a outra controla o acesso ao painel operacional pedido, neste caso a JustCauses. Quando a aplicação é recusada, a interface apresenta um ecrã de acesso negado e envia, em segundo plano, um registo de tentativa falhada.
-
-Depois de entrar na aplicação certa, o sistema ainda tem de decidir a que página encaminhar o operador. Essa decisão é feita duas vezes. Primeiro, no \textit{router}, através das listas \texttt{PANEL\_PAGES} e \texttt{ADMIN\_PAGES}, que definem a permissão base de cada rota e calculam o primeiro destino acessível. Depois, já dentro dos \textit{layouts}, através dos \textit{page gates} carregados da \gls{API}. No painel JustCauses, o \textit{layout} aplica lógica OR às permissões configuradas. No backoffice administrativo, as ações mais sensíveis continuam dependentes das permissões administrativas e das restrições de nível dos operadores.
-
-Esta combinação separa duas decisões distintas. As guardas de rota determinam se o operador pode entrar numa aplicação. Os \textit{page gates} determinam se uma página concreta deve aparecer na navegação e ser renderizada.
-
-\subsection{Passo 3: limitar ações dentro da interface}
-\label{subsec:auth_step3}
-
-Mesmo quando a página já está aberta, nem todas as ações são mostradas a todos os operadores. Para isso existe o \textit{hook} \texttt{usePermission}, usado em páginas e componentes para esconder botões, ações rápidas e controlos de edição. A regra usa as permissões efetivas devolvidas pelo servidor: o Super Admin passa sempre; nos restantes casos, a ação só aparece se a permissão necessária estiver presente no contexto do utilizador.
-
-No painel, esconder uma ação é uma decisão de experiência de utilização, não uma garantia de segurança. Esta filtragem reduz elementos indisponíveis na interface e torna mais clara a área de responsabilidade de cada operador. A validação de segurança continua a ser feita no servidor.
-
-\subsection{Passo 4: revalidar cada pedido no servidor}
+\subsection{Proteção de endpoints}
 \label{subsec:auth_step4}
 
-Todas as rotas da \gls{API} são montadas sob autenticação Cognito, definida no carregador do Express. Sobre essa autenticação base, os endpoints sensíveis usam o \textit{middleware} de autorização. O padrão repete-se de forma consistente ao longo do código: a listagem de campanhas exige \texttt{view\_campaigns}; a criação ou edição de categorias recorre a \texttt{change\_settings}; e a consulta de logs aceita \texttt{view\_audit\_logs} ou \texttt{view\_admin\_logs}. Nas restantes rotas operacionais, a lógica mantém-se: o pedido só avança quando traz uma das permissões aceites para essa operação.
+Depois de resolvido o contexto do operador, cada endpoint sensível volta a validar permissões no servidor. Esta segunda barreira concretiza a separação entre experiência de interface e segurança efetiva: o \textit{front-end} pode esconder ações indisponíveis, mas a \gls{API} continua a decidir se o pedido deve ser executado. O padrão repete-se ao longo das rotas: a listagem de campanhas exige \texttt{view\_campaigns} ou permissões equivalentes, a edição de categorias exige \texttt{edit\_categories}, as verificações KYC/KYB exigem \texttt{view\_kyc} ou \texttt{view\_kyb}, e os logs exigem permissões administrativas próprias.
 
-O comportamento do \textit{middleware} é deliberadamente conservador. Se não existir contexto de autenticação, o pedido recebe \texttt{401}. Se o utilizador estiver autenticado mas não tiver nenhuma das permissões exigidas, recebe \texttt{403}. O Super Admin contorna sempre esta validação. Os restantes operadores, incluindo perfis de backoffice, passam apenas quando a permissão existe no conjunto de permissões efetivas calculado previamente pelo servidor. Assim, a regra especial de backoffice é tratada na resolução central de acesso, não espalhada por cada rota.
+O excerto da Listagem~\ref{lst:require_permission} mostra o núcleo desta validação. A regra é conservadora: sem contexto autenticado, a resposta é \texttt{401}; com contexto autenticado mas sem permissões suficientes, a resposta é \texttt{403}; apenas pedidos autorizados avançam para o controlador.
 
-Quando um pedido é recusado por falta de permissões, o servidor infere a aplicação a partir da rota, regista o evento \texttt{APP\_ACCESS\_FAILED} e aplica uma janela curta de deduplicação para limitar eventos repetidos do mesmo utilizador sobre o mesmo recurso. Esta regra reduz redundância nos registos de auditoria, sobretudo em cenários de atualização repetida de páginas sem acesso.
-
-O excerto da Listagem~\ref{lst:require_permission} mostra o núcleo desta segunda validação no servidor.
-
-\begin{lstlisting}[caption={Validação de permissões no middleware \texttt{requirePermission}}, label={lst:require_permission}]
+\begin{lstlisting}[float, caption={Validação de permissões no middleware \texttt{requirePermission}}, label={lst:require_permission}]
 export function requirePermission(...required) {
   return (req, res, next) => {
     const auth = req.auth;
@@ -129,26 +103,16 @@ export function requirePermission(...required) {
 }
 \end{lstlisting}
 
-%----------------------------------------------------------------------------------------
+Quando um pedido é recusado por falta de permissões, o servidor infere a aplicação a partir da rota, regista o evento \texttt{APP\_ACCESS\_FAILED} e aplica uma janela curta de deduplicação para limitar registos repetidos sobre o mesmo recurso. Esta decisão liga a implementação ao requisito RF13: acessos negados relevantes também fazem parte da rastreabilidade operacional.
 
-\section{Módulos transversais ao ecossistema}
-\label{sec:modulos_transversais}
-
-\subsection{Seletor de aplicações}
-\label{subsec:impl_app_selector}
-
-Após a autenticação, o operador é encaminhado para o seletor de aplicações. A página apresenta exclusivamente as aplicações para as quais o operador tem um perfil atribuído, pelo que dois operadores com acessos diferentes veem listas distintas. O botão de gestão do backoffice administrativo só é visível para operadores com um perfil de backoffice, sendo ocultado para todos os restantes. Esta filtragem é uma consequência direta do modelo de autorização por aplicação: a interface não esconde arbitrariamente opções, limita-se a refletir o contexto de acesso calculado pelo servidor após a autenticação.
-
-\subsection{Gestão de operadores, perfis e permissões}
+\subsection{Perfis, permissões e configuração administrativa}
 \label{subsec:impl_roles_permissions}
 
-A página de gestão de utilizadores internos permite criar contas de backoffice, ativar ou desativar operadores, transferir o papel de Super Admin e gerir o acesso atribuído a cada utilizador. Com a evolução do modelo de autorização, a atribuição deixou de depender de um único campo \texttt{roleId} e passou a trabalhar sobre \texttt{roleIds}. Na interface, o administrador escolhe no máximo um perfil por aplicação; se selecionar um perfil de backoffice, as restantes aplicações ficam bloqueadas, porque os perfis de backoffice são globais e exclusivos.
+A gestão de operadores, perfis e permissões concretiza os requisitos RF03, RF05 e RF07. No modelo atual, cada operador pode ter no máximo um perfil por aplicação. Os perfis de backoffice são globais e exclusivos, pelo que um operador com esse tipo de perfil não acumula perfis aplicacionais. Esta regra impede configurações ambíguas e mantém clara a diferença entre administração transversal e operação de uma aplicação específica.
 
-A página de perfis e permissões aplica a mesma separação. Cada perfil pertence a uma aplicação, e a interface apenas apresenta permissões dessa aplicação. Esta filtragem reduz o risco de erro operacional, mas não é a garantia principal: o \textit{back-end} volta a validar a associação antes de gravar alterações e rejeita permissões cuja aplicação não corresponda à aplicação do perfil.
+A Listagem~\ref{lst:role_permission_validation} mostra duas validações servidor-side que impedem estados incoerentes: duplicar perfis da mesma aplicação num operador e associar permissões de uma aplicação a um perfil de outra.
 
-As validações centrais desta regra aparecem na Listagem~\ref{lst:role_permission_validation}. O excerto mostra duas barreiras complementares: a atribuição de perfis a operadores e a associação de permissões a perfis.
-
-\begin{lstlisting}[caption={Validações de perfis e permissões por aplicação}, label={lst:role_permission_validation}]
+\begin{lstlisting}[float, caption={Validações de perfis e permissões por aplicação}, label={lst:role_permission_validation}]
 const applications = new Set<string>();
 for (const role of roles) {
   if (applications.has(role.application)) {
@@ -186,81 +150,68 @@ private assertPermissionMatchesRoleApplication(
 }
 \end{lstlisting}
 
-A Listagem~\ref{lst:role_permission_validation} mostra que a coerência do modelo não depende apenas da interface. O servidor impede dois casos que comprometeriam a evolução futura: atribuir dois perfis da mesma aplicação ao mesmo operador e misturar um perfil global de backoffice com perfis aplicacionais. A mesma lógica impede que uma permissão da JustCauses seja guardada num perfil de backoffice, ou o inverso.
+Estas validações demonstram que a coerência do modelo não depende apenas da interface. Mesmo que um pedido manual tente atribuir uma permissão da JustCauses a um perfil de backoffice, ou combinar um perfil global com perfis aplicacionais, a gravação é rejeitada no servidor. Esta regra concretiza o modelo de dados administrativo apresentado na Figura~\ref{fig:backoffice_data_model}: perfis, permissões, \textit{page gates} e operadores pertencem ao núcleo administrativo do backoffice, persistido em DynamoDB.
 
-Esta implementação é uma das principais evidências de escalabilidade do backoffice. Para acrescentar uma nova aplicação, o modelo não exige criar uma lógica de autorização paralela; exige definir as permissões da aplicação, criar perfis associados e configurar as páginas correspondentes. O mecanismo de resolução de acesso continua o mesmo.
-
-\subsection{Configuração administrativa do acesso}
-\label{subsec:impl_access_admin}
-
-A área \texttt{/admin} concentra as ferramentas administrativas que mantêm o modelo de autorização operacional. Nela existem páginas para gerir contas internas, ajustar perfis e configurar os \textit{page gates} das duas aplicações. Neste relatório, estas páginas não são tratadas como módulos funcionais isolados; são apresentadas como a consola onde o mecanismo de autorização é mantido e configurado.
-
-A \texttt{PageGatesPage} carrega as configurações por aplicação e permite associar a cada página um conjunto de permissões. A regra usada tanto na interface como no \textit{back-end} é explícita: quando uma página lista várias permissões, o operador precisa de ter pelo menos uma delas. Isto permite adaptar o acesso sem alterar o código das rotas e sem novo \textit{deploy}, porque a configuração fica persistida em DynamoDB.
-
-Também aqui foi mantido o padrão \textit{draft}. O operador pode preparar alterações, compará-las com o estado atual e só depois decidir guardar ou descartar. Num módulo sensível como o de autorização, esta opção reduz o risco de mudanças acidentais aplicadas à primeira interação.
-
-\subsection{Sistema de auditoria}
+\subsection{Auditoria e atividade dos operadores}
 \label{subsec:impl_audit}
 
-Todas as operações de escrita realizadas por operadores sobre entidades críticas geram um registo de auditoria no AWS DynamoDB. Cada registo contém o identificador do ator, o tipo e identificador da entidade afetada, a ação executada, a marca temporal em ISO 8601 e metadados adicionais específicos da ação (razão, estado anterior, estado novo). Os registos são imutáveis: não existem operações de atualização ou eliminação no \texttt{AuditLogRepo}.
+Todas as operações de escrita sobre entidades críticas geram um registo de auditoria no AWS DynamoDB. Cada registo contém o identificador do ator, o tipo e identificador da entidade afetada, a ação executada, a marca temporal em ISO 8601 e metadados específicos da ação, como razão, estado anterior ou estado novo. Os registos são imutáveis: não existem operações de atualização ou eliminação no \texttt{AuditLogRepo}.
 
-A página \texttt{LogsPage} permite consultar o histórico de auditoria com filtros por data, por operador e por tipo de ação. Para além das ações de negócio, o sistema passou também a registar tentativas falhadas de acesso à aplicação e recusas por permissões insuficientes. No \textit{front-end}, esse envio é feito de forma não bloqueante; no \textit{back-end}, a recusa é registada no próprio \textit{middleware} de autorização. A chave de partição no DynamoDB é o identificador da entidade, com a marca temporal como chave de ordenação, o que garante uma consulta eficiente por entidade e por intervalo de tempo.
+A página de logs consulta estes registos com filtros por data, operador e tipo de ação. Para além das operações de negócio, o sistema regista tentativas falhadas de acesso a aplicações e recusas por permissões insuficientes. Esta implementação encaixa no modelo de dados administrativo e na vista de processo de Nível 2: a \gls{API} executa a decisão e escreve auditoria no DynamoDB, mantendo a rastreabilidade separada dos dados operacionais da JustCauses.
 
-A dimensão de responsabilização foi reforçada com o botão \textbf{Activity} na página de utilizadores internos. Este botão abre uma vista agregada da atividade de um operador, combinando eventos de \textit{audit logs} e \textit{audit trail}. A consulta permite filtrar por origem, ação ou evento, resultado, aplicação e intervalo temporal. Quando um registo é selecionado, a interface mostra detalhes como data, alvo, endereço IP e metadados associados. Esta vista apoia a análise operacional de questões como acessos tentados por um operador, alterações realizadas e aplicação afetada.
+A funcionalidade \textbf{Activity} agrega, para um operador específico, eventos de \textit{audit logs} e \textit{audit trail}. Esta agregação responde ao objetivo OE1.4, porque permite analisar ações administrativas, acessos tentados, resultado, aplicação afetada e metadados sem obrigar o leitor ou o operador a consultar fontes separadas. O SD detalhado da Figura~\ref{fig:sd_user_activity_full}, no Apêndice~\ref{app:sd_detalhados}, expande esta interação técnica.
 
-%----------------------------------------------------------------------------------------
-
-\section{Módulos operacionais da JustCauses}
+\subsection{Fluxos operacionais da JustCauses no servidor}
 \label{sec:modulos_ojc}
 
-Os módulos descritos nesta secção evidenciam a integração com os dados transacionais da plataforma e a consistência da arquitetura adotada, concentrando-se nos fluxos desenvolvidos no âmbito deste estágio.
+Os módulos da JustCauses concretizam os objetivos OE2.1 a OE2.5 usando a mesma cadeia de responsabilidades do \textit{back-end}. A \gls{API} não trata estes módulos como exceções ao desenho: campanhas, categorias, analytics e verificações KYC/KYB entram por rotas protegidas, são processados por controladores e serviços próprios, acedem à persistência adequada e registam auditoria quando existe decisão administrativa.
 
-\subsection{Dashboard e métricas}
-\label{subsec:impl_dashboard}
+Na revisão de campanhas, a listagem operacional e a \textit{thread} de revisão são tratadas separadamente. A listagem permite localizar campanhas e perceber o seu estado; a \textit{thread} concentra a decisão sobre uma submissão concreta. A Listagem~\ref{lst:campaign_revision_flow} apresenta um excerto representativo do fluxo de revisão: o controlador chama o serviço de domínio, o serviço aplica a decisão e notifica o criador, e o controlador regista a auditoria da operação.
 
-A \texttt{AdminOverviewPage}, disponível em \texttt{/ojc} após a entrada no painel da JustCauses, é a visão operacional da plataforma. Apresenta sete métricas de resumo calculadas pelo endpoint \texttt{GET /api/ojc/overview/stats}: número total de utilizadores, campanhas ativas, volume total angariado, pedidos de aprovação pendentes, denúncias abertas, total de campanhas e doações concluídas.
+\begin{lstlisting}[float, caption={Excerto do fluxo de revisão de campanha}, label={lst:campaign_revision_flow}]
+const detail = await this.service.moderateThread(
+  threadId,
+  action,
+  actor.adminUserId,
+  bodyMessage,
+);
+if (!detail) {
+  return res.status(404).json({
+    message: "Campaign revision thread not found",
+  });
+}
 
-O \textit{back-end} calcula estas métricas através de \textit{queries} de agregação SQL sobre a base de dados da JustCauses. Os resultados são devolvidos num único pedido e apresentados em cartões de resumo no topo da página.
+this.auditLogService.log({
+  ...actor,
+  action: buildRevisionAuditAction(action),
+  targetType: "campaign",
+  targetId: detail.campaignId,
+  targetLabel: detail.campaign.title,
+  details: buildRevisionAuditDetails(action, detail, bodyMessage),
+});
 
-\subsection{Gestão de campanhas}
-\label{subsec:impl_campaigns}
+await this.repo.applyModerationAction({
+  context,
+  action,
+  message,
+  reviewedByAccountId,
+});
 
-O módulo de gestão de campanhas é composto por duas vistas complementares. A página \texttt{CampaignsPage}, acessível em \texttt{/ojc/campaigns}, apresenta a listagem operacional das campanhas e permite filtrar por estados como \texttt{PENDING}, \texttt{ACTIVE}, \texttt{INACTIVE}, \texttt{FINISHED}, \texttt{REJECTED} e \texttt{REVIEWING}. A revisão detalhada fica concentrada no módulo \texttt{CampaignRevisionsPage}, onde cada submissão é tratada como uma \textit{thread} de revisão.
+await this.notifyCreator(context, action, message);
+\end{lstlisting}
 
-Esta separação evita misturar duas tarefas diferentes. A listagem serve para localizar campanhas e perceber o seu estado. A \textit{thread} de revisão serve para decidir. Nessa vista, o operador consulta o resumo da campanha, o tipo de revisão, o estado atual, o número da submissão mais recente, o histórico de submissões e o histórico de decisões anteriores. Quando existe uma versão anterior, a interface apresenta uma comparação campo a campo entre o estado anterior e a submissão atual. Quando se trata da primeira submissão de uma campanha, a mesma estrutura é usada como vista dos dados submetidos.
+Este excerto demonstra a aplicação do padrão de camadas do Capítulo~\ref{cap:analise_desenho}. O controlador adapta o pedido HTTP e conhece o ator; o serviço aplica a regra de domínio e delega a persistência no repositório; a auditoria fica ligada ao alvo e à ação; a notificação ao criador é consequência da decisão tomada. O SD detalhado da Figura~\ref{fig:sd_campaign_revision_full}, no Apêndice~\ref{app:sd_detalhados}, apresenta este fluxo com os participantes técnicos envolvidos.
 
-O fluxo suporta três decisões principais: aprovar, pedir alterações ou rejeitar. Nos pedidos de alteração e rejeições, a mensagem do operador é obrigatória, porque essa informação passa a fazer parte do histórico da \textit{thread} e é usada para orientar o criador. Esta mensagem é persistida, apresentada no painel e enviada por e-mail quando aplicável. Assim, a revisão não fica reduzida a uma mudança de estado; fica associada a um motivo, a um operador e a uma data.
+No módulo de categorias, a \gls{API} expõe endpoints de listagem, criação, edição e remoção em \path{/api/ojc/categories}. A criação e a edição validam unicidade de nome e \textit{slug}, devolvendo \texttt{409 Conflict} em caso de duplicado. Todas as operações de escrita são registadas em auditoria. No módulo de \textit{analytics}, a \gls{API} expõe \texttt{GET /api/ojc/analytics} com filtros de período e devolve agregações calculadas sobre a base relacional da JustCauses, incluindo evolução temporal, distribuição por categoria e campanhas com maior volume angariado.
 
-Cada ação de revisão gera automaticamente um registo de auditoria no DynamoDB e uma notificação por e-mail ao criador via \gls{SES}. O conteúdo do e-mail depende da decisão tomada: aprovação, rejeição ou pedido de alterações. Quando existe uma mensagem do operador, esta é incluída no corpo da comunicação para que o criador compreenda a decisão e saiba que passos deve executar de seguida.
+A verificação KYC/KYB concretiza diretamente RF11 e OE2.5. No fluxo KYC, o endpoint \path{/api/ojc/kyc} é protegido por \texttt{view\_kyc} e devolve submissões filtráveis por estado, pesquisa, país, tipo de documento, comparação de dados e atraso. O repositório combina informação das tabelas partilhadas de verificação com perfis da JustCauses para comparar dados declarados no perfil com dados devolvidos pelo fornecedor externo. No fluxo KYB, os endpoints de organizações permitem consultar perfis coletivos e submissões documentais, enquanto as decisões exigem \texttt{view\_kyb}. Aprovar ou rejeitar uma submissão atualiza o estado da organização, cria notificação interna, pode enviar e-mail e regista auditoria com \texttt{KYB\_APPROVED} ou \texttt{KYB\_REJECTED}.
 
-\subsection{Gestão de categorias}
-\label{subsec:impl_categories}
-
-O módulo de categorias, acessível na página \texttt{CategoriesPage} em \texttt{/ojc/categories}, implementa a gestão completa das categorias temáticas das campanhas. Cada categoria é definida por um nome único, um \textit{slug} de URL, um ícone (\texttt{iconName}), uma descrição e um estado de ativação (\texttt{isActive}).
-
-O \textit{back-end} expõe quatro endpoints para este módulo: \texttt{GET} \path{/api/ojc/categories} para listagem; \texttt{POST} \path{/api/ojc/categories} para criação; \texttt{PATCH} \path{/api/ojc/categories/:id} para edição, incluindo desativação através de \texttt{isActive: false}; e \texttt{DELETE} \path{/api/ojc/categories/:id} para remoção. A criação e a edição validam a unicidade do nome e do \textit{slug}, devolvendo \texttt{409 Conflict} em caso de duplicado. Todas as operações de escrita são registadas no sistema de auditoria, com a ação \texttt{CATEGORY\_DELETED} para eliminações.
-
-\subsection{Verificação KYC e KYB}
-\label{subsec:impl_kyc_kyb}
-
-A JustCauses distingue criadores individuais de organizações. Esta distinção não altera o princípio geral do backoffice, mas altera a validação operacional necessária antes de determinados fluxos sensíveis. Utilizadores individuais são acompanhados através de \gls{KYC}; organizações são acompanhadas através de \gls{KYB}. Em ambos os casos, o objetivo do painel é dar ao operador uma vista verificável dos dados submetidos, permitir uma decisão controlada e deixar rasto auditável da ação.
-
-No fluxo \gls{KYC}, a página \texttt{KycQueuePage}, acessível em \texttt{/ojc/kyc}, carrega a fila de verificações através de \texttt{GET} \path{/api/ojc/kyc}. O endpoint é protegido por \texttt{requirePermission("view\_kyc")} e devolve submissões filtráveis por estado, pesquisa, país, tipo de documento, comparação de dados e atraso da submissão. O repositório combina informação das tabelas partilhadas de verificação com perfis da JustCauses, permitindo comparar os dados declarados no perfil com os dados devolvidos pelo fornecedor externo. A interface destaca diferenças de nome e país, falta de dados do fornecedor e submissões pendentes há mais de sete dias.
-
-Quando são detetadas inconsistências, o operador pode preparar um aviso por e-mail ao utilizador. O \textit{back-end} valida a submissão, envia a mensagem através do serviço de e-mail e regista a ação \texttt{KYC\_MISMATCH\_WARNING\_SENT}. Quando uma submissão pendente fica desatualizada, o sistema permite repor o processo, removendo a submissão pendente, criando uma notificação interna e enviando um e-mail de reinício de verificação. A ativação ou desativação de conta aparece apenas como consequência operacional possível dentro deste contexto de revisão, não como foco principal do módulo.
-
-No fluxo \gls{KYB}, a página de organizações apresenta perfis coletivos da JustCauses e permite ao operador abrir a informação de verificação de uma organização. A listagem é acedida através de \texttt{GET} \path{/api/ojc/organizations}, protegida por \texttt{view\_organizations} ou \texttt{view\_kyb}; já as decisões \gls{KYB} exigem \texttt{view\_kyb}. A submissão contém documentos como registo da entidade, documento do representante e fotografia de confirmação, para que o operador possa avaliar a oficialidade da organização e a representação associada.
-
-A aprovação e a rejeição são executadas através de endpoints próprios para decisão \gls{KYB}. A rejeição exige uma nota administrativa, enquanto a aprovação pode incluir uma nota opcional. O serviço atualiza a submissão \gls{KYB}, ajusta o estado de verificação do perfil da organização, cria uma notificação interna, envia e-mail de decisão quando existe endereço associado e regista a auditoria com as ações \texttt{KYB\_APPROVED} ou \texttt{KYB\_REJECTED}. Assim, a organização surge no relatório como entidade operacional da JustCauses e o contributo descrito centra-se na sua verificação, não na gestão geral de organizações.
-
-\subsection{Comunicação por e-mail e notificações}
+\subsection{E-mail transacional e notificações}
 \label{subsec:impl_email_notifications}
 
-As notificações por e-mail foram implementadas como consequência direta das ações de revisão de campanhas. O operador não envia manualmente estes e-mails; a decisão no painel desencadeia uma chamada no \textit{back-end}, que valida a operação, persiste a alteração, regista a auditoria e só depois solicita o envio da mensagem.
+As notificações por e-mail são acionadas por decisões administrativas relevantes. O operador não envia estes e-mails manualmente; a decisão no backoffice desencadeia uma chamada no \textit{back-end}, que valida a operação, persiste a alteração, regista auditoria e solicita o envio através do Amazon SES. Esta ordem é relevante: a comunicação externa é consequência de uma decisão já validada, não a origem da alteração de estado.
 
-Os e-mails transacionais são enviados através do Amazon SES. O \textit{back-end} concentra esta responsabilidade num serviço de e-mail que constrói mensagens HTML com dados do domínio, como o título da campanha, a decisão tomada e a mensagem deixada pelo operador. Esta centralização evita duplicar a configuração do fornecedor e mantém os modelos de mensagem próximos das regras de negócio que os originam.
-
-A Tabela~\ref{tab:emails_transacionais} identifica os principais e-mails automáticos associados a ações administrativas relevantes. A revisão de campanhas é o exemplo demonstrado visualmente neste relatório, mas o mesmo serviço centraliza também mensagens relacionadas com estados de conta e medidas aplicadas a utilizadores.
+Os e-mails transacionais são construídos por um serviço central de e-mail, com mensagens HTML parametrizadas por dados do domínio, como título da campanha, decisão tomada, nome da organização ou nota administrativa. A Tabela~\ref{tab:emails_transacionais} identifica os principais e-mails automáticos associados aos fluxos implementados.
 
 \begin{table}[H]
 \caption{E-mails transacionais acionados por operações administrativas}
@@ -282,89 +233,126 @@ Medidas sobre utilizadores & Utilizador afetado & Registo ou remoção de \texti
 
 Quando o e-mail complementa uma notificação interna da JustCauses, os dois mecanismos são tratados de forma independente. A notificação interna é persistida na base de dados da aplicação, enquanto o e-mail funciona como canal externo de aviso. Em caso de falha no envio, o erro fica registado nos logs do servidor, mas a operação administrativa não é revertida, porque a decisão já foi validada e persistida.
 
-\subsection{\textit{Analytics}}
-\label{subsec:impl_analytics}
-
-O módulo de \textit{analytics}, acessível na página \texttt{AnalyticsPage} em \texttt{/ojc/analytics}, apresenta uma visão temporal e categórica do desempenho da plataforma. O \textit{back-end} expõe o endpoint \texttt{GET /api/ojc/analytics} com suporte a filtros de período (\texttt{1d}, \texttt{1w}, \texttt{2w}, \texttt{1m}, \texttt{3m}, \texttt{6m}, \texttt{1y}, \texttt{all}).
-
-A página inclui gráficos de evolução temporal de receita, novos utilizadores e campanhas criadas; uma tabela de campanhas com mais doações angariadas, ordenada por valor total decrescente (\texttt{ORDER BY COALESCE(SUM(d."amount"), 0) DESC}); e distribuições de doações por estado e por categoria. A \textit{query} de agregação das campanhas utiliza \texttt{COALESCE} para garantir que campanhas sem doações surgem corretamente com valor zero em vez de serem excluídas.
-
 %----------------------------------------------------------------------------------------
 
-\section{Perspetivas de utilização e evidências}
-\label{sec:evidencias_utilizador}
+\section{Implementação do front-end}
+\label{sec:impl_frontend}
 
-Para além da descrição técnica, a implementação deve ser lida a partir das perspetivas dos operadores que usam o painel. As evidências visuais desta secção mostram como o desenho descrito no Capítulo~\ref{cap:analise_desenho} foi concretizado na interface: separação de permissões, configuração de acesso, auditoria e operação da JustCauses. A Tabela~\ref{tab:evidencias_prints} identifica a perspetiva de cada evidência e o ponto que deve ser retirado pelo leitor.
+O \textit{front-end} concretiza a vista de componentes e a vista de processo das Figuras~\ref{fig:c4_level3_fe} e \ref{fig:frontend_process_view}. A interface não é a fonte final de autorização; trabalha sobre o contexto calculado no servidor e torna visíveis as decisões de acesso, página e ação. Por isso, as capturas seguintes não são apresentadas como uma secção isolada de evidências, mas como parte da implementação de cada área funcional.
 
-Os diagramas de sequência que detalham estes fluxos foram reunidos no Apêndice~\ref{app:sd_detalhados}. Assim, esta secção mantém o foco nas evidências visuais e na interpretação do que cada ecrã demonstra.
+\subsection{Entrada no ecossistema e acesso por aplicação}
+\label{subsec:impl_app_selector}
 
-Nas evidências relativas a \gls{KYC} e \gls{KYB}, importa distinguir a origem dos dados apresentados. A integração de \gls{KYC} com o fornecedor externo de verificação não estava disponível no ambiente de desenvolvimento por decisão da equipa responsável pela aplicação JustCauses, ficando ativa apenas em produção. Por esse motivo, as capturas de \gls{KYC} foram obtidas com dados reais anonimizados e parcialmente ocultados. Já as capturas de \gls{KYB} foram obtidas em ambiente de desenvolvimento, com dados de demonstração sem correspondência a organizações reais.
+Depois de iniciar sessão, o operador é encaminhado para o seletor de aplicações. A interface apresenta apenas aplicações incluídas em \texttt{appsAccessible} ou permitidas pelo perfil do operador. Esta decisão concretiza RF03: o acesso ao backoffice administrativo e à aplicação JustCauses é separado por aplicação, antes de qualquer decisão sobre páginas internas.
 
-As Figuras~\ref{fig:impl_app_selector} a~\ref{fig:impl_kyb_verification_modal} apresentam as evidências visuais selecionadas para demonstrar a concretização dos principais fluxos transversais e operacionais.
+A Listagem~\ref{lst:frontend_access_rules} mostra como a interface usa o contexto de autorização devolvido pelo servidor para decidir o acesso à aplicação e às páginas. O primeiro bloco corresponde à guarda da JustCauses; o segundo mostra a regra de \textit{page gates} no \textit{layout}. O objetivo desta listagem é responder à ligação entre desenho e implementação: aplicação, página e ação são decisões distintas.
 
-\begin{table}[H]
-\caption{Evidências visuais usadas no Capítulo 4}
-\label{tab:evidencias_prints}
-\begin{center}
-\begingroup
-\scriptsize
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{|p{2.9cm}|p{3.8cm}|p{5.9cm}|}
-\hline
-\textbf{Perspetiva} & \textbf{Evidência visual} & \textbf{O que deve demonstrar} \\ \hline
-Entrada no ecossistema & Seletor de aplicações & O operador vê apenas as aplicações para as quais tem um perfil atribuído; o acesso ao backoffice administrativo só aparece para operadores com perfil de backoffice. \\ \hline
-Gestão de operadores & Atribuição de perfis & A atribuição manual permite um perfil por aplicação e separa perfis globais de backoffice de perfis da JustCauses. \\ \hline
-Perfis e permissões & Permissões por aplicação & A edição de um perfil apresenta apenas permissões da aplicação selecionada. \\ \hline
-Configuração de páginas & Configuração de \textit{page gates} & O acesso a páginas é configurável por aplicação e usa permissões como regra de entrada. \\ \hline
-Auditoria individual & Atividade de operador & A atividade de um operador agrega ações administrativas, eventos de acesso, resultado e aplicação. \\ \hline
-Revisão de campanhas & \textit{Thread} de revisão & O operador compara submissões, consulta histórico, decide a revisão e deixa registo da operação. \\ \hline
-Permissões de ação & Modal de campanha com e sem ações & A mesma campanha pode ser consultada por operadores diferentes, mas as ações sensíveis só aparecem quando o perfil tem permissão. \\ \hline
-Comunicação externa & E-mail transacional & A decisão administrativa é comunicada ao criador com a mensagem registada pelo operador. \\ \hline
-Gestão de categorias & Administração de categorias & O módulo gere categorias usadas na criação de campanhas e protege categorias já associadas a causas existentes. \\ \hline
-Verificação KYC & Fila e modal de comparação & O operador consulta verificações individuais, identifica diferenças entre perfil e fornecedor externo e executa ações auditadas. \\ \hline
-Verificação KYB & Organizações e submissão documental & O operador consulta organizações, abre a submissão documental e decide a verificação com notificação e auditoria. \\ \hline
-\end{tabular}
-\endgroup
-\end{center}
-\end{table}
+\begin{lstlisting}[float, caption={Decisão de acesso a aplicação e página no front-end}, label={lst:frontend_access_rules}]
+const canAccess =
+  user?.appsAccessible?.includes("just_causes") ||
+  (!user?.roleIsDefault &&
+    (user?.roleApplication === "just_causes" ||
+      user?.roleApplication === "backoffice"));
+
+function canAccessPage(pageKey: string): boolean {
+  if (isSuperAdmin || isBackofficeRole) return true;
+  const gate = gates.find((g) => g.pageKey === pageKey);
+  if (!gate) return true;
+  if (!gate.requiredPermissions.length) return true;
+  return gate.requiredPermissions.some((p) =>
+    userPerms.includes(p),
+  );
+}
+\end{lstlisting}
+
+A Listagem~\ref{lst:frontend_access_rules} mostra que a interface apenas aplica decisões calculadas a partir do contexto recebido. Se o operador não pertence à aplicação, a guarda apresenta acesso negado antes de renderizar a navegação interna. Se pertence à aplicação mas não tem permissão para uma página, os \textit{page gates} impedem a navegação para essa área. A validação final continua no servidor, através da Listagem~\ref{lst:require_permission}.
 
 \IfFileExists{frontmatter/assets/backoffice/ch4/app-selector.png}{
+A Figura~\ref{fig:impl_app_selector} apresenta o seletor de aplicações depois da autenticação.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/app-selector.png}
+\includegraphics[width=0.80\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/app-selector.png}
 \caption{Seletor de aplicações disponível após autenticação}
 \label{fig:impl_app_selector}
 \end{figure}
 
-Depois da Figura~\ref{fig:impl_app_selector}, a leitura pretendida é que a lista de aplicações não é fixa nem genérica: resulta diretamente do perfil atribuído ao operador. No exemplo, o acesso ao backoffice administrativo aparece precisamente porque o operador tem um perfil de backoffice; para um operador sem esse perfil, o botão não seria apresentado.
+Depois da Figura~\ref{fig:impl_app_selector}, a leitura pretendida é que a lista de aplicações não é fixa nem genérica: resulta diretamente do perfil atribuído ao operador. No exemplo, o acesso ao backoffice administrativo aparece porque o operador tem um perfil de backoffice; para um operador sem esse perfil, a entrada não seria apresentada.
+}{}
+
+\subsection{Configuração visual de operadores, perfis e páginas}
+\label{subsec:impl_access_admin}
+
+A interface administrativa torna operacionais as regras do modelo de permissões. A atribuição de perfis obriga o administrador a escolher manualmente o acesso do operador; a edição de perfis mostra apenas permissões da aplicação selecionada; e a página de \textit{page gates} permite configurar que permissões abrem cada página. Estas três vistas correspondem ao núcleo administrativo descrito no modelo de dados: \texttt{BO\_Users}, \texttt{BO\_Roles}, \texttt{BO\_Permissions} e \texttt{BO\_PageGates}.
+
+\IfFileExists{frontmatter/assets/backoffice/ch4/new-user.png}{
+\IfFileExists{frontmatter/assets/backoffice/ch4/new-user-no-perms.png}{
+A Figura~\ref{fig:impl_new_user_creation} apresenta a criação de um operador interno e o estado inicial da conta antes da atribuição de permissões.
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.34\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/new-user.png}
+
+\vspace{0.1em}
+
+\includegraphics[width=0.80\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/new-user-no-perms.png}
+\caption{Criação de operador interno e estado inicial sem permissões}
+\label{fig:impl_new_user_creation}
+\end{figure}
+
+Depois da Figura~\ref{fig:impl_new_user_creation}, a evidência principal é que a criação da conta não concede acesso operacional por si só. O administrador cria o operador e o sistema passa a reconhecê-lo como identidade interna, mas a conta fica inicialmente sem acesso até receber perfis. Esta decisão separa o ciclo de criação do utilizador do ciclo de autorização e evita que uma conta recém-criada obtenha permissões por omissão.
+}{}
+}{}
+
+\IfFileExists{frontmatter/assets/backoffice/ch4/new-user-email.png}{
+\IfFileExists{frontmatter/assets/backoffice/ch4/new-user-pass.png}{
+A Figura~\ref{fig:impl_new_user_onboarding} mostra o convite recebido pelo operador e o primeiro passo de configuração da palavra-passe.
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.52\textwidth}
+\centering
+\includegraphics[width=\linewidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/new-user-email.png}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.29\textwidth}
+\centering
+\includegraphics[width=\linewidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/new-user-pass.png}
+\end{minipage}
+\caption{Convite de acesso e definição da palavra-passe no primeiro acesso}
+\label{fig:impl_new_user_onboarding}
+\end{figure}
+
+Depois da Figura~\ref{fig:impl_new_user_onboarding}, importa distinguir autenticação e autorização. O convite enviado pelo Cognito permite ao operador iniciar sessão com uma palavra-passe temporária e obriga à sua substituição no primeiro acesso. Após esse passo, o backoffice usa a identidade autenticada para localizar o registo em \texttt{BO\_Users}; o acesso efetivo continua, contudo, dependente dos perfis e permissões configurados manualmente.
+}{}
 }{}
 
 \IfFileExists{frontmatter/assets/backoffice/ch4/role-assignment.png}{
+A Figura~\ref{fig:impl_role_assignment} mostra a atribuição manual de perfis a um operador interno.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/role-assignment.png}
+\includegraphics[width=0.80\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/role-assignment.png}
 \caption{Atribuição de perfis a um operador interno}
 \label{fig:impl_role_assignment}
 \end{figure}
 
-Depois da Figura~\ref{fig:impl_role_assignment}, a evidência a reter é que a atribuição de acesso é feita por aplicação. A janela distingue o perfil global de backoffice dos perfis da JustCauses e obriga o administrador a escolher explicitamente o acesso pretendido. Esta opção torna visível a regra usada no servidor: perfis administrativos são globais, enquanto perfis de aplicações operacionais são atribuídos no contexto da respetiva aplicação.
+Depois da Figura~\ref{fig:impl_role_assignment}, a evidência a reter é que a atribuição de acesso é feita por aplicação. A janela distingue o perfil global de backoffice dos perfis da JustCauses e obriga o administrador a escolher explicitamente o acesso pretendido. Esta opção torna visível a regra validada no servidor: perfis administrativos são globais, enquanto perfis aplicacionais são atribuídos no contexto da respetiva aplicação.
 }{}
 
 \IfFileExists{frontmatter/assets/backoffice/ch4/permissions-by-application.png}{
+A Figura~\ref{fig:impl_permissions_by_application} apresenta a edição de permissões filtrada pela aplicação do perfil.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/permissions-by-application.png}
+\includegraphics[width=0.82\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/permissions-by-application.png}
 \caption{Permissões filtradas pela aplicação do perfil}
 \label{fig:impl_permissions_by_application}
 \end{figure}
 
-Depois da Figura~\ref{fig:impl_permissions_by_application}, a evidência pretendida é a separação entre aplicações. O perfil aberto pertence à JustCauses e, por isso, a interface apresenta permissões ligadas a essa aplicação. A filtragem reduz erro operacional, mas não substitui a validação do servidor, que continua a rejeitar permissões cuja aplicação não corresponda à aplicação do perfil.
+Depois da Figura~\ref{fig:impl_permissions_by_application}, a evidência pretendida é a separação entre aplicações. O perfil aberto pertence à JustCauses e, por isso, a interface apresenta permissões ligadas a essa aplicação. A filtragem reduz erro operacional, mas não substitui a validação do servidor, que rejeita permissões cuja aplicação não corresponda à aplicação do perfil.
 }{}
 
 \IfFileExists{frontmatter/assets/backoffice/ch4/page-gates.png}{
+A Figura~\ref{fig:impl_page_gates} mostra a configuração administrativa dos \textit{page gates}.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/page-gates.png}
+\includegraphics[width=0.82\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/page-gates.png}
 \caption{Configuração administrativa dos \textit{page gates}}
 \label{fig:impl_page_gates}
 \end{figure}
@@ -372,41 +360,55 @@ Depois da Figura~\ref{fig:impl_permissions_by_application}, a evidência pretend
 Depois da Figura~\ref{fig:impl_page_gates}, importa evidenciar que o acesso a páginas não está fixo apenas no código. Cada página pode ter permissões associadas e a configuração é organizada por aplicação. No exemplo, a página de \textit{analytics} da JustCauses exige permissões específicas, enquanto páginas abertas aparecem explicitamente como \textit{open}. Esta distinção ajuda o administrador a perceber que páginas dependem de autorização e que páginas ficam disponíveis sem configuração adicional.
 }{}
 
+\subsection{Auditoria na interface}
+\label{subsec:impl_audit_frontend}
+
+Na interface, a auditoria aparece em duas perspetivas: consulta global dos logs e consulta individual através do botão \textbf{Activity}. Esta segunda perspetiva concretiza a responsabilização descrita no desenho, porque reúne ações administrativas, eventos de acesso, aplicação afetada, resultado e detalhes técnicos do evento num único contexto de leitura.
+
 \IfFileExists{frontmatter/assets/backoffice/ch4/user-activity.png}{
+A Figura~\ref{fig:impl_user_activity} apresenta a vista agregada de atividade de um operador.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/user-activity.png}
+\includegraphics[width=0.82\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/user-activity.png}
 \caption{Vista de atividade individual de um operador}
 \label{fig:impl_user_activity}
 \end{figure}
 
-Depois da Figura~\ref{fig:impl_user_activity}, o objetivo é mostrar a dimensão de responsabilização. A vista agrega eventos de \textit{audit logs} e \textit{audit trail}, permite filtrar por ação, resultado e aplicação, e apresenta eventos como alterações de perfil, atualizações de permissões, acessos concedidos e início de sessão. Esta consulta apoia a análise do comportamento de um operador sem exigir navegação separada por vários registos.
+Depois da Figura~\ref{fig:impl_user_activity}, o objetivo é mostrar a ligação entre o modelo de auditoria e a utilização real do backoffice. A vista agrega eventos de \textit{audit logs} e \textit{audit trail}, permite filtrar por ação, resultado e aplicação, e apresenta eventos como alterações de perfil, atualizações de permissões, acessos concedidos e início de sessão. Esta consulta evita que a análise do comportamento de um operador dependa de várias páginas separadas.
 }{}
 
+\subsection{Fluxos operacionais da JustCauses}
+\label{subsec:impl_frontend_ojc}
+
+Os módulos da JustCauses mostram a aplicação da base comum do backoffice a uma aplicação real. As interfaces de campanhas, categorias, KYC, KYB e \textit{analytics} consomem a \gls{API}, aplicam permissões na navegação e escondem ações não autorizadas. A validação final permanece no servidor, mas a interface reduz ambiguidade operacional ao apresentar apenas as ações relevantes para o perfil do operador.
+
 \IfFileExists{frontmatter/assets/backoffice/ch4/ojc-campaign-review1.png}{
+A Figura~\ref{fig:impl_ojc_campaign_review_thread} apresenta uma \textit{thread} de revisão de campanha.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/ojc-campaign-review1.png}
+\includegraphics[width=0.82\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/ojc-campaign-review1.png}
 \caption{Vista geral de uma \textit{thread} de revisão de campanha}
 \label{fig:impl_ojc_campaign_review_thread}
 \end{figure}
 
-Depois da Figura~\ref{fig:impl_ojc_campaign_review_thread}, a evidência a reter é que a revisão de campanhas não consiste apenas em alterar um estado numa tabela. A vista reúne o resumo da campanha, o tipo e estado da \textit{thread}, a submissão selecionada, a comparação de conteúdo, o histórico de submissões, o histórico de decisões e as ações de moderação. O operador consegue assim decidir com contexto suficiente e a decisão fica associada à submissão que foi efetivamente analisada.
+Depois da Figura~\ref{fig:impl_ojc_campaign_review_thread}, a evidência a reter é que a revisão de campanhas não consiste apenas em alterar um estado numa tabela. A vista reúne resumo da campanha, tipo e estado da \textit{thread}, submissão selecionada, comparação de conteúdo, histórico de submissões, histórico de decisões e ações de moderação. O operador decide com contexto e a decisão fica associada à submissão efetivamente analisada.
 }{}
 
 \IfFileExists{frontmatter/assets/backoffice/ch4/ojc-campaign-review2.png}{
+A Figura~\ref{fig:impl_ojc_campaign_review_media} mostra a comparação de elementos multimédia numa revisão de campanha.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.82\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/ojc-campaign-review2.png}
+\includegraphics[width=0.66\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/ojc-campaign-review2.png}
 \caption{Comparação de elementos multimédia numa revisão de campanha}
 \label{fig:impl_ojc_campaign_review_media}
 \end{figure}
 
-Depois da Figura~\ref{fig:impl_ojc_campaign_review_media}, a leitura centra-se na comparação entre versões. O painel coloca lado a lado os elementos anteriores e os elementos submetidos, mantendo a indicação de ficheiro principal e o acesso direto ao recurso. Esta apresentação evita que a revisão de imagens dependa apenas da memória do operador ou de uma inspeção manual fora do backoffice.
+Depois da Figura~\ref{fig:impl_ojc_campaign_review_media}, a leitura centra-se na comparação entre versões. A interface coloca lado a lado os elementos anteriores e os elementos submetidos, mantendo a indicação de ficheiro principal e o acesso direto ao recurso. Esta apresentação evita que a revisão de imagens dependa apenas da memória do operador ou de uma inspeção manual fora do backoffice.
 }{}
 
 \IfFileExists{frontmatter/assets/backoffice/ch4/campaign-review-modal-with-actions.png}{
 \IfFileExists{frontmatter/assets/backoffice/ch4/campaign-review-modal-readonly.png}{
+A Figura~\ref{fig:impl_campaign_modal_permissions} compara a mesma campanha vista por operadores com permissões diferentes.
 \begin{figure}[H]
 \centering
 \begin{minipage}[t]{0.49\textwidth}
@@ -424,24 +426,26 @@ Depois da Figura~\ref{fig:impl_ojc_campaign_review_media}, a leitura centra-se n
 \label{fig:impl_campaign_modal_permissions}
 \end{figure}
 
-Depois da Figura~\ref{fig:impl_campaign_modal_permissions}, a diferença relevante está nas ações disponíveis dentro do mesmo contexto funcional. Ambos os operadores conseguem consultar a campanha, mas apenas o operador com permissões adequadas vê os botões de intervenção, como \texttt{Deactivate}, \texttt{Finish}, \texttt{Request Changes} e \texttt{Campaign Revisions}. Esta evidência completa os exemplos anteriores de autorização: além do acesso à aplicação e à página, o backoffice também controla operações sensíveis dentro de um modal já aberto.
+Depois da Figura~\ref{fig:impl_campaign_modal_permissions}, a diferença relevante está nas ações disponíveis dentro do mesmo contexto funcional. Ambos os operadores conseguem consultar a campanha, mas apenas o operador com permissões adequadas vê botões de intervenção, como \texttt{Deactivate}, \texttt{Finish}, \texttt{Request Changes} e \texttt{Campaign Revisions}. Esta evidência completa a sequência de autorização: aplicação, página e ação.
 }{}}{}
 
 \IfFileExists{frontmatter/assets/backoffice/ch4/transactional-email.png}{
+A Figura~\ref{fig:impl_transactional_email} mostra o e-mail enviado ao criador após uma decisão administrativa.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.82\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/transactional-email.png}
+\includegraphics[width=0.68\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/transactional-email.png}
 \caption{E-mail transacional enviado após pedido de alterações}
 \label{fig:impl_transactional_email}
 \end{figure}
 
-Depois da Figura~\ref{fig:impl_transactional_email}, observa-se o resultado externo de uma decisão tomada no painel. A mensagem informa o criador de que a campanha precisa de alterações e inclui a nota definida pelo operador durante a revisão. Este exemplo liga três partes da implementação descritas neste capítulo: decisão administrativa, persistência da mensagem de revisão e envio automático por e-mail.
+Depois da Figura~\ref{fig:impl_transactional_email}, observa-se o resultado externo de uma decisão tomada no backoffice. A mensagem informa o criador de que a campanha precisa de alterações e inclui a nota definida pelo operador durante a revisão. Este exemplo liga três partes da implementação: decisão administrativa, persistência da mensagem de revisão e envio automático por e-mail.
 }{}
 
 \IfFileExists{frontmatter/assets/backoffice/ch4/ojc-categories.png}{
+A Figura~\ref{fig:impl_ojc_categories} apresenta a gestão de categorias da JustCauses.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/ojc-categories.png}
+\includegraphics[width=0.82\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/ojc-categories.png}
 \caption{Gestão de categorias da JustCauses}
 \label{fig:impl_ojc_categories}
 \end{figure}
@@ -449,10 +453,18 @@ Depois da Figura~\ref{fig:impl_transactional_email}, observa-se o resultado exte
 Depois da Figura~\ref{fig:impl_ojc_categories}, a evidência a retirar é que a gestão de categorias não se limita a uma lista de nomes. A página mostra métricas agregadas, filtros por estado, posição de apresentação, número de causas associadas e ações permitidas. Quando uma categoria está em uso, a interface torna explícita a restrição de eliminação, evitando que o operador execute uma ação que afetaria campanhas existentes.
 }{}
 
+\subsection{Verificação KYC e KYB}
+\label{subsec:impl_kyc_kyb}
+
+A verificação KYC/KYB é apresentada no front-end como concretização de RF11 e OE2.5. Na JustCauses, criadores individuais e organizações podem submeter campanhas, mas exigem validações distintas. Utilizadores individuais são tratados através de KYC; organizações são tratadas através de KYB. A interface disponibiliza filas, filtros, comparação de dados, consulta documental e ações de decisão, mantendo auditoria e permissões associadas.
+
+Nas evidências relativas a \gls{KYC} e \gls{KYB}, importa distinguir a origem dos dados apresentados. A integração de \gls{KYC} com o fornecedor externo de verificação não estava disponível no ambiente de desenvolvimento por decisão da equipa responsável pela aplicação JustCauses, ficando ativa apenas em produção. Por esse motivo, as capturas de \gls{KYC} foram obtidas com dados reais anonimizados e parcialmente ocultados. Já as capturas de \gls{KYB} foram obtidas em ambiente de desenvolvimento, com dados de demonstração sem correspondência a organizações reais.
+
 \IfFileExists{frontmatter/assets/backoffice/ch4/kyc-queue.png}{
+A Figura~\ref{fig:impl_kyc_queue} apresenta a fila de verificações KYC.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/kyc-queue.png}
+\includegraphics[width=0.82\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/kyc-queue.png}
 \caption{Fila de verificação KYC de utilizadores individuais}
 \label{fig:impl_kyc_queue}
 \end{figure}
@@ -461,9 +473,10 @@ Depois da Figura~\ref{fig:impl_kyc_queue}, a evidência principal é a existênc
 }{}
 
 \IfFileExists{frontmatter/assets/backoffice/ch4/kyc-comparison-modal.png}{
+A Figura~\ref{fig:impl_kyc_comparison_modal} mostra a comparação entre perfil e dados de verificação KYC.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.78\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/kyc-comparison-modal.png}
+\includegraphics[width=0.62\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/kyc-comparison-modal.png}
 \caption{Comparação entre perfil e dados de verificação KYC}
 \label{fig:impl_kyc_comparison_modal}
 \end{figure}
@@ -471,26 +484,26 @@ Depois da Figura~\ref{fig:impl_kyc_queue}, a evidência principal é a existênc
 Depois da Figura~\ref{fig:impl_kyc_comparison_modal}, o ponto a reter é a comparação explícita entre a informação declarada pelo utilizador na plataforma e a informação devolvida pelo fornecedor de verificação. O operador não decide apenas com base no estado final da submissão: vê que campos coincidem, que campos divergem e que ação pode executar. Avisos ao utilizador, reinícios de submissões pendentes e alterações de estado ficam associados a auditoria.
 }{}
 
-\IfFileExists{frontmatter/assets/backoffice/ch4/kyb-organizations.png}{
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/kyb-organizations.png}
-\caption{Organizações da JustCauses sujeitas a verificação KYB}
-\label{fig:impl_kyb_organizations}
-\end{figure}
-
-Depois da Figura~\ref{fig:impl_kyb_organizations}, importa observar que as organizações são apresentadas como perfis coletivos do domínio da JustCauses. A listagem permite localizar entidades, consultar o seu estado operacional e perceber que organizações exigem análise documental. A figura prepara a leitura da verificação \gls{KYB}, sem transformar o módulo numa gestão genérica de organizações.
-}{}
-
 \IfFileExists{frontmatter/assets/backoffice/ch4/kyb-verification-modal.png}{
+A Figura~\ref{fig:impl_kyb_flow} apresenta a listagem de organizações da JustCauses e a submissão documental KYB de uma organização.
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.72\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/kyb-verification-modal.png}
-\caption{Submissão documental KYB de uma organização}
-\label{fig:impl_kyb_verification_modal}
+\begin{minipage}[t]{0.50\textwidth}
+\centering
+\includegraphics[width=\linewidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/kyb-organizations.png}
+{\small Organizações sujeitas a verificação}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.34\textwidth}
+\centering
+\includegraphics[width=\linewidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/kyb-verification-modal.png}
+{\small Submissão documental}
+\end{minipage}
+\caption{Listagem de organizações e submissão documental KYB}
+\label{fig:impl_kyb_flow}
 \end{figure}
 
-Depois da Figura~\ref{fig:impl_kyb_verification_modal}, a evidência pretendida é a decisão administrativa sobre a oficialidade da organização. O operador consulta dados da entidade, documentos submetidos e estado da verificação antes de aprovar ou rejeitar a submissão. A decisão atualiza o estado de verificação da organização, gera notificação, pode enviar e-mail e fica registada em auditoria.
+Depois da Figura~\ref{fig:impl_kyb_flow}, importa observar que as organizações são apresentadas como perfis coletivos do domínio da JustCauses. A listagem permite localizar entidades, consultar o seu estado operacional e perceber que organizações exigem análise documental. No modal, o operador consulta os dados da entidade, os documentos submetidos e o estado da verificação antes de aprovar ou rejeitar a submissão. A decisão atualiza o estado de verificação da organização, gera notificação, pode enviar e-mail e fica registada em auditoria. O objetivo da figura é mostrar o fluxo KYB sem transformar esta funcionalidade numa gestão genérica de organizações.
 }{}
 
 %----------------------------------------------------------------------------------------
@@ -498,14 +511,12 @@ Depois da Figura~\ref{fig:impl_kyb_verification_modal}, a evidência pretendida 
 \section{Testes}
 \label{sec:testes}
 
-A validação realizada no âmbito deste estágio combinou duas fontes principais de evidência: validação manual sistemática realizada durante o desenvolvimento e testes automatizados conduzidos pelo elemento da empresa responsável por \gls{QA}. Este relatório descreve a parte executada diretamente no desenvolvimento do backoffice, nomeadamente a utilização dos fluxos na aplicação, a confirmação dos estados apresentados na interface, a verificação das respostas da \gls{API} e a validação dos registos de auditoria gerados.
-
-Os testes automatizados não foram desenvolvidos pelo autor deste relatório. Ainda assim, são relevantes para a avaliação da solução, porque incidem sobre endpoints, fluxos de interface e regras de autorização implementados neste projeto. Esta distinção mantém clara a autoria do trabalho e, ao mesmo tempo, enquadra a validação no processo real da empresa.
+A validação realizada no âmbito deste estágio combinou duas fontes principais: validação manual sistemática realizada pelo autor durante o desenvolvimento e testes automatizados conduzidos pelo Vicente no processo de \gls{QA} da empresa. Esta distinção é importante para manter clara a autoria do trabalho. Os testes automatizados não foram desenvolvidos pelo autor deste relatório, mas incidem sobre endpoints, fluxos de interface e regras de autorização implementados no backoffice, pelo que são relevantes para avaliar a solução.
 
 \subsection{Validação manual por módulo}
 \label{subsec:testes_manual}
 
-A validação manual consistiu em verificar cada módulo após a implementação. Para cada requisito funcional, foram executados cenários de sucesso, cenários de erro, ausência de permissões, persistência de dados e criação dos registos de auditoria esperados. Esta validação incidiu sobre os fluxos transversais de autenticação, autorização, gestão de perfis, \textit{page gates} e auditoria, bem como sobre os módulos da JustCauses. No final do processo, estes cenários foram considerados concluídos no âmbito definido para o estágio. A Tabela~\ref{tab:validacao_manual} resume os principais cenários verificados manualmente.
+A validação manual consistiu em verificar cada módulo após a implementação. Para cada requisito funcional foram executados cenários de sucesso, cenários de erro, ausência de permissões, persistência de dados e criação dos registos de auditoria esperados. Esta validação incidiu sobre a utilização de uma sessão autenticada, a resolução do contexto de autorização, perfis, \textit{page gates}, auditoria e módulos JustCauses. No final do processo, estes cenários foram considerados concluídos no âmbito definido para o estágio. A Tabela~\ref{tab:validacao_manual} resume os principais cenários verificados manualmente.
 
 \begin{table}[H]
 \caption{Cenários de validação manual da solução}
@@ -517,7 +528,8 @@ A validação manual consistiu em verificar cada módulo após a implementação
 \begin{tabular}{|>{\raggedright\arraybackslash}p{2.4cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{2.8cm}|}
 \hline
 \textbf{Módulo} & \textbf{Cenário validado} & \textbf{Resultado esperado} & \textbf{Evidência observada} \\ \hline
-Autenticação & Operador inicia sessão com conta ativa & Sessão criada e contexto interno carregado & Redirecionamento para o seletor de aplicações \\ \hline
+Sessão autenticada e contexto de autorização & Operador inicia sessão com conta ativa & Sessão criada e contexto interno carregado & Redirecionamento para o seletor de aplicações com aplicações permitidas \\ \hline
+Onboarding de operador & Operador criado recebe convite e define nova palavra-passe & Conta autenticável, mas sem acesso operacional até atribuição de perfis & Convite Cognito recebido, palavra-passe temporária substituída e estado sem permissões confirmado \\ \hline
 Acesso a aplicações & Operador sem acesso tenta abrir uma aplicação & Acesso recusado & Ecrã de acesso negado e registo de tentativa \\ \hline
 Perfis por aplicação & Administrador atribui perfis a um operador & Só é aceite um perfil por aplicação; backoffice é exclusivo & Atualização persistida e refletida no perfil do utilizador \\ \hline
 Permissões & Tentativa de associar permissão de outra aplicação a um perfil & Pedido rejeitado pelo servidor & Resposta de erro e ausência de alteração persistida \\ \hline
@@ -531,27 +543,27 @@ Atividade de utilizador & Abrir botão \textbf{Activity} num operador & Históri
 \end{center}
 \end{table}
 
-Um dos cenários de validação manual incidiu sobre a tentativa de contornar a navegação normal do painel através da introdução direta de uma rota protegida no browser. A Figura~\ref{fig:test_access_denied_manual_route} apresenta esse comportamento para a rota \texttt{/ojc/analytics}, quando acedida por um operador que tem acesso à aplicação JustCauses, mas não tem permissão para essa página específica.
+Um dos cenários de validação manual incidiu sobre a tentativa de contornar a navegação normal através da introdução direta de uma rota protegida no browser. A Figura~\ref{fig:test_access_denied_manual_route} apresenta esse comportamento para a rota \texttt{/ojc/analytics}, quando acedida por um operador que tem acesso à aplicação JustCauses, mas não tem permissão para essa página específica.
 
 \IfFileExists{frontmatter/assets/backoffice/ch4/access-denied-manual-route.png}{
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/access-denied-manual-route.png}
+\includegraphics[width=0.50\textwidth, keepaspectratio]{frontmatter/assets/backoffice/ch4/access-denied-manual-route.png}
 \caption{Validação manual de acesso negado a página protegida}
 \label{fig:test_access_denied_manual_route}
 \end{figure}
 
-Depois da Figura~\ref{fig:test_access_denied_manual_route}, a evidência pretendida é que o controlo de acesso não se limita ao nível da aplicação. O operador consegue entrar no painel da JustCauses, mas não consegue abrir uma página para a qual o seu perfil não tem permissão. Mesmo quando a rota é introduzida manualmente, o \textit{page gate} bloqueia a navegação e apresenta um estado de acesso negado. No caso complementar, em que o operador não pertence sequer à aplicação, a validação ocorre antes da renderização do painel interno: é apresentada uma página completa de acesso negado, sem navegação lateral nem separadores da aplicação. Assim, a solução cobre tanto a entrada numa aplicação como o acesso a páginas específicas dentro dessa aplicação. As operações sensíveis continuam a ser verificadas no servidor através do \textit{middleware} de autorização.
+Depois da Figura~\ref{fig:test_access_denied_manual_route}, a evidência pretendida é que o controlo de acesso não se limita ao nível da aplicação. O operador consegue entrar na JustCauses, mas não consegue abrir uma página para a qual o seu perfil não tem permissão. Mesmo quando a rota é introduzida manualmente, o \textit{page gate} bloqueia a navegação e apresenta acesso negado. No caso complementar, em que o operador não pertence sequer à aplicação, a validação ocorre antes da renderização da navegação interna: é apresentada uma página completa de acesso negado. As operações sensíveis continuam a ser verificadas no servidor através do \textit{middleware} de autorização.
 }{}
 
-Esta abordagem permitiu acompanhar o ritmo de desenvolvimento das \textit{sprints}, confirmar os fluxos antes da passagem das tarefas para concluído e identificar regressões visíveis durante a fase de testes iniciada a 13 de maio de 2026. A validação manual descrita neste relatório foi complementada pelos testes automatizados realizados pelo colega responsável por essa frente, pelo que a validação da solução ficou concluída dentro do processo de qualidade seguido pela empresa.
+Esta validação acompanhou o ritmo das \textit{sprints}, confirmou fluxos antes da passagem das tarefas para concluído e ajudou a identificar regressões visíveis durante a fase de testes iniciada a 13 de maio de 2026. A validação manual foi complementada pelos testes automatizados do processo de \gls{QA}, pelo que a solução ficou validada no âmbito definido para o estágio.
 
-\subsection{Testes de código no processo de qualidade}
+\subsection{Testes automatizados no processo de qualidade}
 \label{subsec:testes_qa}
 
-Na empresa, a criação e manutenção dos testes automatizados estava atribuída a um elemento específico da equipa. A sua existência foi importante durante o estágio, porque obrigou a estabilizar contratos de \gls{API}, códigos de resposta, identificadores de interface e estados de erro. Desta forma, as alterações feitas ao modelo de utilizadores, perfis, permissões, \textit{page gates} e auditoria puderam ser avaliadas não apenas por utilização manual, mas também contra cenários automatizados definidos pela equipa de qualidade.
+Na empresa, a criação e manutenção dos testes automatizados estava atribuída ao Vicente. A sua existência influenciou diretamente o desenvolvimento, porque obrigou a estabilizar contratos de \gls{API}, códigos de resposta, identificadores de interface e estados de erro. Desta forma, as alterações feitas ao modelo de utilizadores, perfis, permissões, \textit{page gates} e auditoria puderam ser avaliadas contra cenários automatizados definidos pela frente de qualidade.
 
-Os artefactos disponíveis estão organizados em três conjuntos. O primeiro conjunto contém testes de \gls{API} em Playwright, focados em autenticação, utilizadores internos, perfis, permissões, \textit{page gates}, logs e estado do serviço. O segundo conjunto contém testes \gls{E2E} em Playwright, executados em browser, que validam fluxos de \textit{login}, \textit{dashboard}, navegação, gestão de utilizadores, auditoria, perfis e configuração de acessos. O terceiro conjunto contém testes de integração em Jest/Supertest, executáveis diretamente contra a \gls{API}, com cenários próximos dos testes de \gls{API}, mas estruturados ao nível de integração de endpoints. A Tabela~\ref{tab:testes_qa} caracteriza estes conjuntos de testes.
+Os artefactos disponíveis estão organizados em três conjuntos. O primeiro contém testes de \gls{API} em Playwright, focados em autenticação, utilizadores internos, perfis, permissões, \textit{page gates}, logs e estado do serviço. O segundo contém testes \gls{E2E} em Playwright, executados em browser, que validam fluxos de \textit{login}, \textit{dashboard}, navegação, gestão de utilizadores, auditoria, perfis e configuração de acessos. O terceiro contém testes de integração em Jest/Supertest, executáveis diretamente contra a \gls{API}. Estes testes foram conduzidos no processo de \gls{QA} atribuído ao Vicente; no contexto deste relatório, são usados como evidência externa sobre os módulos de autorização, administração e auditoria que incidem sobre o código desenvolvido. A Tabela~\ref{tab:testes_qa} caracteriza estes conjuntos de testes.
 
 \begin{table}[H]
 \caption{Caracterização dos testes automatizados de qualidade}
@@ -563,11 +575,11 @@ Os artefactos disponíveis estão organizados em três conjuntos. O primeiro con
 \begin{tabular}{|>{\raggedright\arraybackslash}p{2.5cm}|>{\raggedright\arraybackslash}p{4.2cm}|>{\raggedright\arraybackslash}p{1.5cm}|>{\raggedright\arraybackslash}p{4.5cm}|}
 \hline
 \textbf{Conjunto} & \textbf{Âmbito principal} & \textbf{Casos} & \textbf{Resultado ou observação} \\ \hline
-\gls{API} Playwright & Autenticação, utilizadores, perfis, permissões, \textit{page gates}, logs e estado do serviço & 223 & Executados no relatório de 27/05/2026, sem falhas, erros ou testes ignorados \\ \hline
+\gls{API} Playwright & Autenticação, resolução de utilizadores, perfis, permissões, \textit{page gates}, logs e estado do serviço & 223 & Executados no relatório de 27/05/2026, sem falhas, erros ou testes ignorados \\ \hline
 \gls{E2E} Playwright & \textit{Login}, \textit{dashboard}, navegação, gestão de operadores, auditoria, perfis e configuração de páginas & 96 & Executados no mesmo relatório, também sem falhas, erros ou testes ignorados \\ \hline
 Integração Jest/Supertest & Validação direta de endpoints e contratos da \gls{API} em cenários de integração & 127 & Casos definidos para execução separada, cobrindo os mesmos módulos transversais de administração \\ \hline
 \textbf{Total Playwright executado} & \textbf{API + E2E} & \textbf{319} & \textbf{319 testes concluídos com sucesso em 134,6 s, com 0 falhas, 0 erros e 0 ignorados} \\ \hline
-\textbf{Total identificado} & \textbf{Playwright + integração} & \textbf{446} & \textbf{Cobertura funcional centrada nos módulos de autenticação, autorização, administração e auditoria} \\ \hline
+\textbf{Total identificado} & \textbf{Playwright + integração} & \textbf{446} & \textbf{Cobertura funcional centrada em autenticação transversal, autorização, administração e auditoria} \\ \hline
 \end{tabular}
 \endgroup
 \end{center}
@@ -575,7 +587,7 @@ Integração Jest/Supertest & Validação direta de endpoints e contratos da \gl
 
 A Listagem~\ref{lst:qa_page_gate_tests} apresenta um excerto representativo dos testes automatizados de \gls{API} sobre a configuração de acesso por página. O exemplo foi escolhido por incidir diretamente sobre uma regra central da solução: os \textit{page gates} pertencem a uma aplicação e a alteração das permissões exigidas deve ficar persistida no servidor. Por concisão, a listagem omite o carregamento inicial do identificador da página e da configuração original, realizado na preparação do teste.
 
-\begin{lstlisting}[caption={Excerto de testes automatizados sobre configuração de acesso por página}, label={lst:qa_page_gate_tests}]
+\begin{lstlisting}[float, caption={Excerto de testes automatizados sobre configuração de acesso por página}, label={lst:qa_page_gate_tests}]
 test('deve filtrar por application=just_causes', async ({ request }) => {
   const response =
     await request.get('/api/page-gates?application=just_causes');
@@ -617,21 +629,19 @@ O primeiro teste da Listagem~\ref{lst:qa_page_gate_tests} confirma que o filtro 
 
 O relatório de execução Playwright consultado registou 319 testes concluídos com sucesso, sem falhas, erros, testes ignorados ou testes instáveis. Este resultado cobre os testes de \gls{API} e os testes \gls{E2E}. Os testes de integração em Jest/Supertest constam do conjunto de testes disponível e acrescentam 127 cenários definidos, mas não estavam incluídos no relatório Playwright, por serem executados através de um comando próprio.
 
-Não foi disponibilizado um relatório de cobertura de código por linhas ou instruções. Por esse motivo, a avaliação quantitativa apresentada não deve ser lida como uma percentagem formal de cobertura. O que pode ser concluído com rigor é que existe cobertura funcional automatizada sobre os módulos mais sensíveis do backoffice: autenticação, resolução de utilizador autenticado, criação e manutenção de operadores, perfis, permissões, configuração de páginas, logs, audit trail e navegação administrativa.
-
-Estes testes influenciaram o desenvolvimento de forma concreta. A implementação teve de manter contratos de \gls{API} estáveis, códigos de resposta previsíveis, validações explícitas, estados de erro distinguíveis e identificadores de interface adequados para automação. Isto foi particularmente relevante nas alterações ao modelo de perfis por aplicação e permissões por aplicação, porque os testes obrigam a que a interface, os endpoints e os dados devolvidos continuem alinhados após cada alteração.
+Não foi disponibilizado um relatório de cobertura de código por linhas ou instruções. Por esse motivo, a avaliação quantitativa apresentada não deve ser lida como uma percentagem formal de cobertura. O que pode ser concluído com rigor é que existe cobertura funcional automatizada sobre módulos sensíveis do backoffice: autenticação transversal, resolução de utilizador autenticado, criação e manutenção de operadores, perfis, permissões, configuração de páginas, logs, audit trail e navegação administrativa.
 
 %----------------------------------------------------------------------------------------
 
 \section{Avaliação da solução}
 \label{sec:avaliacao}
 
-Para além dos testes, a solução foi avaliada pela sua adequação ao problema inicial: permitir operação interna da JustCauses e, simultaneamente, manter uma base técnica reutilizável para futuras aplicações. A disponibilização do backoffice em ambiente de utilização interna permitiu validar a viabilidade operacional dos fluxos principais, sobretudo nos módulos de autenticação, controlo de acesso, auditoria, revisão de campanhas e gestão de categorias.
+Para além dos testes, a solução foi avaliada pela sua adequação ao problema inicial: permitir operação interna da JustCauses e, simultaneamente, manter uma base técnica reutilizável para futuras aplicações. A disponibilização do backoffice em ambiente de utilização interna permitiu validar a viabilidade operacional dos fluxos principais, sobretudo integração com sessão autenticada, controlo de acesso, auditoria, revisão de campanhas, categorias e verificações KYC/KYB.
 
 \subsection{Avaliação operacional e critérios complementares}
 \label{subsec:avaliacao_complementar}
 
-A Tabela~\ref{tab:avaliacao_complementar} apresenta os critérios usados para complementar a validação funcional e automatizada.
+A Tabela~\ref{tab:avaliacao_complementar} apresenta os critérios usados para complementar a validação funcional e automatizada. Para responder ao limite metodológico identificado, cada linha indica a forma concreta de avaliação e evita apresentar como medição formal aquilo que resultou apenas de validação manual ou observação operacional.
 
 \begin{table}[H]
 \caption{Critérios complementares de avaliação da solução}
@@ -642,25 +652,25 @@ A Tabela~\ref{tab:avaliacao_complementar} apresenta os critérios usados para co
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{|>{\raggedright\arraybackslash}p{2.4cm}|>{\raggedright\arraybackslash}p{5.2cm}|>{\raggedright\arraybackslash}p{4.5cm}|}
 \hline
-\textbf{Critério} & \textbf{Forma de avaliação} & \textbf{Resultado observado} \\ \hline
-Adequação funcional & Comparação entre problema inicial, requisitos e funcionalidades implementadas & Os módulos prioritários da JustCauses e os mecanismos transversais de administração ficaram disponíveis no âmbito definido \\ \hline
-Segurança e autorização & Validação manual e testes de \gls{API} sobre autenticação, permissões, perfis e acessos negados & A decisão de acesso é aplicada no cliente e revalidada no servidor, com registo auditável das recusas relevantes \\ \hline
-Escalabilidade funcional & Verificação do modelo de aplicações, perfis por aplicação, permissões por aplicação e \textit{page gates} & A arquitetura suporta novas aplicações sem duplicar autenticação, autorização e auditoria \\ \hline
-Qualidade automatizada & Relatório Playwright e testes de integração disponíveis no processo de \gls{QA} & 319 testes Playwright concluídos com sucesso e 127 testes de integração definidos sobre os módulos transversais \\ \hline
-Usabilidade operacional & Utilização interna dos fluxos e revisão dos estados visíveis na interface & As páginas apresentam ações, filtros, estados de erro e mensagens explícitas para apoiar trabalho administrativo diário \\ \hline
-Desempenho percebido & Utilização manual dos fluxos principais em ambiente de desenvolvimento e produção interna & Não foram identificados bloqueios funcionais nos fluxos avaliados, embora não tenha sido realizada uma medição formal de carga \\ \hline
-Acessibilidade & Revisão visual e funcional dos componentes usados nas páginas principais & Foram mantidos padrões consistentes de navegação e contraste, mas não foi realizada uma auditoria automática formal de acessibilidade \\ \hline
+\textbf{Critério} & \textbf{Fonte e forma de avaliação} & \textbf{Resultado observado} \\ \hline
+Adequação funcional & Comparação feita pelo autor entre problema inicial, RF01 a RF13 e funcionalidades implementadas & Os módulos prioritários e os mecanismos transversais de administração ficaram disponíveis no âmbito definido \\ \hline
+Segurança e autorização & Validação manual do autor e testes de \gls{API} do processo de \gls{QA} sobre sessão autenticada, permissões, perfis e acessos negados & A decisão de acesso é aplicada na interface e revalidada no servidor, com registo auditável das recusas relevantes \\ \hline
+Escalabilidade funcional & Revisão técnica do autor sobre modelo de aplicações, perfis por aplicação, permissões por aplicação e \textit{page gates} & A arquitetura suporta novas aplicações sem duplicar a integração com a autenticação comum, o modelo de autorização e a auditoria \\ \hline
+Qualidade automatizada & Relatório Playwright e testes de integração conduzidos pelo Vicente no processo de \gls{QA} & 319 testes Playwright concluídos com sucesso e 127 testes de integração identificados sobre módulos transversais \\ \hline
+Usabilidade operacional & Utilização manual pelo autor durante desenvolvimento e revisão dos estados visíveis nas páginas principais & As páginas apresentam ações, filtros, estados de erro e mensagens explícitas; não foi realizado inquérito formal aos operadores \\ \hline
+Desempenho percebido & Utilização manual dos fluxos principais em ambiente de desenvolvimento e produção interna & Não foram identificados bloqueios funcionais nos fluxos avaliados; não foi realizada medição formal de carga \\ \hline
+Acessibilidade & Revisão visual e funcional dos componentes usados nas páginas principais & Foram mantidos padrões consistentes de navegação e contraste; não foi realizada auditoria automática formal de acessibilidade \\ \hline
 \end{tabular}
 \endgroup
 \end{center}
 \end{table}
 
-Esta avaliação mostra que a solução responde ao núcleo do problema apresentado na introdução: reduzir operações manuais pouco rastreáveis, centralizar a administração da JustCauses e criar uma base de controlo de acesso reutilizável. Ao mesmo tempo, identifica limites da avaliação realizada. Não houve, até ao momento descrito neste relatório, um inquérito formal aos operadores internos nem uma campanha dedicada de testes de carga ou acessibilidade. A avaliação de usabilidade baseou-se, por isso, na utilização operacional e na revisão dos fluxos entregues. Esses instrumentos poderiam complementar a avaliação em iterações futuras, sobretudo quando o número de operadores e aplicações integradas aumentar.
+Esta avaliação mostra que a solução responde ao núcleo do problema apresentado na introdução: reduzir operações manuais pouco rastreáveis, operar a JustCauses como primeira integração real e criar uma base de controlo de acesso reutilizável para futuras aplicações. Ao mesmo tempo, identifica limites da avaliação realizada. Não houve, até ao momento descrito neste relatório, um inquérito formal aos operadores internos nem uma campanha dedicada de testes de carga ou acessibilidade. A avaliação de usabilidade baseou-se, por isso, na validação manual do autor, no uso interno disponível e na revisão dos fluxos entregues. Esses instrumentos poderiam complementar a avaliação em iterações futuras.
 
 \subsection{Estado final da solução}
 \label{subsec:estado_final_solucao}
 
-Esta secção avalia o estado de implementação da solução por eixo funcional, com base no estado do painel no final do período de desenvolvimento coberto por este relatório e nas evidências apresentadas nas secções anteriores. Em vez de voltar a detalhar cada fluxo operacional isolado, a análise centra-se nas capacidades que melhor representam o trabalho efetivamente consolidado e a sua correspondência com os objetivos definidos na introdução. A Tabela~\ref{tab:avaliacao_rf} sintetiza esse estado final.
+Esta secção avalia o estado de implementação da solução por eixo funcional, com base no estado do backoffice no final do período de desenvolvimento coberto por este relatório e nas evidências apresentadas nas secções anteriores. Em vez de voltar a detalhar cada fluxo operacional isolado, a análise centra-se nas capacidades que melhor representam o trabalho consolidado e a sua correspondência com os objetivos definidos na introdução. A Tabela~\ref{tab:avaliacao_rf} sintetiza esse estado final.
 
 \begin{table}[H]
 \caption{Estado de implementação por eixo funcional}
@@ -672,7 +682,7 @@ Esta secção avalia o estado de implementação da solução por eixo funcional
 \begin{tabular}{|>{\raggedright\arraybackslash}p{2.3cm}|>{\raggedright\arraybackslash}p{3.2cm}|>{\raggedright\arraybackslash}p{1.2cm}|>{\raggedright\arraybackslash}p{1.8cm}|>{\raggedright\arraybackslash}p{3.7cm}|}
 \hline
 \textbf{Eixo} & \textbf{Descrição resumida} & \textbf{Estado} & \textbf{Obj.} & \textbf{Observações} \\ \hline
-Autenticação com Cognito & Gestão de sessão, recuperação de palavra-passe e integração com o painel & Concluído & OE1.1 & Fluxo funcional com Amplify no cliente e validação JWT no servidor \\ \hline
+Integração da identidade autenticada & Ligação entre sessão Cognito, operador interno e contexto administrativo & Concluído & OE1.1 & O backoffice usa a identidade autenticada como entrada e resolve estado, perfis, aplicações acessíveis e permissões efetivas \\ \hline
 Resolução do contexto de autorização & Perfis, aplicações acessíveis e permissões efetivas do operador & Concluído & OE1.1/OE1.2 & \texttt{/users/me} no cliente e \texttt{req.auth} no servidor mantêm a mesma fonte de verdade \\ \hline
 Acesso a aplicações e páginas & Guardas de rota, redireções e \textit{page gates} por aplicação & Concluído & OE1.3/OE2.1 & Separação entre \texttt{backoffice} e \texttt{just\_causes}, com suporte a expansão para novas aplicações \\ \hline
 Proteção de endpoints \gls{REST} & Verificação de permissões antes de qualquer operação sensível & Concluído & OE1.3 & \texttt{requirePermission} aplicado de forma consistente nas rotas críticas \\ \hline
@@ -688,13 +698,9 @@ Validação da solução & Verificação dos fluxos implementados, testes de qua
 \end{center}
 \end{table}
 
-A análise final desta secção indica que os objetivos estruturais OE1.1 a OE1.5 ficaram concretizados através da autenticação, autorização, controlo de acesso a páginas, proteção de endpoints, auditoria e separação entre dados administrativos e dados operacionais. Os objetivos OE2.1 a OE2.5 ficaram concluídos no âmbito definido para o estágio e demonstram a aplicação da base transversal à JustCauses. Em conjunto, estes resultados suportam o OP.
+A análise final desta secção indica que os objetivos estruturais OE1.1 a OE1.5 ficaram concretizados através da integração da identidade autenticada com a autorização interna, controlo de acesso a páginas, proteção de endpoints, auditoria e separação entre dados administrativos e dados operacionais. Os objetivos OE2.1 a OE2.5 ficaram concluídos no âmbito definido para o estágio e demonstram a aplicação da base transversal à JustCauses. Em conjunto, estes resultados suportam o OP.
 
 \section{Sumário}
 \label{sec:sumario_cap4}
 
-O trabalho de implementação descrito neste capítulo mostra um painel já utilizável em contexto operacional e, ao mesmo tempo, ainda em evolução. O contributo técnico principal não foi apenas a entrega de páginas, mas a consolidação de uma linha técnica clara para autenticação, autorização, auditoria e administração do acesso.
-
-Esta coerência verifica-se em vários pontos: o \textit{front-end} consome o contexto de acesso calculado pelo \textit{back-end}, as páginas são filtradas por \textit{page gates} configuráveis, os endpoints são revalidados no servidor e as recusas deixam rasto auditável. A evolução para perfis por aplicação reforçou esta base, porque a autorização deixou de depender de um único perfil por utilizador e passou a suportar crescimento controlado para novas aplicações. Os módulos operacionais entregues, incluindo campanhas, categorias, \gls{KYC} e \gls{KYB}, assentam nesta base comum, o que reduz o custo de evolução nas iterações seguintes.
-
-No capítulo seguinte é feita a apreciação global do trabalho realizado, retomando os objetivos inicialmente definidos, as limitações identificadas e as principais linhas de evolução futura da solução.
+O trabalho de implementação descrito neste capítulo mostra um backoffice utilizável em contexto operacional e alinhado com o desenho apresentado no Capítulo~\ref{cap:analise_desenho}. A solução integrou a autenticação existente com autorização, auditoria, comunicação externa e administração do acesso: o \textit{front-end} consome o contexto calculado pelo \textit{back-end}, os \textit{page gates} filtram páginas, os endpoints revalidam permissões e os módulos da JustCauses, incluindo campanhas, categorias, \gls{KYC} e \gls{KYB}, demonstram a aplicação prática dessa base comum.

@@ -225,7 +225,7 @@
       {°}{{\textdegree}}1 {º}{{\textordmasculine}}1 {ª}{{\textordfeminine}}1
 }
 
-\RequirePackage[acronym,nonumberlist]{glossaries} % Required to define acronyms and make glossaries
+\RequirePackage[acronym,nonumberlist,toc]{glossaries} % Required to define acronyms and make glossaries
 
 \RequirePackage[centerlast,small,sc]{caption} % Required for customising the captions
 \setlength{\captionmargin}{50pt}

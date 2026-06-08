@@ -1,0 +1,84 @@
+@startuml backend-process-view
+title Backend Process View\nLevel 3
+
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam backgroundColor white
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam participantPadding 3
+skinparam BoxPadding 3
+skinparam maxMessageSize 55
+skinparam sequence {
+    FontSize 9
+    ParticipantFontSize 9
+}
+hide footbox
+
+actor "BE API" as API
+participant "Routing" as Routing
+participant "Controllers" as Controllers
+participant "DTO" as DTO
+participant "Services" as Services
+participant "Domain" as Domain
+participant "Repo" as Repo
+participant "Data Model" as DataModel
+database "AWS Aurora\nPostgreSQL\nShared" as SharedDB
+database "AWS Aurora\nPostgreSQL\nOnlyJustCauses" as OJCDB
+database "AWS\nDynamoDB\nBackoffice" as DynamoDB
+
+API -> Routing : request
+activate Routing
+Routing -> Controllers : dispatch
+activate Controllers
+Controllers -> DTO : map request
+activate DTO
+DTO --> Controllers : requestDTO
+deactivate DTO
+
+Controllers -> Services : execute
+activate Services
+Services -> Domain : apply rules
+activate Domain
+Domain --> Services : decision
+deactivate Domain
+
+Services -> Repo : load / persist
+activate Repo
+Repo -> DataModel : map data
+activate DataModel
+DataModel --> Repo : model
+deactivate DataModel
+
+alt administrative data
+    Repo -> DynamoDB : BO tables
+    activate DynamoDB
+    DynamoDB --> Repo : result
+    deactivate DynamoDB
+else shared ecosystem data
+    Repo -> SharedDB : shared tables
+    activate SharedDB
+    SharedDB --> Repo : result
+    deactivate SharedDB
+else OnlyJustCauses data
+    Repo -> OJCDB : OJC tables
+    activate OJCDB
+    OJCDB --> Repo : result
+    deactivate OJCDB
+end
+
+Repo --> Services : repoResult
+deactivate Repo
+Services --> Controllers : serviceResult
+deactivate Services
+
+Controllers -> DTO : map response
+activate DTO
+DTO --> Controllers : responseDTO
+deactivate DTO
+Controllers --> Routing : HTTP response
+deactivate Controllers
+Routing --> API : response
+deactivate Routing
+
+@enduml

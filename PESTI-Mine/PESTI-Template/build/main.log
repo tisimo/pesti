@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.3.27)  11 MAY 2026 11:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.3.27)  7 JUN 2026 00:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -814,6 +814,12 @@ Package scrbase Info: Unknown processing state.
 (scrbase)             a valid state. This will be interpreted
 (scrbase)             as \FamilyKeyStateProcessed on input line 649.
 ))
+(C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/latex/pgfplots\pgfplots.
+sty
+(C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplot
+s.revision.tex)
+Package: pgfplots 2021/05/15 v1.18.1 Data Visualization (1.18.1)
+
 (C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\
 tikz.sty
 (C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgf
@@ -1119,12 +1125,6 @@ File: pgfmodulematrix.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 r/tikz/libraries\tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2025-08-29 v3.1.11a (3.1.11a)
 )))
-(C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/latex/pgfplots\pgfplots.
-sty
-(C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplot
-s.revision.tex)
-Package: pgfplots 2021/05/15 v1.18.1 Data Visualization (1.18.1)
-
 (C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplot
 s.code.tex
 (C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/generic/pgfplots\pgfplot
@@ -1617,20 +1617,20 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip96
 )
-Package hyperref Info: Option `bookmarksopen' set `true' on input line 66.
-Package hyperref Info: Option `hypertexnames' set `false' on input line 66.
-Package hyperref Info: Option `colorlinks' set `false' on input line 66.
-Package hyperref Info: Option `unicode' set `true' on input line 66.
-Package hyperref Info: Option `breaklinks' set `true' on input line 66.
+Package hyperref Info: Option `bookmarksopen' set `true' on input line 68.
+Package hyperref Info: Option `hypertexnames' set `false' on input line 68.
+Package hyperref Info: Option `colorlinks' set `false' on input line 68.
+Package hyperref Info: Option `unicode' set `true' on input line 68.
+Package hyperref Info: Option `breaklinks' set `true' on input line 68.
 \glswrite=\write5
 \glo@main@file=\write6
 \openout6 = `main.glo'.
 
-Package glossaries Info: Writing glossary file main.glo on input line 73.
+Package glossaries Info: Writing glossary file main.glo on input line 78.
 \glo@acronym@file=\write7
 \openout7 = `main.acn'.
 
-Package glossaries Info: Writing glossary file main.acn on input line 73.
+Package glossaries Info: Writing glossary file main.acn on input line 78.
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
  (main.aux
@@ -1639,26 +1639,26 @@ Package babel Info: 'portuguese' activates 'portuges' shorthands.
 )
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 114.
 Package translations Info: no dictionary file `translations-basic-dictionary-po
-rtuges.trsl' found. on input line 109.
+rtuges.trsl' found. on input line 114.
 
 (C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-p
 df.mkii
@@ -1694,7 +1694,7 @@ Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
 )
 \c@lstlisting=\count556
-Package tocbasic Info: setting babel extension for `lol' on input line 109.
+Package tocbasic Info: setting babel extension for `lol' on input line 114.
  (main.glsdefs)
 (C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/latex/glossaries-english
 \glossaries-dictionary-English.dict
@@ -1739,24 +1739,24 @@ Package caption Info: End \AtBeginDocument code.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 Package scrbase Info: activating portuguese \dissertationdisclamer on input lin
-e 109.
-Package scrbase Info: activating portuguese \supervisorlabel on input line 109.
+e 114.
+Package scrbase Info: activating portuguese \supervisorlabel on input line 114.
 
 Package scrbase Info: activating portuguese \externalsupervisorlabel on input l
-ine 109.
-Package scrbase Info: activating portuguese \statementlabel on input line 109.
-Package scrbase Info: activating portuguese \statementtext on input line 109.
-Package scrbase Info: activating portuguese \dedicationlabel on input line 109.
+ine 114.
+Package scrbase Info: activating portuguese \statementlabel on input line 114.
+Package scrbase Info: activating portuguese \statementtext on input line 114.
+Package scrbase Info: activating portuguese \dedicationlabel on input line 114.
 
-Package scrbase Info: activating portuguese \abslabel on input line 109.
-Package scrbase Info: activating portuguese \keywordslabel on input line 109.
-Package scrbase Info: activating portuguese \abslabelotherlang on input line 10
-9.
-Package scrbase Info: activating portuguese \abbrevname on input line 109.
-Package scrbase Info: activating portuguese \constantsname on input line 109.
-Package scrbase Info: activating portuguese \symbolsname on input line 109.
+Package scrbase Info: activating portuguese \abslabel on input line 114.
+Package scrbase Info: activating portuguese \keywordslabel on input line 114.
+Package scrbase Info: activating portuguese \abslabelotherlang on input line 11
+4.
+Package scrbase Info: activating portuguese \abbrevname on input line 114.
+Package scrbase Info: activating portuguese \constantsname on input line 114.
+Package scrbase Info: activating portuguese \symbolsname on input line 114.
 Package scrbase Info: activating portuguese \acknowledgementlabel on input line
- 109.
+ 114.
 Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.18}).
 
@@ -1775,9 +1775,9 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
  (main.bbl)
-Package biblatex Info: Reference section=0 on input line 109.
-Package biblatex Info: Reference segment=0 on input line 109.
-Package hyperref Info: Link coloring OFF on input line 109.
+Package biblatex Info: Reference section=0 on input line 114.
+Package biblatex Info: Reference segment=0 on input line 114.
+Package hyperref Info: Link coloring OFF on input line 114.
  (main.out) (main.out)
 \@outlinefile=\write8
 \openout8 = `main.out'.
@@ -1938,12 +1938,6 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 --------------------
  Resumo
 --------------------
-
-Overfull \hbox (2.53976pt too wide) in paragraph at lines 34--35
-\T1/opensans-TLF/m/n/10.95 Este re-la-tó-rio des-creve o tra-ba-lho re-a-li-zad
-o no âm-bito da uni-dade cur-ri-cu-lar de Pro-jeto/Estágio
- []
-
 [5
 
 ] [6
@@ -1967,624 +1961,723 @@ o no âm-bito da uni-dade cur-ri-cu-lar de Pro-jeto/Estágio
 
  [13] [14
 
-] (main.lof)
+] (main.lof [15])
 \tf@lof=\write11
 \openout11 = `main.lof'.
 
- [15] [16
-
-] (main.lot)
+ [16] (main.lot)
 \tf@lot=\write12
 \openout12 = `main.lot'.
 
-(main.acr [17] [18
+(main.acr [17
 
-]) [19
-
-] [20
-
-]) (chapters/ch1/chapter1.tex
-Cap\'{\i }tulo 1.
-LaTeX Font Info:    Font shape `T1/opensans-TLF/m/n' will be
-(Font)              scaled to size 8.99994pt on input line 16.
-
-LaTeX Font Warning: Font shape `T1/opensans-TLF/m/sc' undefined
-(Font)              using `T1/opensans-TLF/m/n' instead on input line 16.
-
-LaTeX Font Info:    Font shape `T1/opensans-TLF/m/sc' will be
-(Font)              scaled to size 8.99994pt on input line 16.
-[1
+] [18
 
 ]
-LaTeX Font Info:    Font shape `T1/opensans-TLF/b/n' will be
-(Font)              scaled to size 10.79993pt on input line 44.
+Underfull \hbox (badness 1424) in paragraph at lines 39--39
+[]|\T1/opensans-TLF/m/n/10.95 Funcionalidade, Usa-bi-li-dade, Fi-a-bi-li-dade, 
+De-
+ []
+
+ignored error: Infinite glue shrinkage found in box being split [19
+
+]) [20])
+(chapters/ch1/chapter1.tex
+Cap\'{\i }tulo 1.
+LaTeX Font Info:    Font shape `T1/opensans-TLF/m/n' will be
+(Font)              scaled to size 8.99994pt on input line 14.
+
+LaTeX Font Warning: Font shape `T1/opensans-TLF/m/sc' undefined
+(Font)              using `T1/opensans-TLF/m/n' instead on input line 14.
+
+LaTeX Font Info:    Font shape `T1/opensans-TLF/m/sc' will be
+(Font)              scaled to size 8.99994pt on input line 14.
+[1
+
+
+]
+Package babel Info: 'portuguese' activates 'portuges' shorthands.
+(babel)             Reported on input line 49.
+ [2] [3] [4]
 LaTeX Font Info:    Trying to load font information for TS1+opensans-TLF on inp
-ut line 50.
+ut line 120.
 
 (C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/latex/opensans\ts1opensa
 ns-tlf.fd
 File: TS1opensans-TLF.fd 2019/06/24 Font definitions for TS1/opensans-TLF.
 )
 LaTeX Font Info:    Font shape `TS1/opensans-TLF/m/n' will be
-(Font)              scaled to size 9.85492pt on input line 50.
-Package babel Info: 'portuguese' activates 'portuges' shorthands.
-(babel)             Reported on input line 52.
- [2{C:/Users/TiagoSilva/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/
-a_nvvucy.enc}]
-Overfull \hbox (1.54895pt too wide) in paragraph at lines 58--59
-[]\T1/opensans-TLF/b/n/10.95 Autorização trans-ver-sal\T1/opensans-TLF/m/n/10.9
-5 : apli-car per-mis-sões ao ní-vel da apli-ca-ção, da pá-gina, das ações
- []
-
-[3] [4]) (chapters/ch2/chapter2.tex [5] [6
+(Font)              scaled to size 9.85492pt on input line 120.
+ [5{C:/Users/TiagoSilva/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/opensans/
+a_nvvucy.enc}]) (chapters/ch2/chapter2.tex [6]
+Cap\'{\i }tulo 2.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 26.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 26.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 26.
+LaTeX Font Info:    Font shape `T1/opensans-TLF/b/n' will be
+(Font)              scaled to size 8.99994pt on input line 28.
+LaTeX Font Info:    Font shape `T1/opensans-TLF/m/it' will be
+(Font)              scaled to size 8.99994pt on input line 29.
+[7
 
 ]
-Cap\'{\i }tulo 2.
-
-LaTeX Warning: Reference `tab:criterios_backoffice' on page 7 undefined on inpu
-t line 15.
-
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 22.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 22.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 22.
 LaTeX Font Info:    Font shape `T1/opensans-TLF/b/n' will be
-(Font)              scaled to size 8.99994pt on input line 24.
-LaTeX Font Info:    Font shape `T1/opensans-TLF/m/it' will be
-(Font)              scaled to size 8.99994pt on input line 25.
-[7]
-
-LaTeX Warning: Citation 'OWASPAuthorizationCheatSheet' on page 8 undefined on i
-nput line 34.
-
-
-LaTeX Warning: Citation 'NISTABAC' on page 8 undefined on input line 34.
-
-
-Overfull \hbox (6.77206pt too wide) in paragraph at lines 34--35
-[]\T1/opensans-TLF/m/n/10.95 Estes cri-té-rios são tam-bém co-e-ren-tes com re-
-co-men-da-ções de se-gu-rança apli-ca-ci-o-nal. A OWASP
- []
-
-
-Overfull \hbox (15.75134pt too wide) in paragraph at lines 34--35
-\T1/opensans-TLF/m/n/10.95 omis-são quando não exista uma re-gra ex-plí-cita de
- per-mis-são [].
- []
-
-
-LaTeX Warning: Citation 'StripeTeams' on page 8 undefined on input line 47.
-
-
-LaTeX Warning: Citation 'StripeUserRoles' on page 8 undefined on input line 47.
-
-
-[8]
-LaTeX Font Info:    Font shape `T1/opensans-TLF/b/it' will be
-(Font)              scaled to size 10.79993pt on input line 51.
-
-
-LaTeX Warning: Citation 'DirectusPermissions' on page 9 undefined on input line
- 53.
-
-
-LaTeX Warning: Citation 'AppsmithDocs' on page 9 undefined on input line 55.
-
-
-LaTeX Warning: Citation 'ReactAdminDocs' on page 9 undefined on input line 57.
-
-
-LaTeX Warning: Citation 'AdminJSDocs' on page 9 undefined on input line 57.
-
-
-LaTeX Warning: Citation 'RefineDocs' on page 9 undefined on input line 57.
-
-
-LaTeX Warning: Reference `tab:comparacao_abordagens_backoffice' on page 9 undef
-ined on input line 61.
-
+(Font)              scaled to size 10.79993pt on input line 48.
+<frontmatter/assets/backoffice/ch2/shopify_admin.png, id=751, 1027.58907pt x 57
+7.40718pt>
+File: frontmatter/assets/backoffice/ch2/shopify_admin.png Graphic file (type pn
+g)
+<use frontmatter/assets/backoffice/ch2/shopify_admin.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch2/shopify_admin.png  u
+sed on input line 57.
+(pdftex.def)             Requested size: 423.9459pt x 238.21864pt.
+ [8] [9 <./frontmatter/assets/backoffice/ch2/shopify_admin.png>]
+<frontmatter/assets/backoffice/ch2/stripe_dashboard.png, id=774, 986.9372pt x 4
+55.45157pt>
+File: frontmatter/assets/backoffice/ch2/stripe_dashboard.png Graphic file (type
+ png)
+<use frontmatter/assets/backoffice/ch2/stripe_dashboard.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch2/stripe_dashboard.png
+  used on input line 85.
+(pdftex.def)             Requested size: 423.9459pt x 195.64577pt.
+<frontmatter/assets/backoffice/ch2/directus.png, id=779, 731.73375pt x 408.0243
+7pt>
+File: frontmatter/assets/backoffice/ch2/directus.png Graphic file (type png)
+<use frontmatter/assets/backoffice/ch2/directus.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch2/directus.png  used o
+n input line 113.
+(pdftex.def)             Requested size: 423.9459pt x 236.39903pt.
+ [10 <./frontmatter/assets/backoffice/ch2/stripe_dashboard.png>]
+<frontmatter/assets/backoffice/ch2/appsmith.png, id=793, 731.73375pt x 397.485p
+t>
+File: frontmatter/assets/backoffice/ch2/appsmith.png Graphic file (type png)
+<use frontmatter/assets/backoffice/ch2/appsmith.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch2/appsmith.png  used o
+n input line 141.
+(pdftex.def)             Requested size: 423.9459pt x 230.29279pt.
+ [11 <./frontmatter/assets/backoffice/ch2/directus.png>]
 LaTeX Font Info:    Font shape `T1/opensans-TLF/m/n' will be
-(Font)              scaled to size 8.09995pt on input line 67.
+(Font)              scaled to size 8.09995pt on input line 169.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 68.
+(Font)              <9> on input line 170.
 LaTeX Font Info:    Font shape `T1/opensans-TLF/b/n' will be
-(Font)              scaled to size 8.09995pt on input line 70.
+(Font)              scaled to size 8.09995pt on input line 172.
 
-Underfull \hbox (badness 3612) in paragraph at lines 70--70
-[]|\T1/opensans-TLF/b/n/9 Limitação para o pro-
+Underfull \hbox (badness 2111) in paragraph at lines 173--173
+[]|\T1/opensans-TLF/m/n/9 Produto fe-chado, ori-en-tado
  []
 
 
-Underfull \hbox (badness 7291) in paragraph at lines 71--71
-[]|\T1/opensans-TLF/m/n/9 Shopify Ad-min, Stripe
+Underfull \hbox (badness 1102) in paragraph at lines 174--174
+\T1/opensans-TLF/m/n/9 no do-mí-nio fi-nan-ceiro, sem
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 71--71
-[]|\T1/opensans-TLF/m/n/9 Baixa adap-ta-bi-li-dade e
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 72--72
+Underfull \hbox (badness 8000) in paragraph at lines 175--175
 []|\T1/opensans-TLF/m/n/9 Administração ori-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 72--72
-[]|\T1/opensans-TLF/m/n/9 Permissões gra-nu-la-res
+Underfull \hbox (badness 3590) in paragraph at lines 175--175
+[]|\T1/opensans-TLF/m/n/9 Permissões gra-nu-la-res por
  []
 
 
-Underfull \hbox (badness 7504) in paragraph at lines 72--72
-\T1/opensans-TLF/m/n/9 por en-ti-dade, campo e
- []
-
-
-Underfull \hbox (badness 1005) in paragraph at lines 72--72
-[]|\T1/opensans-TLF/m/n/9 Menor ade-qua-ção a flu-
- []
-
-
-Underfull \hbox (badness 1112) in paragraph at lines 72--72
-\T1/opensans-TLF/m/n/9 xos de ne-gó-cio es-pe-cí-fi-
- []
-
-
-Underfull \hbox (badness 1721) in paragraph at lines 72--72
-\T1/opensans-TLF/m/n/9 cos e es-ta-dos ope-ra-ci-o-
+Underfull \hbox (badness 1515) in paragraph at lines 175--175
+\T1/opensans-TLF/m/n/9 ne-gó-cio es-pe-cí-fi-cos, pro-ces-
  []
 
 LaTeX Font Info:    Font shape `T1/opensans-TLF/m/it' will be
-(Font)              scaled to size 8.09995pt on input line 73.
+(Font)              scaled to size 8.09995pt on input line 176.
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--73
-[]|\T1/opensans-TLF/m/n/9 Ferramentas \T1/opensans-TLF/m/it/9 low-
+Underfull \hbox (badness 10000) in paragraph at lines 176--176
+[]|\T1/opensans-TLF/m/n/9 Ferramenta \T1/opensans-TLF/m/it/9 low-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 73--73
-[]|\T1/opensans-TLF/m/n/9 Prototipagem rá-pida de
+Underfull \hbox (badness 1817) in paragraph at lines 176--176
+\T1/opensans-TLF/m/n/9 por com-po-nen-tes e scripts,
  []
 
 
-Underfull \hbox (badness 4316) in paragraph at lines 74--74
-[]|\T1/opensans-TLF/m/it/9 Frameworks \T1/opensans-TLF/m/n/9 de ad-
+Underfull \hbox (badness 10000) in paragraph at lines 177--177
+[]|\T1/opensans-TLF/m/n/9 Implementação à
  []
 
 
-Underfull \hbox (badness 1789) in paragraph at lines 74--74
-[]|\T1/opensans-TLF/m/n/9 React Ad-min, Ad-minJS,
+Underfull \hbox (badness 1694) in paragraph at lines 177--177
+\T1/opensans-TLF/m/n/9 te-gra-ção com a base exis-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 74--74
-[]|\T1/opensans-TLF/m/n/9 Aceleram lis-ta-gens, for-
- []
-
-
-Underfull \hbox (badness 2922) in paragraph at lines 74--74
-\T1/opensans-TLF/m/n/9 mu-lá-rios, au-ten-ti-ca-ção e
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 74--74
-[]|\T1/opensans-TLF/m/n/9 Introduzem de-pen-dên-
- []
-
-
-Underfull \hbox (badness 2443) in paragraph at lines 75--75
-\T1/opensans-TLF/m/n/9 ri-za-ção, au-di-to-ria, flu-xos
- []
-
-
-Underfull \hbox (badness 2495) in paragraph at lines 75--75
+Underfull \hbox (badness 10000) in paragraph at lines 177--177
 []|\T1/opensans-TLF/m/n/9 Maior es-forço ini-cial de
  []
 
-[9]
-
-LaTeX Warning: Citation 'OWASPAuthorizationCheatSheet' on page 10 undefined on 
-input line 91.
-
-[10]
-
-LaTeX Warning: Citation 'StripeTeams' on page 11 undefined on input line 99.
-
-
-LaTeX Warning: Citation 'DynamoDBTTL' on page 11 undefined on input line 99.
-
-LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 11
-8.
+[12 <./frontmatter/assets/backoffice/ch2/appsmith.png>] [13] [14]
+LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 22
+2.
 
 (C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/latex/inconsolata\t1zi4.
 fd
 File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.95pt on input line 118.
-
-
-LaTeX Warning: Citation 'AWSCognitoGroups' on page 11 undefined on input line 1
-18.
-
-[11]) (chapters/ch3/chapter3.tex [12{C:/Users/TiagoSilva/AppData/Local/Programs
-/MiKTeX/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]
+(Font)              scaled to size 10.95pt on input line 222.
+ [15{C:/Users/TiagoSilva/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/inconsol
+ata/i4-t1-0.enc}]) (chapters/ch3/chapter3.tex [16]
 Cap\'{\i }tulo 3.
+[17
 
-Underfull \hbox (badness 1142) in paragraph at lines 24--24
-\T1/opensans-TLF/m/sc/10 cesso de ve-ri-fi-ca-ção de iden-ti-dade ([]Know Your 
-Cus-to-mer
+]
+Underfull \hbox (badness 1418) in paragraph at lines 64--64
+[]|\T1/opensans-TLF/m/sc/10 Autenticação e con-texto ad-mi-nis-
  []
 
-LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.0pt on input line 25.
-[13
-
-] [14] [15] [16]
-<frontmatter/assets/backoffice/docs/C4-Level2.png, id=763, 612.78937pt x 408.02
-437pt>
+[18] [19] [20]
+LaTeX Font Info:    Font shape `T1/opensans-TLF/m/n' will be
+(Font)              scaled to size 5.39996pt on input line 132.
+LaTeX Font Info:    Font shape `T1/opensans-TLF/b/n' will be
+(Font)              scaled to size 5.39996pt on input line 135.
+LaTeX Font Info:    Font shape `T1/opensans-TLF/m/it' will be
+(Font)              scaled to size 5.39996pt on input line 140.
+<frontmatter/assets/backoffice/ch3/uml/architecture/domain-model.png, id=861, 9
+22.8879pt x 617.9085pt>
+File: frontmatter/assets/backoffice/ch3/uml/architecture/domain-model.png Graph
+ic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/architecture/domain-model.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/architecture/dom
+ain-model.png  used on input line 171.
+(pdftex.def)             Requested size: 402.74855pt x 269.65544pt.
+ [21] [22 <./frontmatter/assets/backoffice/ch3/uml/architecture/domain-model.pn
+g (PNG copy)>]
+<frontmatter/assets/backoffice/docs/C4-Level1.png, id=874, 499.11469pt x 178.41
+656pt>
+File: frontmatter/assets/backoffice/docs/C4-Level1.png Graphic file (type png)
+<use frontmatter/assets/backoffice/docs/C4-Level1.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/docs/C4-Level1.png  used
+ on input line 188.
+(pdftex.def)             Requested size: 402.75749pt x 143.97212pt.
+<frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd.png, id=877, 51
+4.92375pt x 678.535pt>
+File: frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd.png Graphi
+c file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/login-authentica
+tion/ssd.png  used on input line 211.
+(pdftex.def)             Requested size: 255.86624pt x 337.16489pt.
+ [23 <./frontmatter/assets/backoffice/docs/C4-Level1.png>]
+<frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd.png, id=886, 5
+26.96875pt x 593.21625pt>
+File: frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd.png Graph
+ic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REV
+ISION/ssd.png  used on input line 224.
+(pdftex.def)             Requested size: 299.52296pt x 337.17729pt.
+ [24 <./frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd.png>]
+<frontmatter/assets/backoffice/docs/C4-Level2.png, id=895, 654.19406pt x 495.35
+063pt>
 File: frontmatter/assets/backoffice/docs/C4-Level2.png Graphic file (type png)
 <use frontmatter/assets/backoffice/docs/C4-Level2.png>
 Package pdftex.def Info: frontmatter/assets/backoffice/docs/C4-Level2.png  used
- on input line 143.
-(pdftex.def)             Requested size: 402.74982pt x 268.17001pt.
- [17]
-<frontmatter/assets/backoffice/docs/C4-Level3BE.png, id=771, 902.6222pt x 761.0
-9344pt>
+ on input line 234.
+(pdftex.def)             Requested size: 402.74121pt x 304.9525pt.
+ [25 <./frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd.png>]
+<frontmatter/assets/backoffice/docs/C4-Level2Implementation.png, id=903, 483.30
+562pt x 361.35pt>
+File: frontmatter/assets/backoffice/docs/C4-Level2Implementation.png Graphic fi
+le (type png)
+<use frontmatter/assets/backoffice/docs/C4-Level2Implementation.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/docs/C4-Level2Implementa
+tion.png  used on input line 257.
+(pdftex.def)             Requested size: 381.56389pt x 285.28142pt.
+ [26 <./frontmatter/assets/backoffice/docs/C4-Level2.png>]
+<frontmatter/assets/backoffice/ch3/uml/architecture/level2-process-view.png, id
+=911, 838.13126pt x 1329.96875pt>
+File: frontmatter/assets/backoffice/ch3/uml/architecture/level2-process-view.pn
+g Graphic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/architecture/level2-process-view.png
+>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/architecture/lev
+el2-process-view.png  used on input line 273.
+(pdftex.def)             Requested size: 305.97292pt x 485.52588pt.
+ [27 <./frontmatter/assets/backoffice/docs/C4-Level2Implementation.png>] [28 <.
+/frontmatter/assets/backoffice/ch3/uml/architecture/level2-process-view.png (PN
+G copy)>]
+<frontmatter/assets/backoffice/docs/aws-physical-view.png, id=924, 445.665pt x 
+568.37344pt>
+File: frontmatter/assets/backoffice/docs/aws-physical-view.png Graphic file (ty
+pe png)
+<use frontmatter/assets/backoffice/docs/aws-physical-view.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/docs/aws-physical-view.p
+ng  used on input line 282.
+(pdftex.def)             Requested size: 402.75406pt x 513.6475pt.
+ [29 <./frontmatter/assets/backoffice/docs/aws-physical-view.png>]
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 10.0pt on input line 312.
+
+Underfull \hbox (badness 10000) in paragraph at lines 314--314
+[]|\T1/opensans-TLF/m/sc/10 Persistência dos da-dos ad-mi-nis-tra-ti-vos do bac
+-kof-fice
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 314--314
+\T1/opensans-TLF/m/sc/10 (\T1/zi4/m/n/10 BO_Users\T1/opensans-TLF/m/sc/10 , \T1
+/zi4/m/n/10 BO_Roles\T1/opensans-TLF/m/sc/10 , \T1/zi4/m/n/10 BO_Permissions\T1
+/opensans-TLF/m/sc/10 , \T1/zi4/m/n/10 BO_PageGates\T1/opensans-TLF/m/sc/10 ,
+ []
+
+[30] [31]
+LaTeX Font Info:    Font shape `T1/opensans-TLF/b/it' will be
+(Font)              scaled to size 9.85492pt on input line 329.
+<frontmatter/assets/backoffice/docs/C4-Level3BE.png, id=941, 344.03531pt x 601.
+4972pt>
 File: frontmatter/assets/backoffice/docs/C4-Level3BE.png Graphic file (type png
 )
 <use frontmatter/assets/backoffice/docs/C4-Level3BE.png>
 Package pdftex.def Info: frontmatter/assets/backoffice/docs/C4-Level3BE.png  us
-ed on input line 158.
-(pdftex.def)             Requested size: 402.74678pt x 339.59717pt.
- [18 <./frontmatter/assets/backoffice/docs/C4-Level2.png>]
-<frontmatter/assets/backoffice/docs/C4-Level3Fe.png, id=779, 1434.35875pt x 778
-.91pt>
+ed on input line 335.
+(pdftex.def)             Requested size: 327.8711pt x 573.23636pt.
+ [32] [33 <./frontmatter/assets/backoffice/docs/C4-Level3BE.png>]
+<frontmatter/assets/backoffice/docs/C4-Level3Implementation.png, id=955, 452.44
+03pt x 536.75531pt>
+File: frontmatter/assets/backoffice/docs/C4-Level3Implementation.png Graphic fi
+le (type png)
+<use frontmatter/assets/backoffice/docs/C4-Level3Implementation.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/docs/C4-Level3Implementa
+tion.png  used on input line 353.
+(pdftex.def)             Requested size: 381.54536pt x 452.64865pt.
+
+[34 <./frontmatter/assets/backoffice/docs/C4-Level3Implementation.png>]
+<frontmatter/assets/backoffice/ch3/uml/architecture/backend-process-view.png, i
+d=963, 943.525pt x 1051.93pt>
+File: frontmatter/assets/backoffice/ch3/uml/architecture/backend-process-view.p
+ng Graphic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/architecture/backend-process-view.pn
+g>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/architecture/bac
+kend-process-view.png  used on input line 359.
+(pdftex.def)             Requested size: 415.46901pt x 463.20375pt.
+
+[35 <./frontmatter/assets/backoffice/ch3/uml/architecture/backend-process-view.
+png (PNG copy)>]
+<frontmatter/assets/backoffice/docs/C4-Level3Fe.png, id=970, 500.62032pt x 622.
+57594pt>
 File: frontmatter/assets/backoffice/docs/C4-Level3Fe.png Graphic file (type png
 )
 <use frontmatter/assets/backoffice/docs/C4-Level3Fe.png>
 Package pdftex.def Info: frontmatter/assets/backoffice/docs/C4-Level3Fe.png  us
-ed on input line 169.
-(pdftex.def)             Requested size: 402.73393pt x 218.69946pt.
- [19 <./frontmatter/assets/backoffice/docs/C4-Level3BE.png>]
-LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 9.0pt on input line 203.
- [20 <./frontmatter/assets/backoffice/docs/C4-Level3Fe.png (PNG copy)>]
-Underfull \hbox (badness 5175) in paragraph at lines 231--231
+ed on input line 374.
+(pdftex.def)             Requested size: 402.76553pt x 500.88284pt.
+ [36]
+<frontmatter/assets/backoffice/ch3/uml/architecture/frontend-process-view.png, 
+id=977, 753.81625pt x 1116.17pt>
+File: frontmatter/assets/backoffice/ch3/uml/architecture/frontend-process-view.
+png Graphic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/architecture/frontend-process-view.p
+ng>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/architecture/fro
+ntend-process-view.png  used on input line 385.
+(pdftex.def)             Requested size: 318.7861pt x 472.02417pt.
+ [37 <./frontmatter/assets/backoffice/docs/C4-Level3Fe.png>] [38 <./frontmatter
+/assets/backoffice/ch3/uml/architecture/frontend-process-view.png (PNG copy)>]
+<frontmatter/assets/backoffice/ch3/uml/architecture/backoffice-data-model.png, 
+id=989, 1253.68375pt x 847.165pt>
+File: frontmatter/assets/backoffice/ch3/uml/architecture/backoffice-data-model.
+png Graphic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/architecture/backoffice-data-model.p
+ng>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/architecture/bac
+koffice-data-model.png  used on input line 406.
+(pdftex.def)             Requested size: 402.7365pt x 272.14539pt.
+ [39 <./frontmatter/assets/backoffice/ch3/uml/architecture/backoffice-data-mode
+l.png>] [40]
+Underfull \hbox (badness 5175) in paragraph at lines 452--452
 []|\T1/opensans-TLF/m/sc/10 Resolução do con-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 232--232
+Underfull \hbox (badness 10000) in paragraph at lines 452--452
+[]|\T1/opensans-TLF/m/sc/10 Cognito + \T1/zi4/m/n/10 BO_Users
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 452--452
+\T1/opensans-TLF/m/sc/10 + \T1/zi4/m/n/10 BO_Roles \T1/opensans-TLF/m/sc/10 +
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 453--453
 []|\T1/zi4/m/n/10 ProtectedRoute \T1/opensans-TLF/m/sc/10 exige ses-são;
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 232--232
-\T1/zi4/m/n/10 BackofficeRoute \T1/opensans-TLF/m/sc/10 e \T1/zi4/m/n/10 PanelR
-oute \T1/opensans-TLF/m/sc/10 de-ci-dem
- []
-
-[21] [22]
-<frontmatter/assets/backoffice/ch3/uml/BOSH-26/ssd.png, id=807, 363.3575pt x 57
-7.15625pt>
-File: frontmatter/assets/backoffice/ch3/uml/BOSH-26/ssd.png Graphic file (type 
-png)
-<use frontmatter/assets/backoffice/ch3/uml/BOSH-26/ssd.png>
-Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/BOSH-26/ssd.png 
- used on input line 285.
-(pdftex.def)             Requested size: 360.36816pt x 572.40802pt.
- [23]
-<frontmatter/assets/backoffice/ch3/uml/BOSH-1/ssd.png, id=814, 279.0425pt x 421
-.575pt>
-File: frontmatter/assets/backoffice/ch3/uml/BOSH-1/ssd.png Graphic file (type p
-ng)
-<use frontmatter/assets/backoffice/ch3/uml/BOSH-1/ssd.png>
-Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/BOSH-1/ssd.png  
-used on input line 295.
-(pdftex.def)             Requested size: 360.36655pt x 544.43867pt.
- [24 <./frontmatter/assets/backoffice/ch3/uml/BOSH-26/ssd.png (PNG copy)>]
-<frontmatter/assets/backoffice/ch3/uml/BOSH-7/ssd.png, id=821, 344.28625pt x 48
-3.8075pt>
-File: frontmatter/assets/backoffice/ch3/uml/BOSH-7/ssd.png Graphic file (type p
-ng)
-<use frontmatter/assets/backoffice/ch3/uml/BOSH-7/ssd.png>
-Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/BOSH-7/ssd.png  
-used on input line 305.
-(pdftex.def)             Requested size: 360.36073pt x 506.39615pt.
- [25 <./frontmatter/assets/backoffice/ch3/uml/BOSH-1/ssd.png (PNG copy)>]
-<frontmatter/assets/backoffice/ch3/uml/BOSH-5/ssd.png, id=828, 277.035pt x 466.
-74374pt>
-File: frontmatter/assets/backoffice/ch3/uml/BOSH-5/ssd.png Graphic file (type p
-ng)
-<use frontmatter/assets/backoffice/ch3/uml/BOSH-5/ssd.png>
-Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/BOSH-5/ssd.png  
-used on input line 315.
-(pdftex.def)             Requested size: 340.25221pt x 573.251pt.
- [26 <./frontmatter/assets/backoffice/ch3/uml/BOSH-7/ssd.png (PNG copy)>]
-[27 <./frontmatter/assets/backoffice/ch3/uml/BOSH-5/ssd.png (PNG copy)>]
-LaTeX Font Info:    Font shape `T1/opensans-TLF/b/it' will be
-(Font)              scaled to size 9.85492pt on input line 331.
-
-Overfull \hbox (41.0507pt too wide) in paragraph at lines 331--332
-\T1/opensans-TLF/m/n/10.95 end-po-ints da []API sem pas-sar pela in-ter-face. A
- so-lu-ção ado-tada aplica o \T1/opensans-TLF/m/it/10.95 mid-dleware \T1/zi4/m/
-n/10.95 requirePermission
- []
-
-[28]) (chapters/ch4/chapter4.tex [29] [30
+[41]) (chapters/ch4/chapter4.tex [42]
+Cap\'{\i }tulo 4.
+[43
 
 ]
-Cap\'{\i }tulo 4.
-[31]
-Overfull \hbox (77.64627pt too wide) in paragraph at lines 31--32
-[]\T1/opensans-TLF/m/n/10.95 Há ape-nas três ex-ce-ções pú-bli-cas a esta re-gr
-a glo-bal: \T1/zi4/m/n/10.95 /status\T1/opensans-TLF/m/n/10.95 , \T1/zi4/m/n/10
-.95 /auth/login-failed \T1/opensans-TLF/m/n/10.95 e \T1/zi4/m/n/10.95 /logs/acc
-ess-attempt\T1/opensans-TLF/m/n/10.95 .
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 9.0pt on input line 29.
+ [44] [45]
+LaTeX Info: Symbol \textasciigrave not provided by
+            font family zi4 in TS1 encoding.
+            Default family used instead on input line 145.
+LaTeX Info: Symbol \textasciigrave not provided by
+            font family zi4 in TS1 encoding.
+            Default family used instead on input line 145.
+LaTeX Info: Symbol \textasciigrave not provided by
+            font family zi4 in TS1 encoding.
+            Default family used instead on input line 146.
+LaTeX Info: Symbol \textasciigrave not provided by
+            font family zi4 in TS1 encoding.
+            Default family used instead on input line 146.
+LaTeX Info: Symbol \textasciigrave not provided by
+            font family zi4 in TS1 encoding.
+            Default family used instead on input line 147.
+LaTeX Info: Symbol \textasciigrave not provided by
+            font family zi4 in TS1 encoding.
+            Default family used instead on input line 147.
+ [46]
+
+LaTeX Warning: Reference `lst:campaign_revision_flow' on page 47 undefined on i
+nput line 169.
+
+[47]
+Underfull \hbox (badness 4713) in paragraph at lines 225--225
+[]|\T1/opensans-TLF/m/n/9 Revisão de al-te-ra-ções a
  []
 
-[32]
-Overfull \hbox (47.66924pt too wide) in paragraph at lines 52--53
-\T1/opensans-TLF/m/n/10.95 press. Em cima dessa au-ten-ti-ca-ção base, os end-p
-o-ints sen-sí-veis usam o \T1/opensans-TLF/m/it/10.95 mid-dleware \T1/zi4/m/n/1
-0.95 requirePermission\T1/opensans-TLF/m/n/10.95 .
+
+Underfull \hbox (badness 1360) in paragraph at lines 227--227
+[]|\T1/opensans-TLF/m/n/9 Resultado da ava-li-a-ção da sub-mis-são do-cu-
  []
 
+
+Underfull \hbox (badness 3471) in paragraph at lines 229--229
+[]|\T1/opensans-TLF/m/n/9 Medidas so-bre uti-li-za-do-
+ []
+
+[48]
+
+LaTeX Warning: Reference `lst:frontend_access_rules' on page 49 undefined on in
+put line 248.
+
+[49]
+
+LaTeX Warning: Reference `lst:frontend_access_rules' on page 50 undefined on in
+put line 268.
+
+<frontmatter/assets/backoffice/ch4/app-selector.png, id=1213, 1389.69188pt x 62
+6.34pt>
+File: frontmatter/assets/backoffice/ch4/app-selector.png Graphic file (type png
+)
+<use frontmatter/assets/backoffice/ch4/app-selector.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/app-selector.png  us
+ed on input line 280.
+(pdftex.def)             Requested size: 402.74731pt x 181.51926pt.
+<frontmatter/assets/backoffice/ch4/role-assignment.png, id=1216, 1409.265pt x 6
+88.07062pt>
+File: frontmatter/assets/backoffice/ch4/role-assignment.png Graphic file (type 
+png)
+<use frontmatter/assets/backoffice/ch4/role-assignment.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/role-assignment.png 
+ used on input line 297.
+(pdftex.def)             Requested size: 402.74731pt x 196.63762pt.
+[50 <./frontmatter/assets/backoffice/ch4/app-selector.png>]
+<frontmatter/assets/backoffice/ch4/permissions-by-application.png, id=1236, 140
+7.00656pt x 687.31781pt>
+File: frontmatter/assets/backoffice/ch4/permissions-by-application.png Graphic 
+file (type png)
+<use frontmatter/assets/backoffice/ch4/permissions-by-application.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/permissions-by-appli
+cation.png  used on input line 309.
+(pdftex.def)             Requested size: 402.74731pt x 196.7371pt.
+<frontmatter/assets/backoffice/ch4/page-gates.png, id=1239, 1405.50093pt x 686.
+565pt>
+File: frontmatter/assets/backoffice/ch4/page-gates.png Graphic file (type png)
+<use frontmatter/assets/backoffice/ch4/page-gates.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/page-gates.png  used
+ on input line 321.
+(pdftex.def)             Requested size: 402.74731pt x 196.73114pt.
+ [51 <./frontmatter/assets/backoffice/ch4/role-assignment.png> <./frontmatter/a
+ssets/backoffice/ch4/permissions-by-application.png>]
+<frontmatter/assets/backoffice/ch4/user-activity.png, id=1251, 1407.00656pt x 6
+85.8122pt>
+File: frontmatter/assets/backoffice/ch4/user-activity.png Graphic file (type pn
+g)
+<use frontmatter/assets/backoffice/ch4/user-activity.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/user-activity.png  u
+sed on input line 338.
+(pdftex.def)             Requested size: 402.74731pt x 196.30614pt.
+ [52 <./frontmatter/assets/backoffice/ch4/page-gates.png> <./frontmatter/assets
+/backoffice/ch4/user-activity.png>]
+<frontmatter/assets/backoffice/ch4/ojc-campaign-review1.png, id=1263, 1405.5009
+3pt x 686.565pt>
+File: frontmatter/assets/backoffice/ch4/ojc-campaign-review1.png Graphic file (
+type png)
+<use frontmatter/assets/backoffice/ch4/ojc-campaign-review1.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/ojc-campaign-review1
+.png  used on input line 355.
+(pdftex.def)             Requested size: 402.74731pt x 196.73114pt.
+<frontmatter/assets/backoffice/ch4/ojc-campaign-review2.png, id=1266, 763.35187
+pt x 630.10406pt>
+File: frontmatter/assets/backoffice/ch4/ojc-campaign-review2.png Graphic file (
+type png)
+<use frontmatter/assets/backoffice/ch4/ojc-campaign-review2.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/ojc-campaign-review2
+.png  used on input line 367.
+(pdftex.def)             Requested size: 330.67728pt x 272.94891pt.
+ [53 <./frontmatter/assets/backoffice/ch4/ojc-campaign-review1.png>]
+<frontmatter/assets/backoffice/ch4/campaign-review-modal-with-actions.png, id=1
+276, 636.87938pt x 429.10312pt>
+File: frontmatter/assets/backoffice/ch4/campaign-review-modal-with-actions.png 
+Graphic file (type png)
+<use frontmatter/assets/backoffice/ch4/campaign-review-modal-with-actions.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/campaign-review-moda
+l-with-actions.png  used on input line 390.
+(pdftex.def)             Requested size: 207.73581pt x 139.96101pt.
+<frontmatter/assets/backoffice/ch4/campaign-review-modal-readonly.png, id=1277,
+ 649.67719pt x 447.92343pt>
+File: frontmatter/assets/backoffice/ch4/campaign-review-modal-readonly.png Grap
+hic file (type png)
+<use frontmatter/assets/backoffice/ch4/campaign-review-modal-readonly.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/campaign-review-moda
+l-readonly.png  used on input line 390.
+(pdftex.def)             Requested size: 207.73581pt x 143.22223pt.
+ [54 <./frontmatter/assets/backoffice/ch4/ojc-campaign-review2.png> <./frontmat
+ter/assets/backoffice/ch4/campaign-review-modal-with-actions.png> <./frontmatte
+r/assets/backoffice/ch4/campaign-review-modal-readonly.png>]
+<frontmatter/assets/backoffice/ch4/transactional-email.png, id=1289, 634.62094p
+t x 377.15906pt>
+File: frontmatter/assets/backoffice/ch4/transactional-email.png Graphic file (t
+ype png)
+<use frontmatter/assets/backoffice/ch4/transactional-email.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/transactional-email.
+png  used on input line 402.
+(pdftex.def)             Requested size: 330.67728pt x 196.52669pt.
+<frontmatter/assets/backoffice/ch4/ojc-categories.png, id=1292, 1410.77063pt x 
+687.31781pt>
+File: frontmatter/assets/backoffice/ch4/ojc-categories.png Graphic file (type p
+ng)
+<use frontmatter/assets/backoffice/ch4/ojc-categories.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/ojc-categories.png  
+used on input line 414.
+(pdftex.def)             Requested size: 402.74731pt x 196.21272pt.
+ [55 <./frontmatter/assets/backoffice/ch4/transactional-email.png> <./frontmatt
+er/assets/backoffice/ch4/ojc-categories.png>]
+<frontmatter/assets/backoffice/ch4/kyc-queue.png, id=1303, 1407.00656pt x 671.5
+0874pt>
+File: frontmatter/assets/backoffice/ch4/kyc-queue.png Graphic file (type png)
+<use frontmatter/assets/backoffice/ch4/kyc-queue.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/kyc-queue.png  used 
+on input line 433.
+(pdftex.def)             Requested size: 402.74731pt x 192.21193pt.
+<frontmatter/assets/backoffice/ch4/kyc-comparison-modal.png, id=1306, 603.0028p
+t x 508.90125pt>
+File: frontmatter/assets/backoffice/ch4/kyc-comparison-modal.png Graphic file (
+type png)
+<use frontmatter/assets/backoffice/ch4/kyc-comparison-modal.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/kyc-comparison-modal
+.png  used on input line 445.
+(pdftex.def)             Requested size: 305.24156pt x 257.60266pt.
+ [56 <./frontmatter/assets/backoffice/ch4/kyc-queue.png>]
+<frontmatter/assets/backoffice/ch4/kyb-organizations.png, id=1316, 1406.25375pt
+ x 686.565pt>
+File: frontmatter/assets/backoffice/ch4/kyb-organizations.png Graphic file (typ
+e png)
+<use frontmatter/assets/backoffice/ch4/kyb-organizations.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/kyb-organizations.pn
+g  used on input line 457.
+(pdftex.def)             Requested size: 402.74731pt x 196.62639pt.
+ [57 <./frontmatter/assets/backoffice/ch4/kyc-comparison-modal.png> <./frontmat
+ter/assets/backoffice/ch4/kyb-organizations.png>]
+<frontmatter/assets/backoffice/ch4/kyb-verification-modal.png, id=1328, 673.767
+18pt x 670.00313pt>
+File: frontmatter/assets/backoffice/ch4/kyb-verification-modal.png Graphic file
+ (type png)
+<use frontmatter/assets/backoffice/ch4/kyb-verification-modal.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/kyb-verification-mod
+al.png  used on input line 469.
+(pdftex.def)             Requested size: 288.2801pt x 286.67467pt.
+ [58 <./frontmatter/assets/backoffice/ch4/kyb-verification-modal.png>]
 LaTeX Font Info:    Font shape `T1/opensans-TLF/m/n' will be
-(Font)              scaled to size 5.39996pt on input line 61.
-[33]
-Overfull \hbox (24.39839pt too wide) in paragraph at lines 100--101
-\T1/opensans-TLF/m/n/10.95 Após a au-ten-ti-ca-ção, o uti-li-za-dor é re-di-re-
-ci-o-nado para o se-le-tor de apli-ca-ções (\T1/zi4/m/n/10.95 /backoffice/panel
-\T1/opensans-TLF/m/n/10.95 ),
- []
+(Font)              scaled to size 7.19995pt on input line 488.
+LaTeX Font Info:    Font shape `T1/opensans-TLF/b/n' will be
+(Font)              scaled to size 7.19995pt on input line 492.
+LaTeX Font Info:    Font shape `T1/opensans-TLF/m/it' will be
+(Font)              scaled to size 7.19995pt on input line 497.
+<frontmatter/assets/backoffice/ch4/access-denied-manual-route.png, id=1340, 141
+1.52344pt x 743.02594pt>
+File: frontmatter/assets/backoffice/ch4/access-denied-manual-route.png Graphic 
+file (type png)
+<use frontmatter/assets/backoffice/ch4/access-denied-manual-route.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch4/access-denied-manual
+-route.png  used on input line 518.
+(pdftex.def)             Requested size: 402.74731pt x 212.00269pt.
+ [59 <./frontmatter/assets/backoffice/ch4/access-denied-manual-route.png>]
+LaTeX Font Info:    Trying to load font information for TS1+zi4 on input line 5
+52.
 
-
-Overfull \hbox (2.62617pt too wide) in paragraph at lines 113--114
-[]\T1/opensans-TLF/m/n/10.95 Também aqui foi man-tido o pa-drão \T1/opensans-TL
-F/m/it/10.95 draft\T1/opensans-TLF/m/n/10.95 . O ope-ra-dor pode ex-pe-ri-men-t
-ar al-te-ra-ções, compará-
- []
-
-[34]
-Overfull \hbox (27.37132pt too wide) in paragraph at lines 143--144
-\T1/opensans-TLF/m/n/10.95 ints: \T1/zi4/m/n/10.95 GET /api/ojc/campaigns \T1/o
-pensans-TLF/m/n/10.95 para a lis-ta-gem com fil-tro por es-tado, \T1/zi4/m/n/10
-.95 GET /api/ojc/campaigns/:id
- []
-
-[35]
-Overfull \hbox (62.42572pt too wide) in paragraph at lines 156--157
-[]\T1/opensans-TLF/m/n/10.95 O \T1/opensans-TLF/m/it/10.95 back-end \T1/opensan
-s-TLF/m/n/10.95 ex-põe qua-tro end-po-ints: \T1/zi4/m/n/10.95 GET /api/ojc/cate
-gories \T1/opensans-TLF/m/n/10.95 para lis-ta-gem, \T1/zi4/m/n/10.95 POST /api/
-ojc/categories
- []
-
-
-Overfull \hbox (15.96275pt too wide) in paragraph at lines 156--157
-\T1/opensans-TLF/m/n/10.95 para cri-a-ção, \T1/zi4/m/n/10.95 PATCH /api/ojc/cat
-egories/:id \T1/opensans-TLF/m/n/10.95 para edi-ção (in-clu-indo de-sa-ti-va-çã
-o via \T1/zi4/m/n/10.95 isActive:
- []
-
-[36] [37]
-Underfull \hbox (badness 1960) in paragraph at lines 258--258
-[]|\T1/opensans-TLF/m/sc/10 Gestão de ses-são, re-cu-pe-ra-ção de
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 258--258
-[]|\T1/opensans-TLF/m/sc/10 Fluxo fun-ci-o-nal com
- []
-
-
-Underfull \hbox (badness 6741) in paragraph at lines 259--259
-\T1/zi4/m/n/10 req.auth \T1/opensans-TLF/m/sc/10 no ser-vi-dor
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 260--260
-[]|\T1/opensans-TLF/m/sc/10 Separação en-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 260--260
-\T1/opensans-TLF/m/sc/10 tre \T1/zi4/m/n/10 backoffice \T1/opensans-TLF/m/sc/10
- e
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 260--260
-\T1/zi4/m/n/10 just_causes \T1/opensans-TLF/m/sc/10 com ló-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 261--261
-[]|\T1/zi4/m/n/10 requirePermission
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 261--261
-\T1/opensans-TLF/m/sc/10 apli-cado de forma
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 261--261
-\T1/opensans-TLF/m/sc/10 con-sis-tente nas ro-tas
- []
-
-
-Underfull \hbox (badness 1297) in paragraph at lines 263--263
-[]|\T1/opensans-TLF/m/sc/10 Visão glo-bal da ati-vi-dade da pla-ta-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 263--263
-[]|\T1/zi4/m/n/10 AdminOverviewPage \T1/opensans-TLF/m/sc/10 e
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 263--263
-\T1/zi4/m/n/10 AnalyticsPage \T1/opensans-TLF/m/sc/10 com
- []
-
-
-Underfull \hbox (badness 3884) in paragraph at lines 266--266
-\T1/opensans-TLF/m/sc/10 sulta está pronta; al-
- []
-
-
-Underfull \hbox (badness 1755) in paragraph at lines 267--267
-[]|\T1/opensans-TLF/m/sc/10 A base está en-tre-gue;
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 267--267
-\T1/opensans-TLF/m/sc/10 da pla-ta-forma não
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 267--267
-\T1/opensans-TLF/m/sc/10 fo-ram apro-fun-da-das
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 268--268
-\T1/opensans-TLF/m/sc/10 ber-tura au-to-ma-ti-zada
- []
-
-
-Overfull \hbox (86.32097pt too wide) in paragraph at lines 255--270
- [] 
- []
-
-[38] [39]) (chapters/ch5/chapter5.tex [40]
+(C:\Users\TiagoSilva\AppData\Local\Programs\MiKTeX\tex/latex/inconsolata\ts1zi4
+.fd
+File: ts1zi4.fd 2018/01/14 TS1/zi4 (Inconsolata)
+)
+LaTeX Font Info:    Font shape `TS1/zi4/m/n' will be
+(Font)              scaled to size 9.0pt on input line 552.
+ [60]
+LaTeX Info: Symbol \textasciigrave not provided by
+            font family zi4 in TS1 encoding.
+            Default family used instead on input line 570.
+LaTeX Info: Symbol \textasciigrave not provided by
+            font family zi4 in TS1 encoding.
+            Default family used instead on input line 570.
+LaTeX Info: Symbol \textasciigrave not provided by
+            font family zi4 in TS1 encoding.
+            Default family used instead on input line 582.
+LaTeX Info: Symbol \textasciigrave not provided by
+            font family zi4 in TS1 encoding.
+            Default family used instead on input line 582.
+ [61{C:/Users/TiagoSilva/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/inconsol
+ata/i4-ts1.enc}] [62]
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 8.0pt on input line 647.
+ [63]) (chapters/ch5/chapter5.tex [64]
 Cap\'{\i }tulo 5.
 
-Underfull \hbox (badness 3108) in paragraph at lines 19--19
-[]|\T1/opensans-TLF/m/sc/10 Autenticação cen-tra-li-zada de
+Underfull \hbox (badness 2635) in paragraph at lines 19--19
+[]|\T1/opensans-TLF/m/n/8 Backoffice mul-ti-a-pli-ca-ção para o
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 20--20
-[]|\T1/opensans-TLF/m/sc/10 Guardas de rota, \T1/opensans-TLF/m/it/10 page
+Underfull \hbox (badness 3209) in paragraph at lines 19--19
+[]|\T1/opensans-TLF/m/n/8 Sistema in-terno ope-ra-ci-o-nal, se-pa-ra-ção
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 20--20
-\T1/opensans-TLF/m/it/10 ga-tes\T1/opensans-TLF/m/sc/10 , \T1/zi4/m/n/10 usePer
-mission \T1/opensans-TLF/m/sc/10 e
+Underfull \hbox (badness 1490) in paragraph at lines 22--22
+\T1/opensans-TLF/m/n/8 di-ci-o-na-das na in-ter-face e va-li-da-ção por
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 20--20
-\T1/zi4/m/n/10 requirePermission \T1/opensans-TLF/m/sc/10 tra-ba-lham
+Underfull \hbox (badness 6141) in paragraph at lines 24--24
+[]|\T1/opensans-TLF/m/n/8 Separação en-tre da-dos ad-mi-nis-tra-ti-vos
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 21--21
-[]|\T1/opensans-TLF/m/sc/10 Configuração di-nâ-mica do
+Underfull \hbox (badness 2626) in paragraph at lines 24--24
+\T1/opensans-TLF/m/n/8 do bac-kof-fice e da-dos ope-ra-ci-o-nais da
  []
 
+[65
 
-Underfull \hbox (badness 1371) in paragraph at lines 23--23
-[]|\T1/opensans-TLF/m/sc/10 Dashboard, cam-pa-nhas, ca-te-go-rias,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 24--24
-[]|\T1/opensans-TLF/m/sc/10 Operações fi-nan-cei-ras com-
- []
-
-
-Underfull \hbox (badness 2689) in paragraph at lines 27--27
-[]|\T1/opensans-TLF/m/sc/10 Garantia de qua-li-dade au-to-
- []
-
-
-Underfull \hbox (badness 2903) in paragraph at lines 27--27
-[]|\T1/opensans-TLF/m/sc/10 Validação ma-nual sis-te-má-tica; tes-
- []
-
-
-Underfull \hbox (badness 1226) in paragraph at lines 28--28
-[]|\T1/opensans-TLF/m/sc/10 Interfaces cla-ras para ope-ra-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 28--28
-[]|\T1/opensans-TLF/m/sc/10 Navegação co-e-rente, es-ta-dos de
- []
-
-
-Underfull \hbox (badness 2050) in paragraph at lines 28--28
-\T1/opensans-TLF/m/sc/10 acesso ne-gado ex-plí-ci-tos e pa-drão
- []
-
-[41
+] [66]) [67] [68
 
 ]
-Overfull \hbox (16.41078pt too wide) in paragraph at lines 54--55
-\T1/opensans-TLF/m/n/10.95 Com base nas li-mi-ta-ções iden-ti-fi-ca-das e nas c
-a-pa-ci-da-des da ar-qui-te-tura im-ple-men-tada, propõem-
- []
-
-[42]) [43] [44
-
-]
-Overfull \hbox (12.23895pt too wide) in paragraph at lines 135--135
-[]\T1/opensans-TLF/m/n/10.95 OnlyHighIQ, \T1/opensans-TLF/m/it/10.95 OnlyHighIQ
- --- Mis-são, Vi-são e Va-lo-res\T1/opensans-TLF/m/n/10.95 , Dis-po-ní-vel em [
-]$\T1/zi4/m/n/10.95 https : / / www . onlyhighiq .
- []
-
 LaTeX Font Info:    Font shape `T1/opensans-TLF/m/sc' will be
-(Font)              scaled to size 9.85492pt on input line 135.
-(appendices/appendixA.tex [45] [46
+(Font)              scaled to size 9.85492pt on input line 140.
+ [69] (appendices/appendixA.tex [70]
+Ap\^endice A.
+<frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd-full.png, id=14
+93, 1438.37375pt x 1453.43pt>
+File: frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd-full.png G
+raphic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd-full.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/login-authentica
+tion/ssd-full.png  used on input line 15.
+(pdftex.def)             Requested size: 423.94347pt x 428.38112pt.
+[71
 
 ]
-Ap\^endice A.
-<frontmatter/assets/backoffice/ch3/uml/BOSH-26/ssd-full.png, id=1006, 1174.3875
-pt x 1291.82625pt>
-File: frontmatter/assets/backoffice/ch3/uml/BOSH-26/ssd-full.png Graphic file (
-type png)
-<use frontmatter/assets/backoffice/ch3/uml/BOSH-26/ssd-full.png>
-Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/BOSH-26/ssd-full
-.png  used on input line 13.
-(pdftex.def)             Requested size: 423.94395pt x 466.33836pt.
-[47]
-<frontmatter/assets/backoffice/ch3/uml/BOSH-1/ssd-full.png, id=1012, 1064.97874
-pt x 1292.83pt>
-File: frontmatter/assets/backoffice/ch3/uml/BOSH-1/ssd-full.png Graphic file (t
-ype png)
-<use frontmatter/assets/backoffice/ch3/uml/BOSH-1/ssd-full.png>
-Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/BOSH-1/ssd-full.
-png  used on input line 25.
-(pdftex.def)             Requested size: 423.93642pt x 514.63725pt.
- [48 <./frontmatter/assets/backoffice/ch3/uml/BOSH-26/ssd-full.png (PNG copy)>]
-<frontmatter/assets/backoffice/ch3/uml/BOSH-7/ssd-full.png, id=1019, 1011.78pt 
-x 2033.5975pt>
-File: frontmatter/assets/backoffice/ch3/uml/BOSH-7/ssd-full.png Graphic file (t
-ype png)
-<use frontmatter/assets/backoffice/ch3/uml/BOSH-7/ssd-full.png>
-Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/BOSH-7/ssd-full.
-png  used on input line 37.
-(pdftex.def)             Requested size: 285.17996pt x 573.1891pt.
- [49 <./frontmatter/assets/backoffice/ch3/uml/BOSH-1/ssd-full.png (PNG copy)>]
-<frontmatter/assets/backoffice/ch3/uml/BOSH-5/ssd-full.png, id=1026, 1132.23pt 
-x 1345.025pt>
-File: frontmatter/assets/backoffice/ch3/uml/BOSH-5/ssd-full.png Graphic file (t
-ype png)
-<use frontmatter/assets/backoffice/ch3/uml/BOSH-5/ssd-full.png>
-Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/BOSH-5/ssd-full.
-png  used on input line 49.
-(pdftex.def)             Requested size: 423.94598pt x 503.62376pt.
-) [50 <./frontmatter/assets/backoffice/ch3/uml/BOSH-7/ssd-full.png (PNG copy)>]
- [51 <./frontmatter/assets/backoffice/ch3/uml/BOSH-5/ssd-full.png (PNG copy)>] 
+<frontmatter/assets/backoffice/ch3/uml/create-admin-user/ssd-full.png, id=1501,
+ 2130.96124pt x 1320.935pt>
+File: frontmatter/assets/backoffice/ch3/uml/create-admin-user/ssd-full.png Grap
+hic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/create-admin-user/ssd-full.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/create-admin-use
+r/ssd-full.png  used on input line 29.
+(pdftex.def)             Requested size: 423.94112pt x 262.79156pt.
+ [72 <./frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd-full.png
+>]
+<frontmatter/assets/backoffice/ch3/uml/CH4-ROLE-ASSIGNMENT/ssd-full.png, id=151
+0, 1316.92pt x 1593.955pt>
+File: frontmatter/assets/backoffice/ch3/uml/CH4-ROLE-ASSIGNMENT/ssd-full.png Gr
+aphic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/CH4-ROLE-ASSIGNMENT/ssd-full.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/CH4-ROLE-ASSIGNM
+ENT/ssd-full.png  used on input line 43.
+(pdftex.def)             Requested size: 423.93483pt x 513.11624pt.
+ [73 <./frontmatter/assets/backoffice/ch3/uml/create-admin-user/ssd-full.png>]
+<frontmatter/assets/backoffice/ch3/uml/roles-permissions/ssd-full.png, id=1519,
+ 1952.29375pt x 1952.29375pt>
+File: frontmatter/assets/backoffice/ch3/uml/roles-permissions/ssd-full.png Grap
+hic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/roles-permissions/ssd-full.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/roles-permission
+s/ssd-full.png  used on input line 57.
+(pdftex.def)             Requested size: 423.9353pt x 423.9353pt.
+ [74 <./frontmatter/assets/backoffice/ch3/uml/CH4-ROLE-ASSIGNMENT/ssd-full.png>
+]
+<frontmatter/assets/backoffice/ch3/uml/CH4-PAGE-GATES/ssd-full.png, id=1528, 13
+13.90875pt x 1153.30875pt>
+File: frontmatter/assets/backoffice/ch3/uml/CH4-PAGE-GATES/ssd-full.png Graphic
+ file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/CH4-PAGE-GATES/ssd-full.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/CH4-PAGE-GATES/s
+sd-full.png  used on input line 71.
+(pdftex.def)             Requested size: 423.94786pt x 372.1284pt.
+ [75 <./frontmatter/assets/backoffice/ch3/uml/roles-permissions/ssd-full.png>]
+<frontmatter/assets/backoffice/ch3/uml/CH4-USER-ACTIVITY/ssd-full.png, id=1538,
+ 1167.36125pt x 991.705pt>
+File: frontmatter/assets/backoffice/ch3/uml/CH4-USER-ACTIVITY/ssd-full.png Grap
+hic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/CH4-USER-ACTIVITY/ssd-full.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/CH4-USER-ACTIVIT
+Y/ssd-full.png  used on input line 85.
+(pdftex.def)             Requested size: 423.93692pt x 360.14589pt.
+ [76 <./frontmatter/assets/backoffice/ch3/uml/CH4-PAGE-GATES/ssd-full.png>]
+<frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd-full.png, id=1
+547, 1681.28125pt x 1486.55376pt>
+File: frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd-full.png 
+Graphic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd-full.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REV
+ISION/ssd-full.png  used on input line 99.
+(pdftex.def)             Requested size: 423.93654pt x 374.83583pt.
+ [77 <./frontmatter/assets/backoffice/ch3/uml/CH4-USER-ACTIVITY/ssd-full.png>]
+<frontmatter/assets/backoffice/ch3/uml/manage-categories/ssd-full.png, id=1556,
+ 1798.72pt x 3044.37375pt>
+File: frontmatter/assets/backoffice/ch3/uml/manage-categories/ssd-full.png Grap
+hic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/manage-categories/ssd-full.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/manage-categorie
+s/ssd-full.png  used on input line 113.
+(pdftex.def)             Requested size: 338.65894pt x 573.1878pt.
+[78 <./frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd-full.png
+>]
+<frontmatter/assets/backoffice/ch3/uml/kyc-verification/ssd-full.png, id=1565, 
+2811.50375pt x 2980.13374pt>
+File: frontmatter/assets/backoffice/ch3/uml/kyc-verification/ssd-full.png Graph
+ic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/kyc-verification/ssd-full.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/kyc-verification
+/ssd-full.png  used on input line 132.
+(pdftex.def)             Requested size: 423.93817pt x 449.36539pt.
+ [79 <./frontmatter/assets/backoffice/ch3/uml/manage-categories/ssd-full.png>]
+<frontmatter/assets/backoffice/ch3/uml/kyb-verification/ssd-full.png, id=1574, 
+2978.12625pt x 3658.66875pt>
+File: frontmatter/assets/backoffice/ch3/uml/kyb-verification/ssd-full.png Graph
+ic file (type png)
+<use frontmatter/assets/backoffice/ch3/uml/kyb-verification/ssd-full.png>
+Package pdftex.def Info: frontmatter/assets/backoffice/ch3/uml/kyb-verification
+/ssd-full.png  used on input line 148.
+(pdftex.def)             Requested size: 423.93298pt x 520.80746pt.
+) [80 <./frontmatter/assets/backoffice/ch3/uml/kyc-verification/ssd-full.png>] 
+[81 <./frontmatter/assets/backoffice/ch3/uml/kyb-verification/ssd-full.png>]
 (main.aux)
  ***********
 LaTeX2e <2025-11-01>
@@ -2598,415 +2691,331 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 0B521EE0B5DF9106037B56BF562A6C21;16211.
-
-Package biblatex Warning: Please (re)run Biber on the file:
-(biblatex)                main
-(biblatex)                and rerun LaTeX afterwards.
-
+(rerunfilecheck)             Checksum: D060DB477A820E9FD2BACF3817B3C59E;15953.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 60680 strings out of 467871
- 1440223 string characters out of 5415956
- 2553649 words of memory out of 5000000
- 88367 multiletter control sequences out of 15000+600000
- 670785 words of font info for 106 fonts, out of 8000000 for 9000
+ 61520 strings out of 467871
+ 1467807 string characters out of 5415956
+ 2665780 words of memory out of 5000000
+ 88988 multiletter control sequences out of 15000+600000
+ 675310 words of font info for 118 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 101i,20n,131p,2475b,2818s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 103i,21n,131p,2475b,2825s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-pdfTeX warning (dest): name{lstlisting.111} has been referenced but does not ex
+pdfTeX warning (dest): name{lstlisting.162} has been referenced but does not ex
 ist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{table.caption.161} has been referenced but does not
+pdfTeX warning (dest): name{lstlisting.131} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{table.caption.274} has been referenced but does not
  exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{table.caption.157} has been referenced but does not
+pdfTeX warning (dest): name{table.caption.270} has been referenced but does not
  exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{table.caption.153} has been referenced but does not
+pdfTeX warning (dest): name{table.caption.268} has been referenced but does not
  exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{table.caption.81} has been referenced but does not 
-exist, replaced by a fixed one
+pdfTeX warning (dest): name{table.caption.229} has been referenced but does not
+ exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{table.caption.79} has been referenced but does not 
-exist, replaced by a fixed one
+pdfTeX warning (dest): name{table.caption.226} has been referenced but does not
+ exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{table.caption.69} has been referenced but does not 
-exist, replaced by a fixed one
+pdfTeX warning (dest): name{table.caption.209} has been referenced but does not
+ exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{table.caption.62} has been referenced but does not 
-exist, replaced by a fixed one
+pdfTeX warning (dest): name{table.caption.206} has been referenced but does not
+ exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{table.caption.53} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.51} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.49} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.47} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.43} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{table.caption.40} has been referenced but does not 
-exist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{figure.caption.175} has been referenced but does no
+pdfTeX warning (dest): name{figure.caption.300} has been referenced but does no
 t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.173} has been referenced but does no
+pdfTeX warning (dest): name{figure.caption.298} has been referenced but does no
 t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.171} has been referenced but does no
+pdfTeX warning (dest): name{figure.caption.296} has been referenced but does no
 t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.169} has been referenced but does no
+pdfTeX warning (dest): name{figure.caption.294} has been referenced but does no
 t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.96} has been referenced but does not
- exist, replaced by a fixed one
+pdfTeX warning (dest): name{figure.caption.292} has been referenced but does no
+t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.94} has been referenced but does not
- exist, replaced by a fixed one
+pdfTeX warning (dest): name{figure.caption.290} has been referenced but does no
+t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.92} has been referenced but does not
- exist, replaced by a fixed one
+pdfTeX warning (dest): name{figure.caption.288} has been referenced but does no
+t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.90} has been referenced but does not
- exist, replaced by a fixed one
+pdfTeX warning (dest): name{figure.caption.286} has been referenced but does no
+t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.77} has been referenced but does not
- exist, replaced by a fixed one
+pdfTeX warning (dest): name{figure.caption.284} has been referenced but does no
+t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.76} has been referenced but does not
- exist, replaced by a fixed one
+pdfTeX warning (dest): name{figure.caption.282} has been referenced but does no
+t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.74} has been referenced but does not
- exist, replaced by a fixed one
+pdfTeX warning (dest): name{figure.caption.227} has been referenced but does no
+t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.36} has been referenced but does not
- exist, replaced by a fixed one
+pdfTeX warning (dest): name{figure.caption.223} has been referenced but does no
+t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.32} has been referenced but does not
- exist, replaced by a fixed one
+pdfTeX warning (dest): name{figure.caption.222} has been referenced but does no
+t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.28} has been referenced but does not
- exist, replaced by a fixed one
+pdfTeX warning (dest): name{figure.caption.221} has been referenced but does no
+t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{figure.caption.24} has been referenced but does not
- exist, replaced by a fixed one
+pdfTeX warning (dest): name{figure.caption.220} has been referenced but does no
+t exist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.174} has been referenced but does not exist
+pdfTeX warning (dest): name{figure.caption.219} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.218} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.217} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.216} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.215} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.214} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.213} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.212} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.211} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{figure.caption.210} has been referenced but does no
+t exist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section.299} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.172} has been referenced but does not exist
+pdfTeX warning (dest): name{section.297} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.170} has been referenced but does not exist
+pdfTeX warning (dest): name{section.295} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.168} has been referenced but does not exist
+pdfTeX warning (dest): name{section.293} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{appendix.167} has been referenced but does not exis
+pdfTeX warning (dest): name{section.291} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section.289} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section.287} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section.285} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section.283} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section.281} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{appendix.280} has been referenced but does not exis
 t, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{chapter*.166} has been referenced but does not exis
+pdfTeX warning (dest): name{chapter*.279} has been referenced but does not exis
 t, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.165} has been referenced but does not exist
+pdfTeX warning (dest): name{section.278} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{subsection.164} has been referenced but does not ex
+pdfTeX warning (dest): name{subsection.277} has been referenced but does not ex
 ist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{subsection.163} has been referenced but does not ex
+pdfTeX warning (dest): name{subsection.276} has been referenced but does not ex
 ist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.162} has been referenced but does not exist
+pdfTeX warning (dest): name{section.275} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.160} has been referenced but does not exist
+pdfTeX warning (dest): name{section.273} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{chapter.159} has been referenced but does not exist
+pdfTeX warning (dest): name{chapter.272} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.158} has been referenced but does not exist
+pdfTeX warning (dest): name{section.271} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.156} has been referenced but does not exist
+pdfTeX warning (dest): name{subsection.269} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.267} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section.266} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{subsection.155} has been referenced but does not ex
+pdfTeX warning (dest): name{subsection.228} has been referenced but does not ex
 ist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{subsection.154} has been referenced but does not ex
+pdfTeX warning (dest): name{subsection.225} has been referenced but does not ex
 ist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{subsection.152} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.151} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.149} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.148} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.147} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.146} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.145} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.144} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section.143} has been referenced but does not exist
+pdfTeX warning (dest): name{section.224} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{subsection.142} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.141} has been referenced but does not ex
-ist, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section.139} has been referenced but does not exist
+pdfTeX warning (dest): name{section.208} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{subsection.110} has been referenced but does not ex
+pdfTeX warning (dest): name{subsection.207} has been referenced but does not ex
 ist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{subsection.109} has been referenced but does not ex
+pdfTeX warning (dest): name{subsection.205} has been referenced but does not ex
 ist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{subsection.108} has been referenced but does not ex
+pdfTeX warning (dest): name{subsection.204} has been referenced but does not ex
 ist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{subsection.107} has been referenced but does not ex
+pdfTeX warning (dest): name{subsection.203} has been referenced but does not ex
 ist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.106} has been referenced but does not exist
+pdfTeX warning (dest): name{subsection.202} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.201} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section.200} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.105} has been referenced but does not exist
+pdfTeX warning (dest): name{subsection.199} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.198} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.161} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{subsection.160} has been referenced but does not ex
+ist, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{section.159} has been referenced but does not exist
 , replaced by a fixed one
 
 
-pdfTeX warning (dest): name{chapter.104} has been referenced but does not exist
-, replaced by a fixed one
+pdfTeX warning (dest): name{subsection.130} has been referenced but does not ex
+ist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.103} has been referenced but does not exist
-, replaced by a fixed one
+pdfTeX warning (dest): name{subsection.129} has been referenced but does not ex
+ist, replaced by a fixed one
 
 
-pdfTeX warning (dest): name{section.97} has been referenced but does not exist,
+pdfTeX warning (dest): name{section.90} has been referenced but does not exist,
  replaced by a fixed one
 
-
-pdfTeX warning (dest): name{subsection.95} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.93} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.91} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.89} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section.83} has been referenced but does not exist,
- replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section.80} has been referenced but does not exist,
- replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.78} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.75} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.73} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.72} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section.71} has been referenced but does not exist,
- replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section.70} has been referenced but does not exist,
- replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.68} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section*.67} has been referenced but does not exist
-, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section*.66} has been referenced but does not exist
-, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section*.65} has been referenced but does not exist
-, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.64} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section.63} has been referenced but does not exist,
- replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section.61} has been referenced but does not exist,
- replaced by a fixed one
-
-
-pdfTeX warning (dest): name{chapter.60} has been referenced but does not exist,
- replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.56} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.52} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.50} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.46} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.42} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{section.41} has been referenced but does not exist,
- replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.39} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.35} has been referenced but does not exi
-st, replaced by a fixed one
-
-
-pdfTeX warning (dest): name{subsection.23} has been referenced but does not exi
-st, replaced by a fixed one
-
-<C:/Users/TiagoSilva/AppData/Local/Programs/MiKTeX/fonts/type1/public/inconsola
-ta/Inconsolata-zi4r.pfb><C:/Users/TiagoSilva/AppData/Local/Programs/MiKTeX/font
-s/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/TiagoSilva/AppData/Local/
-Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-BoldItalic.pfb><C:/Users
-/TiagoSilva/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSan
-s-Italic.pfb><C:/Users/TiagoSilva/AppData/Local/Programs/MiKTeX/fonts/type1/asc
-ender/opensans/OpenSans-Regular.pfb>
+ <C:\Users\TiagoSilva\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\t
+ctt0900.pk><C:/Users/TiagoSilva/AppData/Local/Programs/MiKTeX/fonts/type1/publi
+c/inconsolata/Inconsolata-zi4r.pfb><C:/Users/TiagoSilva/AppData/Local/Programs/
+MiKTeX/fonts/type1/ascender/opensans/OpenSans-Bold.pfb><C:/Users/TiagoSilva/App
+Data/Local/Programs/MiKTeX/fonts/type1/ascender/opensans/OpenSans-BoldItalic.pf
+b><C:/Users/TiagoSilva/AppData/Local/Programs/MiKTeX/fonts/type1/ascender/opens
+ans/OpenSans-Italic.pfb><C:/Users/TiagoSilva/AppData/Local/Programs/MiKTeX/font
+s/type1/ascender/opensans/OpenSans-Regular.pfb>
 Output written on C:\Users\TiagoSilva\WebstormProjects\backoffice\docs\PESTI-Mi
-ne\PESTI-Template\build\main.pdf (73 pages, 1480451 bytes).
+ne\PESTI-Template\build\main.pdf (103 pages, 5871614 bytes).
 PDF statistics:
- 1139 PDF objects out of 1200 (max. 8388607)
- 330 named destinations out of 1000 (max. 500000)
- 774 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1737 PDF objects out of 2073 (max. 8388607)
+ 538 named destinations out of 1000 (max. 500000)
+ 939 words of extra memory for PDF output out of 10000 (max. 10000000)
 

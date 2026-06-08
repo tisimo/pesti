@@ -1,102 +1,97 @@
 \babel@toc {portuguese}{}\relax 
-\contentsline {chapter}{\numberline {1}Introdução}{1}{chapter.10}%
-\contentsline {section}{\numberline {1.1}Enquadramento/Contexto}{1}{section.11}%
-\contentsline {section}{\numberline {1.2}Descrição do Problema}{2}{section.13}%
-\contentsline {subsection}{\numberline {1.2.1}Objetivos}{2}{subsection.14}%
-\contentsline {subsection}{\numberline {1.2.2}Abordagem}{3}{subsection.15}%
-\contentsline {subsection}{\numberline {1.2.3}Contributos}{3}{subsection.16}%
-\contentsline {paragraph}{Síntese dos contributos previstos:}{4}{section*.17}%
-\contentsline {subsection}{\numberline {1.2.4}Planeamento do trabalho}{4}{subsection.18}%
-\contentsline {section}{\numberline {1.3}Estrutura do relatório}{5}{section.20}%
-\contentsline {chapter}{\numberline {2}Estado da Arte}{7}{chapter.21}%
-\contentsline {section}{\numberline {2.1}Trabalhos relacionados}{7}{section.22}%
-\contentsline {subsection}{\numberline {2.1.1}Shopify Admin}{7}{subsection.23}%
-\contentsline {paragraph}{Pontos fortes}{8}{section*.25}%
-\contentsline {paragraph}{Pontos fracos}{8}{section*.26}%
-\contentsline {subsection}{\numberline {2.1.2}Stripe Dashboard}{9}{subsection.27}%
-\contentsline {paragraph}{Pontos fortes}{9}{section*.29}%
-\contentsline {paragraph}{Pontos fracos}{9}{section*.30}%
-\contentsline {subsection}{\numberline {2.1.3}Directus}{10}{subsection.31}%
-\contentsline {paragraph}{Pontos fortes}{11}{section*.33}%
-\contentsline {paragraph}{Pontos fracos}{11}{section*.34}%
-\contentsline {subsection}{\numberline {2.1.4}Appsmith}{11}{subsection.35}%
-\contentsline {paragraph}{Pontos fortes}{12}{section*.37}%
-\contentsline {paragraph}{Pontos fracos}{12}{section*.38}%
-\contentsline {subsection}{\numberline {2.1.5}Análise comparativa}{13}{subsection.39}%
-\contentsline {section}{\numberline {2.2}Tecnologias existentes}{13}{section.41}%
-\contentsline {subsection}{\numberline {2.2.1}Frameworks de \textit {UI} para administração}{13}{subsection.42}%
-\contentsline {subsection}{\numberline {2.2.2}Frameworks de \textit {front-end}}{14}{subsection.44}%
-\contentsline {subsection}{\numberline {2.2.3}Frameworks de \textit {back-end}}{14}{subsection.46}%
-\contentsline {subsection}{\numberline {2.2.4}Bases de dados relacionais}{15}{subsection.48}%
-\contentsline {subsection}{\numberline {2.2.5}Bases de dados NoSQL e sistemas de auditoria}{15}{subsection.50}%
-\contentsline {subsection}{\numberline {2.2.6}Provedores de serviços \textit {cloud}}{16}{subsection.52}%
-\contentsline {subsection}{\numberline {2.2.7}Autenticação e gestão de identidade}{16}{subsection.54}%
-\contentsline {subsection}{\numberline {2.2.8}Pagamentos e transações \textit {on-chain}}{17}{subsection.56}%
-\contentsline {section}{\numberline {2.3}Análise e seleção das tecnologias}{17}{section.58}%
-\contentsline {section}{\numberline {2.4}Conclusão}{18}{section.59}%
-\contentsline {chapter}{\numberline {3}Análise e Desenho da Solução}{21}{chapter.60}%
-\contentsline {section}{\numberline {3.1}Domínio do problema}{21}{section.61}%
-\contentsline {section}{\numberline {3.2}Requisitos funcionais e não funcionais}{22}{section.63}%
-\contentsline {subsection}{\numberline {3.2.1}Requisitos funcionais}{22}{subsection.64}%
-\contentsline {subsubsection}{Autenticação, autorização e administração}{22}{section*.65}%
-\contentsline {subsubsection}{Operação da plataforma}{23}{section*.66}%
-\contentsline {subsubsection}{Rastreabilidade}{23}{section*.67}%
-\contentsline {subsection}{\numberline {3.2.2}Requisitos não funcionais}{23}{subsection.68}%
-\contentsline {section}{\numberline {3.3}Casos de utilização}{24}{section.70}%
-\contentsline {section}{\numberline {3.4}Arquitetura da solução}{25}{section.71}%
-\contentsline {subsection}{\numberline {3.4.1}Nível 1 --- Contexto do sistema}{25}{subsection.72}%
-\contentsline {subsection}{\numberline {3.4.2}Nível 2 --- Contentores}{25}{subsection.73}%
-\contentsline {subsection}{\numberline {3.4.3}Nível 3 --- Componentes}{26}{subsection.75}%
-\contentsline {subsection}{\numberline {3.4.4}Vista física}{28}{subsection.78}%
-\contentsline {section}{\numberline {3.5}Modelo de permissões}{29}{section.80}%
-\contentsline {section}{\numberline {3.6}Modelo de dados}{30}{section.82}%
-\contentsline {section}{\numberline {3.7}Diagramas de sequência do sistema}{30}{section.83}%
-\contentsline {subsection}{\numberline {3.7.1}Resolução de permissões e acesso a páginas}{30}{subsection.84}%
-\contentsline {subsection}{\numberline {3.7.2}Autenticação (BOSH-26)}{32}{subsection.89}%
-\contentsline {subsection}{\numberline {3.7.3}Revisão de campanhas (BOSH-1)}{33}{subsection.91}%
-\contentsline {subsection}{\numberline {3.7.4}Gestão de categorias (BOSH-7)}{34}{subsection.93}%
-\contentsline {subsection}{\numberline {3.7.5}Aprovação de levantamentos (BOSH-5)}{35}{subsection.95}%
-\contentsline {section}{\numberline {3.8}Alternativas ao design}{36}{section.97}%
-\contentsline {paragraph}{Framework de administração vs. implementação customizada.}{36}{section*.98}%
-\contentsline {paragraph}{Verificação de permissões centralizada vs. verificação por módulo no \textit {front-end}.}{36}{section*.99}%
-\contentsline {paragraph}{Persistência imediata vs. padrão \textit {draft+save} na configuração do acesso.}{36}{section*.100}%
-\contentsline {paragraph}{Auditoria em PostgreSQL vs. DynamoDB.}{36}{section*.101}%
-\contentsline {paragraph}{Arquitetura de aplicação única vs. seletor multi-aplicação.}{36}{section*.102}%
-\contentsline {section}{\numberline {3.9}Conclusão}{37}{section.103}%
-\contentsline {chapter}{\numberline {4}Implementação da Solução}{39}{chapter.104}%
-\contentsline {section}{\numberline {4.1}Ambiente e estrutura do projeto}{39}{section.105}%
-\contentsline {section}{\numberline {4.2}Autenticação e controlo de acesso}{39}{section.106}%
-\contentsline {subsection}{\numberline {4.2.1}Passo 1 --- autenticar e resolver o contexto do operador}{40}{subsection.107}%
-\contentsline {subsection}{\numberline {4.2.2}Passo 2 --- decidir o acesso à aplicação e à página}{40}{subsection.108}%
-\contentsline {subsection}{\numberline {4.2.3}Passo 3 --- limitar ações dentro da interface}{40}{subsection.109}%
-\contentsline {subsection}{\numberline {4.2.4}Passo 4 --- revalidar cada pedido no servidor}{41}{subsection.110}%
-\contentsline {section}{\numberline {4.3}Módulos transversais ao ecossistema}{42}{section.139}%
-\contentsline {subsection}{\numberline {4.3.1}Seletor de aplicações}{42}{subsection.140}%
-\contentsline {subsection}{\numberline {4.3.2}Configuração administrativa do acesso}{42}{subsection.141}%
-\contentsline {subsection}{\numberline {4.3.3}Sistema de auditoria}{42}{subsection.142}%
-\contentsline {section}{\numberline {4.4}Módulos operacionais da JustCauses}{43}{section.143}%
-\contentsline {subsection}{\numberline {4.4.1}Dashboard e métricas}{43}{subsection.144}%
-\contentsline {subsection}{\numberline {4.4.2}Gestão de campanhas}{43}{subsection.145}%
-\contentsline {subsection}{\numberline {4.4.3}Gestão de categorias}{44}{subsection.146}%
-\contentsline {subsection}{\numberline {4.4.4}\textit {Analytics}}{44}{subsection.147}%
-\contentsline {subsection}{\numberline {4.4.5}Aprovação de levantamentos}{44}{subsection.148}%
-\contentsline {subsection}{\numberline {4.4.6}Transações}{44}{subsection.149}%
-\contentsline {section}{\numberline {4.5}Testes}{45}{section.150}%
-\contentsline {subsection}{\numberline {4.5.1}Validação manual por módulo}{45}{subsection.151}%
-\contentsline {subsection}{\numberline {4.5.2}Testes de integração da API da JustCauses}{45}{subsection.152}%
-\contentsline {subsection}{\numberline {4.5.3}Testes unitários ao módulo de eventos de domínio}{46}{subsection.154}%
-\contentsline {subsection}{\numberline {4.5.4}Limitações e trabalho futuro em testes}{46}{subsection.155}%
-\contentsline {section}{\numberline {4.6}Avaliação da solução}{46}{section.156}%
-\contentsline {section}{\numberline {4.7}Conclusão}{48}{section.158}%
-\contentsline {chapter}{\numberline {5}Conclusões}{49}{chapter.159}%
-\contentsline {section}{\numberline {5.1}Objetivos concretizados}{49}{section.160}%
-\contentsline {section}{\numberline {5.2}Limitações e trabalho futuro}{50}{section.162}%
-\contentsline {subsection}{\numberline {5.2.1}Limitações identificadas}{50}{subsection.163}%
-\contentsline {subsection}{\numberline {5.2.2}Trabalho futuro}{50}{subsection.164}%
-\contentsline {section}{\numberline {5.3}Apreciação final}{51}{section.165}%
-\contentsline {chapter}{Bibliografia}{53}{chapter*.166}%
-\contentsline {chapter}{\numberline {A}Diagramas de sequência do sistema --- Versão detalhada}{55}{appendix.167}%
-\contentsline {section}{\numberline {A.1}Autenticação (BOSH-26)}{56}{section.168}%
-\contentsline {section}{\numberline {A.2}Revisão de campanhas (BOSH-1)}{57}{section.170}%
-\contentsline {section}{\numberline {A.3}Gestão de categorias (BOSH-7)}{58}{section.172}%
-\contentsline {section}{\numberline {A.4}Aprovação de levantamentos (BOSH-5)}{59}{section.174}%
+\contentsline {chapter}{Lista de Figuras}{xv}{section*.7}%
+\contentsline {chapter}{Lista de Tabelas}{xvii}{section*.9}%
+\contentsline {chapter}{\numberline {1}Introdução}{1}{chapter.12}%
+\contentsline {section}{\numberline {1.1}Enquadramento}{1}{section.13}%
+\contentsline {section}{\numberline {1.2}Descrição do Problema}{2}{section.15}%
+\contentsline {section}{\numberline {1.3}Objetivos}{3}{section.16}%
+\contentsline {section}{\numberline {1.4}Abordagem}{4}{section.17}%
+\contentsline {section}{\numberline {1.5}Planeamento do trabalho}{4}{section.18}%
+\contentsline {section}{\numberline {1.6}Contributos}{5}{section.20}%
+\contentsline {paragraph}{Síntese dos contributos:}{5}{section*.21}%
+\contentsline {section}{\numberline {1.7}Estrutura do relatório}{6}{section.22}%
+\contentsline {chapter}{\numberline {2}Estado da Arte}{7}{chapter.23}%
+\contentsline {section}{\numberline {2.1}Critérios de análise}{7}{section.24}%
+\contentsline {section}{\numberline {2.2}Trabalhos relacionados}{8}{section.26}%
+\contentsline {subsection}{\numberline {2.2.1}Shopify Admin}{8}{subsection.27}%
+\contentsline {paragraph}{Contributos para o projeto}{9}{section*.29}%
+\contentsline {paragraph}{Limitações}{9}{section*.30}%
+\contentsline {subsection}{\numberline {2.2.2}Stripe Dashboard}{9}{subsection.31}%
+\contentsline {paragraph}{Contributos para o projeto}{10}{section*.33}%
+\contentsline {paragraph}{Limitações}{10}{section*.34}%
+\contentsline {subsection}{\numberline {2.2.3}Directus}{10}{subsection.35}%
+\contentsline {paragraph}{Contributos para o projeto}{11}{section*.37}%
+\contentsline {paragraph}{Limitações}{11}{section*.38}%
+\contentsline {subsection}{\numberline {2.2.4}Appsmith}{11}{subsection.39}%
+\contentsline {paragraph}{Contributos para o projeto}{12}{section*.41}%
+\contentsline {paragraph}{Limitações}{12}{section*.42}%
+\contentsline {subsection}{\numberline {2.2.5}Análise comparativa}{12}{subsection.43}%
+\contentsline {section}{\numberline {2.3}Princípios técnicos relevantes}{13}{section.45}%
+\contentsline {subsection}{\numberline {2.3.1}Autenticação, autorização e separação de responsabilidades}{13}{subsection.46}%
+\contentsline {subsection}{\numberline {2.3.2}Auditoria operacional}{14}{subsection.47}%
+\contentsline {subsection}{\numberline {2.3.3}Ferramenta genérica ou implementação à medida}{14}{subsection.48}%
+\contentsline {section}{\numberline {2.4}Tecnologias enquadradoras do projeto}{14}{section.49}%
+\contentsline {section}{\numberline {2.5}Análise e seleção da abordagem}{15}{section.50}%
+\contentsline {section}{\numberline {2.6}Sumário}{15}{section.51}%
+\contentsline {chapter}{\numberline {3}Análise e Desenho da Solução}{17}{chapter.52}%
+\contentsline {section}{\numberline {3.1}Requisitos}{17}{section.53}%
+\contentsline {section}{\numberline {3.2}Análise}{20}{section.55}%
+\contentsline {subsection}{\numberline {3.2.1}Modelo de aplicação}{20}{subsection.56}%
+\contentsline {section}{\numberline {3.3}Arquitetura da solução}{22}{section.59}%
+\contentsline {subsection}{\numberline {3.3.1}Nível 1: contexto do sistema}{22}{subsection.60}%
+\contentsline {subsubsection}{\numberline {3.3.1.1}Vista de processo de Nível 1}{23}{subsubsection.62}%
+\contentsline {subsection}{\numberline {3.3.2}Nível 2: contentores, implementação, processo e vista física}{25}{subsection.65}%
+\contentsline {subsubsection}{\numberline {3.3.2.1}Vista de implementação}{26}{subsubsection.67}%
+\contentsline {subsubsection}{\numberline {3.3.2.2}Vista de processo}{27}{subsubsection.69}%
+\contentsline {subsubsection}{\numberline {3.3.2.3}Vista física}{29}{subsubsection.71}%
+\contentsline {subsection}{\numberline {3.3.3}Nível 3: componentes, implementação, processos e dados}{32}{subsection.74}%
+\contentsline {subsubsection}{\numberline {3.3.3.1}Componentes do \textit {back-end}}{32}{subsubsection.75}%
+\contentsline {subsubsection}{\numberline {3.3.3.2}Componentes do \textit {front-end}}{35}{subsubsection.79}%
+\contentsline {subsubsection}{\numberline {3.3.3.3}Modelo de dados administrativo}{37}{subsubsection.82}%
+\contentsline {subsubsection}{\numberline {3.3.3.4}Modelo de permissões}{39}{subsubsection.85}%
+\contentsline {section}{\numberline {3.4}Sumário}{41}{section.87}%
+\contentsline {chapter}{\numberline {4}Implementação da Solução}{43}{chapter.88}%
+\contentsline {section}{\numberline {4.1}Ambiente e estrutura do projeto}{43}{section.89}%
+\contentsline {section}{\numberline {4.2}Autenticação e controlo de acesso}{43}{section.90}%
+\contentsline {subsection}{\numberline {4.2.1}Passo 1: autenticar e resolver o contexto do operador}{44}{subsection.91}%
+\contentsline {subsection}{\numberline {4.2.2}Passo 2: decidir o acesso à aplicação e à página}{45}{subsection.128}%
+\contentsline {subsection}{\numberline {4.2.3}Passo 3: limitar ações dentro da interface}{45}{subsection.129}%
+\contentsline {subsection}{\numberline {4.2.4}Passo 4: revalidar cada pedido no servidor}{46}{subsection.130}%
+\contentsline {section}{\numberline {4.3}Módulos transversais ao ecossistema}{47}{section.159}%
+\contentsline {subsection}{\numberline {4.3.1}Seletor de aplicações}{47}{subsection.160}%
+\contentsline {subsection}{\numberline {4.3.2}Gestão de operadores, perfis e permissões}{47}{subsection.161}%
+\contentsline {subsection}{\numberline {4.3.3}Configuração administrativa do acesso}{48}{subsection.198}%
+\contentsline {subsection}{\numberline {4.3.4}Sistema de auditoria}{48}{subsection.199}%
+\contentsline {section}{\numberline {4.4}Módulos operacionais da JustCauses}{49}{section.200}%
+\contentsline {subsection}{\numberline {4.4.1}Dashboard e métricas}{49}{subsection.201}%
+\contentsline {subsection}{\numberline {4.4.2}Gestão de campanhas}{49}{subsection.202}%
+\contentsline {subsection}{\numberline {4.4.3}Gestão de categorias}{50}{subsection.203}%
+\contentsline {subsection}{\numberline {4.4.4}Verificação KYC e KYB}{50}{subsection.204}%
+\contentsline {subsection}{\numberline {4.4.5}Comunicação por e-mail e notificações}{51}{subsection.205}%
+\contentsline {subsection}{\numberline {4.4.6}\textit {Analytics}}{52}{subsection.207}%
+\contentsline {section}{\numberline {4.5}Perspetivas de utilização e evidências}{52}{section.208}%
+\contentsline {section}{\numberline {4.6}Testes}{60}{section.224}%
+\contentsline {subsection}{\numberline {4.6.1}Validação manual por módulo}{61}{subsection.225}%
+\contentsline {subsection}{\numberline {4.6.2}Testes de código no processo de qualidade}{62}{subsection.228}%
+\contentsline {section}{\numberline {4.7}Avaliação da solução}{64}{section.266}%
+\contentsline {subsection}{\numberline {4.7.1}Avaliação operacional e critérios complementares}{64}{subsection.267}%
+\contentsline {subsection}{\numberline {4.7.2}Estado final da solução}{65}{subsection.269}%
+\contentsline {section}{\numberline {4.8}Sumário}{66}{section.271}%
+\contentsline {chapter}{\numberline {5}Conclusões}{69}{chapter.272}%
+\contentsline {section}{\numberline {5.1}Objetivos concretizados}{69}{section.273}%
+\contentsline {section}{\numberline {5.2}Limitações e trabalho futuro}{70}{section.275}%
+\contentsline {subsection}{\numberline {5.2.1}Limitações identificadas}{70}{subsection.276}%
+\contentsline {subsection}{\numberline {5.2.2}Trabalho futuro}{70}{subsection.277}%
+\contentsline {section}{\numberline {5.3}Apreciação final}{71}{section.278}%
+\contentsline {chapter}{Bibliografia}{73}{chapter*.279}%
+\contentsline {chapter}{\numberline {A}Diagramas de sequência}{75}{appendix.280}%
+\contentsline {section}{\numberline {A.1}Autenticação e resolução de acesso}{75}{section.281}%
+\contentsline {section}{\numberline {A.2}Criação de operadores administrativos}{76}{section.283}%
+\contentsline {section}{\numberline {A.3}Atribuição de perfis por aplicação}{77}{section.285}%
+\contentsline {section}{\numberline {A.4}Gestão de perfis e permissões}{78}{section.287}%
+\contentsline {section}{\numberline {A.5}Configuração de page gates}{79}{section.289}%
+\contentsline {section}{\numberline {A.6}Atividade individual de operadores}{80}{section.291}%
+\contentsline {section}{\numberline {A.7}Revisão de campanhas e comunicação}{81}{section.293}%
+\contentsline {section}{\numberline {A.8}Gestão de categorias}{82}{section.295}%
+\contentsline {section}{\numberline {A.9}Verificação KYC de utilizadores individuais}{83}{section.297}%
+\contentsline {section}{\numberline {A.10}Verificação KYB de organizações}{84}{section.299}%

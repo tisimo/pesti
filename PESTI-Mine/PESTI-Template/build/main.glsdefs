@@ -194,6 +194,62 @@ parent={},%
 %
 }%
 
+\glsdefs@newdocentry{WAF}%
+{%
+name={\acronymfont {\glsentryshort {WAF}}},%
+sort={WAF},%
+type={acronym},%
+first={WAF},%
+firstplural={WAFs},%
+text={WAF},%
+plural={WAFs},%
+description={Web Application Firewall},%
+descriptionplural={Web Application Firewall},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Web Application Firewall},%
+longplural={Web Application Firewalls},%
+short={WAF},%
+shortplural={WAFs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{JWKS}%
+{%
+name={\acronymfont {\glsentryshort {JWKS}}},%
+sort={JWKS},%
+type={acronym},%
+first={JWKS},%
+firstplural={JWKSs},%
+text={JWKS},%
+plural={JWKSs},%
+description={JSON Web Key Set},%
+descriptionplural={JSON Web Key Set},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={JSON Web Key Set},%
+longplural={JSON Web Key Sets},%
+short={JWKS},%
+shortplural={JWKSs},%
+counter={page},%
+parent={},%
+%
+}%
+
 \glsdefs@newdocentry{API}%
 {%
 name={\acronymfont {\glsentryshort {API}}},%
@@ -301,6 +357,34 @@ long={End to End},%
 longplural={End to Ends},%
 short={E2E},%
 shortplural={E2Es},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{FURPS+}%
+{%
+name={\acronymfont {\glsentryshort {FURPS+}}},%
+sort={FURPS+},%
+type={acronym},%
+first={FURPS+},%
+firstplural={FURPS+s},%
+text={FURPS+},%
+plural={FURPS+s},%
+description={Funcionalidade, Usabilidade, Fiabilidade, Desempenho, Suportabilidade},%
+descriptionplural={Funcionalidade, Usabilidade, Fiabilidade, Desempenho, Suportabilidade},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Funcionalidade, Usabilidade, Fiabilidade, Desempenho, Suportabilidade},%
+longplural={Funcionalidade, Usabilidade, Fiabilidade, Desempenho, Suportabilidades},%
+short={FURPS+},%
+shortplural={FURPS+s},%
 counter={page},%
 parent={},%
 %
@@ -502,6 +586,34 @@ parent={},%
 %
 }%
 
+\glsdefs@newdocentry{KYB}%
+{%
+name={\acronymfont {\glsentryshort {KYB}}},%
+sort={KYB},%
+type={acronym},%
+first={KYB},%
+firstplural={KYBs},%
+text={KYB},%
+plural={KYBs},%
+description={Know Your Business},%
+descriptionplural={Know Your Business},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Know Your Business},%
+longplural={Know Your Businesss},%
+short={KYB},%
+shortplural={KYBs},%
+counter={page},%
+parent={},%
+%
+}%
+
 \glsdefs@newdocentry{MFA}%
 {%
 name={\acronymfont {\glsentryshort {MFA}}},%
@@ -642,6 +754,34 @@ parent={},%
 %
 }%
 
+\glsdefs@newdocentry{SD}%
+{%
+name={\acronymfont {\glsentryshort {SD}}},%
+sort={SD},%
+type={acronym},%
+first={SD},%
+firstplural={SDs},%
+text={SD},%
+plural={SDs},%
+description={Sequence Diagram},%
+descriptionplural={Sequence Diagram},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Sequence Diagram},%
+longplural={Sequence Diagrams},%
+short={SD},%
+shortplural={SDs},%
+counter={page},%
+parent={},%
+%
+}%
+
 \glsdefs@newdocentry{SSD}%
 {%
 name={\acronymfont {\glsentryshort {SSD}}},%
@@ -777,62 +917,6 @@ long={Portable Document Format},%
 longplural={Portable Document Formats},%
 short={PDF},%
 shortplural={PDFs},%
-counter={page},%
-parent={},%
-%
-}%
-
-\glsdefs@newdocentry{UC's}%
-{%
-name={\acronymfont {\glsentryshort {UC's}}},%
-sort={UC's},%
-type={acronym},%
-first={UC's},%
-firstplural={UC'ss},%
-text={UC's},%
-plural={UC'ss},%
-description={Use Cases},%
-descriptionplural={Use Cases},%
-symbol={\relax },%
-symbolplural={\relax },%
-user1={},%
-user2={},%
-user3={},%
-user4={},%
-user5={},%
-user6={},%
-long={Use Cases},%
-longplural={Use Casess},%
-short={UC's},%
-shortplural={UC'ss},%
-counter={page},%
-parent={},%
-%
-}%
-
-\glsdefs@newdocentry{US}%
-{%
-name={\acronymfont {\glsentryshort {US}}},%
-sort={US},%
-type={acronym},%
-first={US},%
-firstplural={USs},%
-text={US},%
-plural={USs},%
-description={User Stories},%
-descriptionplural={User Stories},%
-symbol={\relax },%
-symbolplural={\relax },%
-user1={},%
-user2={},%
-user3={},%
-user4={},%
-user5={},%
-user6={},%
-long={User Stories},%
-longplural={User Storiess},%
-short={US},%
-shortplural={USs},%
 counter={page},%
 parent={},%
 %

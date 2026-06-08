@@ -1,0 +1,85 @@
+@startuml level2-process-view
+title Level 2 Process View
+
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam backgroundColor white
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam participantPadding 8
+skinparam BoxPadding 5
+skinparam maxMessageSize 70
+skinparam sequence {
+    FontSize 10
+    ParticipantFontSize 10
+}
+hide footbox
+
+actor "Operator\nBrowser" as Operator
+participant "FrontEnd" as FrontEnd
+participant "AWS Cognito" as Cognito
+participant "BackEnd API" as Backend
+database "AWS DynamoDB\nBackoffice" as DynamoDB
+database "AWS Aurora\nPostgreSQL\nShared" as SharedDB
+database "AWS Aurora\nPostgreSQL\nOnlyJustCauses" as OJCDB
+participant "Amazon SES" as SES
+
+Operator -> FrontEnd : open page
+activate FrontEnd
+FrontEnd -> Cognito : authenticate / validate session
+activate Cognito
+Cognito --> FrontEnd : JWT tokens
+deactivate Cognito
+
+FrontEnd -> Backend : request access context
+activate Backend
+Backend -> DynamoDB : read operator, roles, permissions
+activate DynamoDB
+DynamoDB --> Backend : access configuration
+deactivate DynamoDB
+Backend --> FrontEnd : accessible apps and permissions
+deactivate Backend
+
+alt authorized operational request
+    FrontEnd -> Backend : execute operation
+    activate Backend
+    Backend -> OJCDB : read/write application data
+    activate OJCDB
+    OJCDB --> Backend : operation result
+    deactivate OJCDB
+
+    opt shared ecosystem data
+        Backend -> SharedDB : read/write shared data
+        activate SharedDB
+        SharedDB --> Backend : shared result
+        deactivate SharedDB
+    end
+
+    opt transactional notification
+        Backend -> SES : send e-mail
+        activate SES
+        SES --> Backend : accepted
+        deactivate SES
+    end
+
+    Backend -> DynamoDB : write audit log
+    activate DynamoDB
+    DynamoDB --> Backend : logged
+    deactivate DynamoDB
+    Backend --> FrontEnd : success response
+    deactivate Backend
+else unauthorized request
+    FrontEnd -> Backend : execute restricted operation
+    activate Backend
+    Backend -> DynamoDB : write denied access log
+    activate DynamoDB
+    DynamoDB --> Backend : logged
+    deactivate DynamoDB
+    Backend --> FrontEnd : 403 forbidden
+    deactivate Backend
+end
+
+FrontEnd --> Operator : render result
+deactivate FrontEnd
+
+@enduml

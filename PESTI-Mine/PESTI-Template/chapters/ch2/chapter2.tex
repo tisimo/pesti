@@ -3,7 +3,7 @@
 
 O desenvolvimento de um painel de administração, também designado por \textit{backoffice}, exige uma análise diferente da que seria feita para uma aplicação pública. Estes sistemas são utilizados por operadores internos, têm acesso restrito e, por isso, raramente disponibilizam publicamente todos os seus fluxos, ecrãs e regras de funcionamento. Esta limitação condiciona a análise de trabalhos relacionados: em vez de procurar apenas produtos equivalentes com demonstrações completas, torna-se mais adequado estudar padrões observáveis em painéis de administração, ferramentas de construção de aplicações internas e recomendações técnicas para autorização e auditoria.
 
-No caso deste projeto, o \textit{backoffice} foi também concebido como uma base multiaplicação. No estado atual, existem o módulo transversal de administração dos próprios operadores, perfis e permissões do \textit{backoffice}, e a aplicação JustCauses como primeiro domínio funcional. Ainda assim, a estrutura foi desenhada para facilitar a integração futura de outras aplicações no mesmo painel, reutilizando autenticação, controlo de acesso, auditoria e navegação base.
+No caso deste projeto, o \textit{backoffice} foi também concebido como uma base multiaplicação. No estado atual, existem o módulo transversal de administração dos próprios operadores, perfis e permissões do \textit{backoffice}, e a aplicação JustCauses como primeiro domínio funcional. Ainda assim, a estrutura foi desenhada para facilitar a integração futura de outras aplicações no mesmo \textit{backoffice}, integrando uma autenticação comum e reutilizando controlo de acesso, auditoria e navegação base.
 
 Para apoiar a identificação inicial de exemplos públicos, foram usados mecanismos de pesquisa automática orientados pelos critérios definidos neste capítulo; a seleção final privilegiou apenas os casos com informação pública suficiente e relevância direta para o projeto.
 
@@ -14,7 +14,7 @@ Neste capítulo analisam-se, primeiro, as capacidades mais relevantes para um pa
 \section{Critérios de análise}
 \label{sec:criterios_analise}
 
-O painel desenvolvido neste estágio não corresponde a uma aplicação de consumidor final. O seu objetivo é apoiar operações internas do ecossistema OnlyHighIQ, começando pela administração transversal do próprio \textit{backoffice} e pela aplicação JustCauses. Assim, a análise do estado da arte deve privilegiar critérios ligados à operação, à segurança e à evolução multiaplicação, e não apenas aspetos visuais ou escolhas genéricas de \textit{front-end}.
+O \textit{backoffice} desenvolvido neste estágio não corresponde a uma aplicação de consumidor final. O seu objetivo é apoiar operações internas do ecossistema OnlyHighIQ, começando pela administração transversal do próprio \textit{backoffice} e pela aplicação JustCauses. Assim, a análise do estado da arte deve privilegiar critérios ligados à operação, à segurança e à evolução multiaplicação, e não apenas aspetos visuais ou escolhas genéricas de \textit{front-end}.
 
 A Tabela~\ref{tab:criterios_backoffice} apresenta os critérios usados para comparar os sistemas e ferramentas analisados neste capítulo.
 
@@ -26,10 +26,10 @@ A Tabela~\ref{tab:criterios_backoffice} apresenta os critérios usados para comp
 \begin{tabular}{|p{3.4cm}|p{9.2cm}|}
 \hline
 \textbf{Critério} & \textbf{Relevância para o projeto} \\ \hline
-Controlo de acesso & O painel deve distinguir operadores, perfis, aplicações, páginas e ações, aplicando permissões no \textit{front-end} e no \textit{back-end}. \\ \hline
+Controlo de acesso & O \textit{backoffice} deve distinguir operadores, perfis, aplicações, páginas e ações, aplicando permissões no \textit{front-end} e no \textit{back-end}. \\ \hline
 Auditoria & As operações sensíveis devem deixar registos consultáveis, com identificação do operador, ação executada, entidade afetada e data. \\ \hline
-Fluxos operacionais & O sistema deve suportar processos internos, como revisão de campanhas, gestão de categorias, consulta financeira e administração de acessos. \\ \hline
-Expansão do painel & O painel deve permitir a integração futura de novas aplicações, reutilizando autenticação, operadores, perfis, permissões, auditoria e navegação base. \\ \hline
+Fluxos operacionais & O sistema deve suportar processos internos, como revisão de campanhas, gestão de categorias, verificações \gls{KYC}/\gls{KYB} e administração de acessos. \\ \hline
+Expansão do \textit{backoffice} & O \textit{backoffice} deve permitir a integração futura de novas aplicações, integrando uma autenticação comum e reutilizando operadores, perfis, permissões, auditoria e navegação base. \\ \hline
 Adaptação ao domínio & A solução deve acomodar regras específicas de cada aplicação, como a JustCauses, sem comprometer o núcleo comum do ecossistema da OnlyHighIQ. \\ \hline
 Manutenibilidade & A arquitetura deve permitir evolução incremental, testes e integração com a base de código existente. \\ \hline
 \end{tabular}
@@ -43,7 +43,7 @@ Estes critérios são também coerentes com recomendações de segurança aplica
 \section{Trabalhos relacionados}
 \label{sec:trabalhos_relacionados}
 
-A análise de trabalhos relacionados considera exemplos concretos de painéis comerciais e ferramentas de administração configuráveis. Os painéis comerciais permitem observar padrões de operação, permissões e rastreabilidade em produtos consolidados. As ferramentas configuráveis ajudam a avaliar se faria sentido adotar uma solução pronta em vez de uma implementação à medida. Em ambos os casos, a análise é limitada pela disponibilidade pública de informação, uma vez que muitos fluxos de \textit{backoffice} são reservados a equipas internas ou a clientes autenticados.
+A análise de trabalhos relacionados parte de exemplos públicos que permitem observar partes do funcionamento de \textit{backoffices} reais e de ferramentas configuráveis para aplicações internas. Nos painéis comerciais é possível retirar referências sobre organização operacional, permissões e rastreabilidade. Nas ferramentas configuráveis, a questão é diferente: importa perceber até que ponto uma solução pronta substituiria desenvolvimento próprio. A limitação principal mantém-se, porque muitos fluxos de \textit{backoffice} só estão disponíveis a equipas internas, clientes autenticados ou planos comerciais específicos.
 
 \subsection{Shopify Admin}
 \label{subsec:shopify_admin}
@@ -68,7 +68,7 @@ A documentação pública descreve um modelo de permissões associado a funçõe
 
 \paragraph{Limitações}
 \begin{itemize}
-  \item Domínio fortemente orientado a comércio eletrónico, sem correspondência direta com todos os fluxos do painel desenvolvido.
+  \item Domínio fortemente orientado a comércio eletrónico, sem correspondência direta com todos os fluxos do \textit{backoffice} desenvolvido.
   \item Produto fechado, sem acesso à arquitetura interna ou possibilidade de reutilização estrutural.
   \item Informação pública limitada sobre auditoria detalhada de ações de operadores.
 \end{itemize}
@@ -179,14 +179,14 @@ Solução adotada & Implementação à medida & Controlo sobre autorização, au
 \end{center}
 \end{table}
 
-Da comparação resulta que nenhum dos exemplos prontos responde integralmente ao conjunto de requisitos do projeto. As soluções comerciais ajudam a identificar padrões, mas não são reutilizáveis. As ferramentas configuráveis aceleram aplicações internas de baixa complexidade, mas perdem adequação quando o domínio exige autorização transversal, auditoria própria, fluxos de decisão específicos e capacidade de acrescentar novas aplicações ao mesmo painel. Assim, a implementação à medida foi a opção mais adequada aos critérios definidos para o contexto da empresa.
+A comparação mostra uma limitação comum: nenhum exemplo cobre, sozinho, o conjunto de requisitos deste projeto. Os produtos comerciais são úteis como referência de organização e controlo de acesso, mas não podem ser reutilizados. As ferramentas configuráveis reduzem o esforço em aplicações internas simples; perdem força quando é necessário combinar autorização por aplicação, auditoria própria, fluxos de decisão e evolução para novas aplicações no mesmo \textit{backoffice}. Por esse motivo, a solução à medida ficou mais ajustada ao contexto da empresa.
 
 %----------------------------------------------------------------------------------------
 
 \section{Princípios técnicos relevantes}
 \label{sec:principios_tecnicos_relevantes}
 
-Mais do que comparar tecnologias de forma genérica, o estado da arte deve identificar os princípios que condicionam o desenho de um painel de administração. No projeto desenvolvido, destacam-se três: autorização aplicada de forma consistente, auditoria operacional e separação entre ferramentas genéricas e implementação à medida. Estes princípios são especialmente relevantes num painel multiaplicação, onde permissões e registos de atividade devem manter significado mesmo quando novos domínios funcionais são acrescentados.
+Mais do que comparar tecnologias de forma genérica, o estado da arte deve identificar os princípios que condicionam o desenho de um painel de administração. No projeto desenvolvido, destacam-se três: autorização aplicada de forma consistente, auditoria operacional e separação entre ferramentas genéricas e implementação à medida. A autenticação é tratada como uma dependência comum da entrada no sistema; a análise deste relatório concentra-se sobretudo no que acontece depois dessa identificação, isto é, no controlo de acesso, permissões, auditoria e evolução multiaplicação. Estes princípios são especialmente relevantes num painel multiaplicação, onde permissões e registos de atividade devem manter significado mesmo quando novos domínios funcionais são acrescentados.
 
 \subsection{Autenticação, autorização e separação de responsabilidades}
 
@@ -200,13 +200,13 @@ No projeto, esta recomendação traduz-se em duas camadas complementares. O \tex
 
 A auditoria é uma capacidade central em sistemas internos. Para além de registar que uma entidade mudou de estado, o sistema deve identificar quem executou a ação, quando, sobre que entidade e com que resultado. Este requisito ganha importância em operações financeiras, revisão de conteúdo, gestão de utilizadores e configuração de permissões.
 
-O Stripe Dashboard é um exemplo público de painel que expõe histórico de segurança associado à atividade dos membros da conta \cite{StripeTeams}. No projeto JustCauses, a auditoria foi tratada como uma responsabilidade própria do painel, com registos imutáveis em DynamoDB. Esta opção é compatível com a necessidade de escrita frequente e consulta por eventos. O suporte a \textit{Time to Live} do DynamoDB permite ainda gerir a retenção de registos quando existirem políticas de expiração definidas \cite{DynamoDBTTL}.
+O Stripe Dashboard é um exemplo público de painel que expõe histórico de segurança associado à atividade dos membros da conta \cite{StripeTeams}. No projeto JustCauses, a auditoria foi tratada como uma responsabilidade própria do \textit{backoffice}, com registos imutáveis em DynamoDB. Esta opção é compatível com a necessidade de escrita frequente e consulta por eventos. O suporte a \textit{Time to Live} do DynamoDB permite ainda gerir a retenção de registos quando existirem políticas de expiração definidas \cite{DynamoDBTTL}.
 
 \subsection{Ferramenta genérica ou implementação à medida}
 
 A adoção de uma ferramenta genérica de administração deve ser avaliada de acordo com o grau de especificidade do domínio. Quando o problema consiste sobretudo em listar, criar, editar e remover entidades, soluções configuráveis podem reduzir o esforço inicial. Quando o domínio exige fluxos de aprovação, permissões configuráveis por aplicação e página, auditoria interna e integração com serviços já existentes, a vantagem inicial dessas ferramentas pode ser anulada pelo custo de adaptação.
 
-No caso deste estágio, a implementação à medida não resulta de rejeição das ferramentas existentes. Resulta da combinação de três fatores: a empresa já possuía uma base de código em React e Node.js; o modelo de permissões tinha requisitos próprios; e o painel precisava de evoluir como parte do ecossistema OnlyHighIQ, não como aplicação administrativa isolada. Esta orientação permite que o módulo transversal de administração do próprio \textit{backoffice} seja reutilizado quando novas aplicações forem adicionadas.
+No caso deste estágio, a implementação à medida não resulta de rejeição das ferramentas existentes. Resulta da combinação de três fatores: a empresa já possuía uma base de código em React e Node.js; o modelo de permissões tinha requisitos próprios; e o \textit{backoffice} precisava de evoluir como parte do ecossistema OnlyHighIQ, não como aplicação administrativa isolada. Esta orientação permite que o módulo transversal de administração do próprio \textit{backoffice} seja reutilizado quando novas aplicações forem adicionadas.
 
 %----------------------------------------------------------------------------------------
 
@@ -215,7 +215,7 @@ No caso deste estágio, a implementação à medida não resulta de rejeição d
 
 Algumas tecnologias usadas no projeto não foram escolhidas durante o estágio. React, TypeScript, Node.js, Express, PostgreSQL e \gls{AWS} já faziam parte da base técnica da empresa ou da arquitetura prevista para o ecossistema. Por esse motivo, não faria sentido apresentar uma comparação extensa entre React, Vue e Angular, ou entre Express, FastAPI e Spring Boot, como se a seleção tivesse sido feita de raiz no âmbito deste trabalho.
 
-A decisão relevante foi avaliar se a base existente era adequada para consolidar um painel de administração seguro, evolutivo e preparado para várias aplicações. No \textit{front-end}, React com TypeScript e Vite oferece uma base suficiente para construir interfaces internas com componentes reutilizáveis, rotas protegidas e integração com serviços de autenticação. A menor complexidade visual das páginas torna menos relevante uma comparação profunda entre \textit{frameworks} de interface. O desafio principal não esteve na tecnologia visual, mas na coerência entre navegação, permissões, seleção de aplicação e chamadas à \gls{API}.
+A questão relevante foi perceber se a base existente servia o \textit{backoffice} pretendido. No \textit{front-end}, React com TypeScript e Vite já permitiam criar componentes reutilizáveis, rotas protegidas e integração com serviços de autenticação. Como as páginas não tinham elevada complexidade visual, uma comparação profunda entre \textit{frameworks} de interface teria pouco impacto prático no trabalho. O problema mais importante estava na coerência entre navegação, permissões, seleção de aplicação e chamadas à \gls{API}.
 
 No \textit{back-end}, Node.js com Express e TypeScript permite manter a mesma linguagem entre cliente e servidor, simplificando contratos, tipos e integração com bibliotecas do ecossistema \textit{npm}. A persistência relacional em PostgreSQL é adequada para entidades transacionais da plataforma, enquanto o DynamoDB foi usado para dados de configuração e auditoria. Esta separação evita misturar dados operacionais críticos com registos de eventos e configurações administrativas.
 
@@ -226,21 +226,21 @@ A autenticação assenta no AWS Cognito. A documentação do serviço descreve a
 \section{Análise e seleção da abordagem}
 \label{sec:analise_selecao}
 
-A abordagem adotada no projeto foi manter a base técnica existente e desenvolver o painel à medida. Esta decisão é justificada por quatro motivos principais.
+A opção final foi manter a base técnica da empresa e construir o \textit{backoffice} à medida. Esta escolha teve razões práticas.
 
-Primeiro, o painel precisava de respeitar a arquitetura já existente da empresa. A introdução de uma ferramenta externa de administração obrigaria a adaptar rotas, serviços, componentes e contratos de \gls{API} a uma abstração que não fazia parte da base existente. O benefício seria maior num projeto iniciado de raiz.
+A arquitetura existente já tinha rotas, serviços, componentes e contratos de \gls{API} próprios. Introduzir uma ferramenta externa de administração obrigaria a encaixar esses elementos numa abstração diferente, com ganhos pouco claros para um projeto que não começou do zero.
 
-Segundo, o requisito de autorização era transversal. O sistema não precisava apenas de esconder opções na interface; precisava de validar aplicação, página e ação no servidor, mantendo consistência entre o \textit{front-end}, o \textit{back-end} e a configuração administrativa de permissões.
+A autorização também pesou na decisão. O sistema precisava de validar aplicação, página e ação no servidor, e não apenas esconder opções na interface. Para isso, o \textit{front-end}, o \textit{back-end} e a configuração administrativa tinham de partilhar o mesmo modelo de permissões.
 
-Terceiro, a auditoria era parte do desenho da solução. A rastreabilidade de ações internas e tentativas de acesso negado exigia um modelo próprio, integrado com os serviços e entidades do painel.
+A auditoria exigia a mesma integração. Registar ações internas e acessos negados não era um detalhe acrescentado no fim; fazia parte do desenho da solução e tinha de ficar ligado aos serviços e entidades do \textit{backoffice}.
 
-Por fim, a solução tinha de ser extensível ao ecossistema da OnlyHighIQ. Um painel à medida permite separar módulos transversais, como autenticação, operadores, perfis, permissões e auditoria, de módulos específicos da JustCauses, como campanhas, categorias, transações e levantamentos. Esta separação evita que a primeira aplicação suportada pelo painel condicione a evolução futura do \textit{backoffice}.
+Também pesou o crescimento previsto do ecossistema OnlyHighIQ. Um \textit{backoffice} à medida permite integrar uma autenticação comum e separar módulos transversais, como operadores, perfis, permissões e auditoria, de módulos específicos da JustCauses, como campanhas, categorias, verificações KYC/KYB e indicadores operacionais. Assim, a primeira aplicação suportada não condiciona a evolução futura do \textit{backoffice}.
 
 %----------------------------------------------------------------------------------------
 
 \section{Sumário}
 \label{sec:sumario_cap2}
 
-A análise realizada mostra que o estado da arte dos painéis de administração deve ser observado sobretudo através de capacidades: controlo de acesso, auditoria, fluxos operacionais, integração com dados, manutenibilidade e evolução multiaplicação. A escassez de exemplos públicos completos não invalida a análise; apenas obriga a combinar documentação oficial, padrões observáveis e ferramentas comparáveis.
+A análise do estado da arte foi feita a partir de capacidades observáveis, não de equivalência direta entre produtos. O que mais interessava ao projeto era perceber como outros sistemas tratam controlo de acesso, auditoria, fluxos operacionais, integração com dados, manutenção e evolução para vários domínios. Como os \textit{backoffices} reais raramente expõem todos os seus fluxos, foi necessário cruzar documentação oficial, imagens públicas e ferramentas comparáveis.
 
-Os painéis comerciais, como Shopify Admin e Stripe Dashboard, mostram padrões relevantes de gestão de operadores, permissões e histórico de atividade, mas não são adaptáveis ao domínio do projeto. Ferramentas configuráveis como Directus e Appsmith podem acelerar a criação de ferramentas internas, mas tornam-se menos adequadas quando o domínio exige regras próprias de autorização, auditoria e evolução arquitetural. Neste contexto, a implementação à medida sobre a base React, Node.js, PostgreSQL e AWS já existente foi a opção mais coerente, porque permite tratar a JustCauses como primeira aplicação integrada e não como limite definitivo do \textit{backoffice}. Esta síntese fundamenta as decisões de análise e desenho apresentadas no capítulo seguinte.
+Shopify Admin e Stripe Dashboard ajudaram a observar práticas de gestão de operadores, permissões e histórico de atividade, mas pertencem a produtos fechados. Directus e Appsmith mostram caminhos mais rápidos para criar ferramentas internas, embora se tornem menos adequados quando o domínio exige regras próprias de autorização, auditoria e evolução arquitetural. No contexto da OnlyHighIQ, fez mais sentido manter a base React, Node.js, PostgreSQL e AWS existente e construir uma solução própria, tratando a JustCauses como primeira aplicação integrada e não como limite definitivo do \textit{backoffice}.

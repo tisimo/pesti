@@ -7,17 +7,16 @@
 \contentsline {table}{\numberline {2.2}{\ignorespaces Comparação de exemplos de painéis de administração}}{13}{table.caption.44}%
 \addvspace {10\p@ }
 \contentsline {table}{\numberline {3.1}{\ignorespaces Relação entre objetivos e requisitos}}{19}{table.caption.54}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces Principais entidades do modelo de aplicação}}{21}{table.caption.57}%
-\contentsline {table}{\numberline {3.3}{\ignorespaces Serviços AWS e respetivo papel na solução}}{26}{table.caption.66}%
-\contentsline {table}{\numberline {3.4}{\ignorespaces Tabelas administrativas do backoffice em DynamoDB}}{37}{table.caption.86}%
-\contentsline {table}{\numberline {3.5}{\ignorespaces Camadas de aplicação do modelo de autorização}}{39}{table.caption.88}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Principais entidades do modelo de aplicação}}{21}{table.3.2}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Serviços AWS e respetivo papel na solução}}{32}{table.caption.72}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Tabelas administrativas do backoffice em DynamoDB}}{41}{table.caption.83}%
+\contentsline {table}{\numberline {3.5}{\ignorespaces Camadas de aplicação do modelo de autorização}}{42}{table.caption.85}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces E-mails transacionais acionados por operações administrativas}}{49}{table.caption.208}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces Evidências visuais usadas no Capítulo 4}}{51}{table.caption.211}%
-\contentsline {table}{\numberline {4.3}{\ignorespaces Cenários de validação manual da solução}}{59}{table.caption.228}%
-\contentsline {table}{\numberline {4.4}{\ignorespaces Caracterização dos testes automatizados de qualidade}}{61}{table.caption.231}%
-\contentsline {table}{\numberline {4.5}{\ignorespaces Critérios complementares de avaliação da solução}}{63}{table.caption.270}%
-\contentsline {table}{\numberline {4.6}{\ignorespaces Estado de implementação por eixo funcional}}{64}{table.caption.272}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces E-mails transacionais acionados por operações administrativas}}{51}{table.caption.230}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Cenários de validação manual da solução}}{61}{table.caption.271}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Caracterização dos testes automatizados de qualidade}}{63}{table.caption.274}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Critérios complementares de avaliação da solução}}{65}{table.caption.314}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces Estado de implementação por eixo funcional}}{66}{table.caption.316}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Grau de concretização dos objetivos}}{67}{table.caption.276}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Grau de concretização dos objetivos}}{68}{table.caption.320}%
 \addvspace {10\p@ }

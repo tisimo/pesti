@@ -1,0 +1,78 @@
+@startuml frontend-process-view
+title Frontend Process View\nLevel 3
+
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam backgroundColor white
+skinparam sequenceMessageAlign center
+skinparam sequenceArrowThickness 1.5
+skinparam participantPadding 3
+skinparam BoxPadding 3
+skinparam maxMessageSize 55
+skinparam sequence {
+    FontSize 9
+    ParticipantFontSize 9
+}
+hide footbox
+
+actor "UI" as UI
+participant "React Router" as Router
+participant "ProtectedRoutes" as Protected
+participant "UnauthorizedRoutes" as Unauthorized
+participant "Pages" as Pages
+participant "Components" as Components
+participant "AxiosService" as Axios
+participant "AWS Cognito" as Cognito
+participant "Backend API" as Backend
+
+UI -> Router : navigate
+activate Router
+Router -> Protected : resolve route
+activate Protected
+Protected -> Cognito : validate session
+activate Cognito
+Cognito --> Protected : session
+deactivate Cognito
+
+Protected -> Axios : access context
+activate Axios
+Axios -> Backend : GET /api/users/me
+activate Backend
+Backend --> Axios : access data
+deactivate Backend
+Axios --> Protected : context
+deactivate Axios
+
+alt route is authorized
+    Protected -> Pages : render page
+    activate Pages
+    Pages -> Components : render
+    activate Components
+    Components --> Pages : view parts
+    deactivate Components
+
+    Pages -> Axios : load data
+    activate Axios
+    Axios -> Backend : page request
+    activate Backend
+    Backend --> Axios : page data
+    deactivate Backend
+    Axios --> Pages : page data
+    deactivate Axios
+
+    Pages --> Protected : authorized page
+    deactivate Pages
+    Protected --> Router : allowed view
+else route is not authorized
+    Protected -> Unauthorized : access denied
+    activate Unauthorized
+    Unauthorized --> Protected : denied view
+    deactivate Unauthorized
+    Protected --> Router : denied view
+end
+
+deactivate Protected
+Router --> UI : display view
+deactivate Router
+
+@enduml

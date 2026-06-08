@@ -1,22 +1,50 @@
 \babel@toc {portuguese}{}\relax 
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Interface de gestão de encomendas do Shopify Admin \blx@tocontentsinit {0}\cite {ShopifyAbout}}}{8}{figure.caption.24}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Interface de gestão de transações do Stripe Dashboard \blx@tocontentsinit {0}\cite {StripeDashboard}}}{9}{figure.caption.28}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Interface de gestão de dados do Directus \blx@tocontentsinit {0}\cite {DirectusAbout}}}{11}{figure.caption.32}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Interface de construção de ferramentas internas no Appsmith \blx@tocontentsinit {0}\cite {AppsmithAbout}}}{12}{figure.caption.36}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Interface de gestão de encomendas do Shopify Admin \blx@tocontentsinit {0}\cite {ShopifyAbout}}}{9}{figure.caption.28}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Interface de gestão de transações do Stripe Dashboard \blx@tocontentsinit {0}\cite {StripeDashboard}}}{10}{figure.caption.32}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Interface de gestão de dados do Directus \blx@tocontentsinit {0}\cite {DirectusAbout}}}{11}{figure.caption.36}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Interface de construção de ferramentas internas no Appsmith \blx@tocontentsinit {0}\cite {AppsmithAbout}}}{12}{figure.caption.40}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Diagrama de contentores --- C4 Nível 2}}{26}{figure.caption.74}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Diagrama de componentes do \textit {back-end} --- C4 Nível 3}}{27}{figure.caption.76}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Diagrama de componentes do \textit {front-end} --- C4 Nível 3}}{28}{figure.caption.77}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces SSD --- Autenticação (BOSH-26)}}{32}{figure.caption.90}%
-\contentsline {figure}{\numberline {3.5}{\ignorespaces SSD --- Revisão de campanhas (BOSH-1)}}{33}{figure.caption.92}%
-\contentsline {figure}{\numberline {3.6}{\ignorespaces SSD --- Gestão de categorias (BOSH-7)}}{34}{figure.caption.94}%
-\contentsline {figure}{\numberline {3.7}{\ignorespaces SSD --- Aprovação de levantamentos (BOSH-5)}}{35}{figure.caption.96}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Modelo de domínio do backoffice e da JustCauses}}{22}{figure.caption.58}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Diagrama de contexto: C4 Nível 1}}{23}{figure.caption.61}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces SSD de Nível 1: acesso e autorização inicial}}{24}{figure.caption.63}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces SSD de Nível 1: revisão de campanha}}{25}{figure.caption.64}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Diagrama de contentores: C4 Nível 2}}{26}{figure.caption.66}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Vista de implementação: Nível 2}}{27}{figure.caption.68}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Vista de processo: Nível 2}}{28}{figure.caption.70}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Vista física da infraestrutura AWS do backoffice}}{29}{figure.caption.72}%
+\contentsline {figure}{\numberline {3.9}{\ignorespaces Diagrama de componentes do \textit {back-end}: C4 Nível 3}}{33}{figure.caption.76}%
+\contentsline {figure}{\numberline {3.10}{\ignorespaces Vista de implementação por camadas}}{34}{figure.caption.77}%
+\contentsline {figure}{\numberline {3.11}{\ignorespaces Vista de processo do \textit {back-end}: Nível 3}}{35}{figure.caption.78}%
+\contentsline {figure}{\numberline {3.12}{\ignorespaces Diagrama de componentes do \textit {front-end}: C4 Nível 3}}{36}{figure.caption.80}%
+\contentsline {figure}{\numberline {3.13}{\ignorespaces Vista de processo do \textit {front-end}: Nível 3}}{37}{figure.caption.81}%
+\contentsline {figure}{\numberline {3.14}{\ignorespaces Modelo de dados administrativo do backoffice}}{38}{figure.caption.83}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Seletor de aplicações disponível após autenticação}}{53}{figure.caption.210}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Atribuição de perfis a um operador interno}}{54}{figure.caption.211}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Permissões filtradas pela aplicação do perfil}}{54}{figure.caption.212}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Configuração administrativa dos \textit {page gates}}}{55}{figure.caption.213}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Vista de atividade individual de um operador}}{55}{figure.caption.214}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Vista geral de uma \textit {thread} de revisão de campanha}}{56}{figure.caption.215}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Comparação de elementos multimédia numa revisão de campanha}}{56}{figure.caption.216}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Comparação do modal de campanha com e sem permissões de ação}}{57}{figure.caption.217}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces E-mail transacional enviado após pedido de alterações}}{57}{figure.caption.218}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Gestão de categorias da JustCauses}}{58}{figure.caption.219}%
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Fila de verificação KYC de utilizadores individuais}}{58}{figure.caption.220}%
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Comparação entre perfil e dados de verificação KYC}}{59}{figure.caption.221}%
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Organizações da JustCauses sujeitas a verificação KYB}}{59}{figure.caption.222}%
+\contentsline {figure}{\numberline {4.14}{\ignorespaces Submissão documental KYB de uma organização}}{60}{figure.caption.223}%
+\contentsline {figure}{\numberline {4.15}{\ignorespaces Validação manual de acesso negado a página protegida}}{62}{figure.caption.227}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\addvspace {10\p@ }
-\contentsline {figure}{\numberline {A.1}{\ignorespaces SSD detalhado --- Autenticação (BOSH-26)}}{56}{figure.caption.169}%
-\contentsline {figure}{\numberline {A.2}{\ignorespaces SSD detalhado --- Revisão de campanhas (BOSH-1)}}{57}{figure.caption.171}%
-\contentsline {figure}{\numberline {A.3}{\ignorespaces SSD detalhado --- Gestão de categorias (BOSH-7)}}{58}{figure.caption.173}%
-\contentsline {figure}{\numberline {A.4}{\ignorespaces SSD detalhado --- Aprovação de levantamentos (BOSH-5)}}{59}{figure.caption.175}%
+\contentsline {figure}{\numberline {A.1}{\ignorespaces SD detalhado: autenticação e resolução inicial do operador}}{76}{figure.caption.282}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces SD detalhado: criação de operador administrativo}}{77}{figure.caption.284}%
+\contentsline {figure}{\numberline {A.3}{\ignorespaces SD detalhado: atribuição de perfis a um operador}}{78}{figure.caption.286}%
+\contentsline {figure}{\numberline {A.4}{\ignorespaces SD detalhado: carregamento e edição de perfis e permissões}}{79}{figure.caption.288}%
+\contentsline {figure}{\numberline {A.5}{\ignorespaces SD detalhado: configuração administrativa de page gates}}{80}{figure.caption.290}%
+\contentsline {figure}{\numberline {A.6}{\ignorespaces SD detalhado: agregação de atividade de um operador}}{81}{figure.caption.292}%
+\contentsline {figure}{\numberline {A.7}{\ignorespaces SD detalhado: thread de revisão de campanha com notificação e e-mail}}{82}{figure.caption.294}%
+\contentsline {figure}{\numberline {A.8}{\ignorespaces SD detalhado: gestão de categorias}}{83}{figure.caption.296}%
+\contentsline {figure}{\numberline {A.9}{\ignorespaces SD detalhado: verificação KYC de utilizadores individuais}}{84}{figure.caption.298}%
+\contentsline {figure}{\numberline {A.10}{\ignorespaces SD detalhado: verificação KYB de organizações}}{85}{figure.caption.300}%

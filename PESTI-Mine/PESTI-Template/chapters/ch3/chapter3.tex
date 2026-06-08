@@ -1,7 +1,7 @@
 \chapter{Análise e Desenho da Solução}
 \label{cap:analise_desenho}
 
-Neste capítulo descreve-se o processo de análise e o desenho da solução desenvolvida. Começa-se pelos requisitos, organizados segundo a abordagem \gls{FURPS+}, onde a dimensão \textit{Functionality} agrupa os requisitos funcionais e as restantes dimensões cobrem as propriedades de qualidade não funcionais. Em seguida, apresenta-se a análise do domínio que a solução tem de suportar, incluindo o modelo de aplicação e o modelo de domínio. A arquitetura é depois descrita com recurso à abordagem C4+1, combinando os níveis principais do modelo C4 \cite{C4Model} com uma vista física da infraestrutura. Por fim, apresentam-se o modelo de dados administrativo e o modelo de permissões que sustentam a autorização multiaplicação.
+Neste capítulo descreve-se o processo de análise e o desenho da solução desenvolvida. Começa-se pelos requisitos, organizados segundo a abordagem \gls{FURPS+}: a dimensão de Funcionalidade agrupa os requisitos funcionais e as restantes dimensões cobrem propriedades de qualidade não funcionais. Em seguida, apresenta-se a análise do domínio que a solução tem de suportar, incluindo o núcleo administrativo do backoffice, o módulo operacional da JustCauses e o domínio partilhado do ecossistema. A arquitetura é depois descrita com recurso ao modelo C4 \cite{C4Model}, complementado por vistas de implementação, processo e infraestrutura. Por fim, apresentam-se o modelo de dados administrativo e o modelo de permissões que sustentam a autorização multiaplicação.
 
 %----------------------------------------------------------------------------------------
 
@@ -11,43 +11,43 @@ Neste capítulo descreve-se o processo de análise e o desenho da solução dese
 Os requisitos da solução foram levantados a partir da especificação interna da empresa \cite{BackofficeSpec} e das discussões realizadas durante a fase de integração com a equipa. Para os organizar, adotou-se a abordagem \gls{FURPS+}, que classifica os requisitos de software em cinco dimensões principais, acrescentando ainda restrições adicionais de desenho, implementação ou operação \cite{Rashid2024FURPSMoSCoW}:
 
 \begin{itemize}
-  \item \textit{Functionality}: capacidades funcionais que o sistema deve disponibilizar.
-  \item \textit{Usability}: aspetos da interface que afetam a utilização por operadores internos.
-  \item \textit{Reliability}: capacidade de manter integridade, disponibilidade e comportamento previsível perante falhas ou operações inválidas.
-  \item \textit{Performance}: tempos de resposta, carregamento inicial e impacto das operações sobre os recursos do sistema.
-  \item \textit{Supportability}: manutenibilidade, testabilidade, modularidade e capacidade de adaptação da solução.
+  \item \textit{Funcionalidade}: capacidades funcionais que o sistema deve disponibilizar.
+  \item \textit{Usabilidade}: aspetos da interface que afetam a utilização por operadores internos.
+  \item \textit{Fiabilidade}: capacidade de manter integridade, disponibilidade e comportamento previsível perante falhas ou operações inválidas.
+  \item \textit{Desempenho}: tempos de resposta, carregamento inicial e impacto das operações sobre os recursos do sistema.
+  \item \textit{Suportabilidade}: manutenibilidade, testabilidade, modularidade e capacidade de adaptação da solução.
 \end{itemize}
 
-\noindent\textbf{Functionality}
+\noindent\textbf{Funcionalidade}
 
-Em vez de detalhar cada fluxo operacional isoladamente, os requisitos funcionais privilegiam aquilo que o sistema precisa de garantir para ser seguro, utilizável e evolutivo no contexto do ecossistema OnlyHighIQ. A organização seguinte relaciona-os com os objetivos definidos na introdução, usando o objetivo principal (OP) e os objetivos específicos OE1.1 a OE1.5 e OE2.1 a OE2.5.
+Os requisitos funcionais foram agrupados por responsabilidade para evitar uma lista excessivamente fragmentada de fluxos. Esta organização evidencia aquilo que o sistema tem de garantir para ser seguro, utilizável e evolutivo no contexto do ecossistema OnlyHighIQ, relacionando cada grupo com o objetivo principal (OP) e com os objetivos específicos OE1.1 a OE1.5 e OE2.1 a OE2.5 definidos na introdução.
 
-\medskip\noindent\textit{Autenticação, autorização e administração}: este grupo concretiza sobretudo os objetivos OE1.1, OE1.2 e OE1.3, porque define a base comum de identidade, autorização e gestão de operadores reutilizável por várias aplicações.
+\medskip\noindent\textit{Identidade autenticada, autorização e administração}: este grupo concretiza sobretudo os objetivos OE1.1, OE1.2 e OE1.3, porque define a ligação entre a identidade autenticada e a base comum de autorização e gestão de operadores reutilizável por várias aplicações.
 
 \begin{itemize}
-  \item \textbf{RF01}: o painel deve autenticar operadores internos através do AWS Cognito, com gestão de sessão e suporte a \gls{MFA}.
-  \item \textbf{RF02}: após a autenticação, o sistema deve resolver o contexto interno do operador, incluindo perfis atribuídos, aplicações acessíveis e permissões efetivas.
-  \item \textbf{RF03}: o acesso ao backoffice de gestão e ao painel operacional da JustCauses deve ser separado por aplicação, impedindo a entrada em áreas não autorizadas.
+  \item \textbf{RF01}: o backoffice deve integrar a autenticação de operadores internos através do AWS Cognito, com gestão de sessão e suporte a \gls{MFA}, como mecanismo comum de identificação.
+  \item \textbf{RF02}: após a autenticação, o sistema deve resolver o contexto interno de autorização do operador, incluindo estado da conta, perfis atribuídos, aplicações acessíveis e permissões efetivas.
+  \item \textbf{RF03}: o acesso ao backoffice de gestão e ao módulo operacional da JustCauses deve ser separado por aplicação, impedindo a entrada em áreas não autorizadas.
   \item \textbf{RF04}: o sistema deve controlar o acesso a páginas com base em guardas de rota e em regras configuráveis por página.
   \item \textbf{RF05}: as permissões exigidas por cada página devem poder ser alteradas sem nova publicação da aplicação.
   \item \textbf{RF06}: todos os endpoints sensíveis da \gls{API} devem validar permissões no servidor antes de executar qualquer operação.
-  \item \textbf{RF07}: o painel deve disponibilizar mecanismos de gestão administrativa para contas internas, perfis de acesso, permissões por aplicação e configuração do modelo de autorização.
+  \item \textbf{RF07}: o backoffice deve disponibilizar mecanismos de gestão administrativa para contas internas, perfis de acesso, permissões por aplicação e configuração do modelo de autorização.
 \end{itemize}
 
 \medskip\noindent\textit{Operação da plataforma}: este grupo concretiza sobretudo os objetivos OE2.1 a OE2.5, aplicando a estrutura comum à primeira aplicação integrada no ecossistema.
 
 \begin{itemize}
-  \item \textbf{RF08}: o painel deve disponibilizar um \textit{dashboard} com métricas operacionais relevantes e indicadores de atividade da plataforma.
-  \item \textbf{RF09}: o painel deve suportar a revisão do ciclo de vida das campanhas, incluindo estados de aprovação, rejeição e pedido de alterações.
-  \item \textbf{RF10}: o painel deve permitir criar, editar e desativar categorias de campanhas.
-  \item \textbf{RF11}: o painel deve suportar a verificação \gls{KYC} de utilizadores individuais e a verificação \gls{KYB} de organizações, incluindo consulta de dados submetidos, decisão administrativa, notificação e auditoria.
+  \item \textbf{RF08}: o backoffice deve disponibilizar um \textit{dashboard} com métricas operacionais relevantes e indicadores de atividade da plataforma.
+  \item \textbf{RF09}: o backoffice deve suportar a revisão do ciclo de vida das campanhas, incluindo estados de aprovação, rejeição e pedido de alterações.
+  \item \textbf{RF10}: o backoffice deve permitir criar, editar e desativar categorias de campanhas.
+  \item \textbf{RF11}: o backoffice deve suportar a verificação \gls{KYC} de utilizadores individuais e a verificação \gls{KYB} de organizações, incluindo consulta de dados submetidos, decisão administrativa, notificação e auditoria.
   \item \textbf{RF12}: a arquitetura deve permitir incorporar outros fluxos operacionais do ecossistema sem alterar o núcleo do mecanismo de autorização.
 \end{itemize}
 
 \medskip\noindent\textit{Rastreabilidade}: este grupo apoia simultaneamente o OP e o OE1.4, uma vez que a auditoria é uma capacidade transversal necessária para administrar aplicações internas com responsabilização.
 
 \begin{itemize}
-  \item \textbf{RF13}: o painel deve manter um registo imutável das ações relevantes e das tentativas de acesso negado, consultável por filtros de data, operador e tipo de evento.
+  \item \textbf{RF13}: o backoffice deve manter um registo imutável das ações relevantes e das tentativas de acesso negado, consultável por filtros de data, operador e tipo de evento.
 \end{itemize}
 
 A Tabela~\ref{tab:mapeamento_objetivos_requisitos} resume a relação entre objetivos e requisitos.
@@ -61,7 +61,7 @@ A Tabela~\ref{tab:mapeamento_objetivos_requisitos} resume a relação entre obje
 \hline
 \textbf{Objetivo} & \textbf{Foco} & \textbf{Requisitos associados} \\ \hline
 OP & Base comum de backoffice multiaplicação & RF01 a RF13 e RNF01 a RNF16 \\ \hline
-OE1.1 & Autenticação e contexto administrativo do operador & RF01, RF02, RNF04 \\ \hline
+OE1.1 & Integração da identidade autenticada com o contexto de autorização & RF02, com RF01 e RNF04 como pré-condições de identidade e segurança \\ \hline
 OE1.2 & Perfis e permissões por aplicação & RF03, RF07, RNF05, RNF14 \\ \hline
 OE1.3 & Controlo de acesso em aplicação, página, interface e \gls{API} & RF04, RF05, RF06, RNF12 \\ \hline
 OE1.4 & Auditoria, acessos negados e atividade dos operadores & RF13, RNF06, RNF10 \\ \hline
@@ -75,36 +75,36 @@ OE2.5 & Verificação de identidade e oficialidade & RF11, RF13 \\ \hline
 \end{center}
 \end{table}
 
-\noindent\textbf{Usability}
+\noindent\textbf{Usabilidade}
 \begin{itemize}
   \item \textbf{RNF01}: a interface deve ser utilizável por operadores sem formação técnica, com navegação clara entre módulos e separação visível entre aplicações.
   \item \textbf{RNF02}: ações indisponíveis para o operador devem ser omitidas ou bloqueadas de forma explícita, para que a interface não sugira operações não autorizadas.
   \item \textbf{RNF03}: operações críticas devem apresentar mensagens claras de confirmação, erro ou acesso negado.
 \end{itemize}
 
-\noindent\textbf{Reliability}
+\noindent\textbf{Fiabilidade}
 \begin{itemize}
-  \item \textbf{RNF04}: toda a comunicação deve ser feita sobre HTTPS, com autenticação obrigatória nos pontos de entrada do painel e suporte a \gls{MFA} via AWS Cognito.
+  \item \textbf{RNF04}: toda a comunicação deve ser feita sobre HTTPS, com autenticação obrigatória nos pontos de entrada do backoffice e suporte a \gls{MFA} via AWS Cognito.
   \item \textbf{RNF05}: as validações de servidor devem rejeitar operações que violem o modelo de autorização, incluindo permissões associadas à aplicação errada ou múltiplos perfis da mesma aplicação.
   \item \textbf{RNF06}: os registos de auditoria devem ser imutáveis e associados a exatamente um operador interno, evitando registos anónimos no contexto administrativo.
   \item \textbf{RNF07}: o sistema deve utilizar os mecanismos de disponibilidade e monitorização da infraestrutura AWS, nomeadamente CloudWatch para observabilidade.
 \end{itemize}
 
-\noindent\textbf{Performance}
+\noindent\textbf{Desempenho}
 \begin{itemize}
   \item \textbf{RNF08}: as respostas da \gls{API} para operações de leitura devem ter uma latência inferior a 500 ms em condições normais.
-  \item \textbf{RNF09}: o carregamento inicial do painel deve ocorrer em menos de 3 segundos em condições normais de utilização.
+  \item \textbf{RNF09}: o carregamento inicial do backoffice deve ocorrer em menos de 3 segundos em condições normais de utilização.
   \item \textbf{RNF10}: o módulo de auditoria deve absorver picos de escrita sem degradar o desempenho da base relacional usada pelos dados operacionais da JustCauses.
 \end{itemize}
 
-\noindent\textbf{Supportability}
+\noindent\textbf{Suportabilidade}
 \begin{itemize}
   \item \textbf{RNF11}: o código deve manter separação clara entre interface, rotas, controladores, serviços, repositórios e configuração de infraestrutura.
   \item \textbf{RNF12}: a configuração de \textit{page gates}, isto é, regras de acesso por página, deve poder ser alterada sem nova publicação da aplicação, permitindo adaptar acessos por aplicação e por página.
   \item \textbf{RNF13}: a solução deve manter contratos de \gls{API} estáveis e identificadores de interface adequados à validação manual e aos testes de qualidade existentes.
 \end{itemize}
 
-\noindent\textbf{+ Escalabilidade e restrições}
+\noindent\textbf{Restrições adicionais e escalabilidade}
 \begin{itemize}
   \item \textbf{RNF14}: o modelo de autorização deve permitir acrescentar futuras aplicações sem redesenhar o núcleo do backoffice, recorrendo a perfis e permissões associados a cada aplicação.
   \item \textbf{RNF15}: operadores, perfis, permissões, \textit{page gates} e auditoria devem permanecer separados dos dados transacionais da JustCauses.
@@ -116,48 +116,53 @@ OE2.5 & Verificação de identidade e oficialidade & RF11, RF13 \\ \hline
 \section{Análise}
 \label{sec:analise_dominio}
 
-O painel de administração opera sobre dois níveis de domínio. O primeiro corresponde aos conceitos transversais do próprio backoffice, como operador interno, aplicação, perfil de acesso, permissão e registo de auditoria. O segundo corresponde ao domínio operacional da JustCauses, que é a primeira aplicação integrada no sistema. Esta distinção é importante porque o relatório não descreve apenas um painel isolado da JustCauses: descreve uma base de administração multiaplicação, onde a JustCauses é o primeiro caso operacional completo.
+O backoffice opera sobre três áreas conceptuais que devem ser lidas em conjunto, mas não confundidas. A primeira é o núcleo do backoffice, responsável por operadores internos, aplicações, perfis, permissões, \textit{page gates} e auditoria. A segunda é o módulo operacional da JustCauses, primeira aplicação real integrada no backoffice, onde surgem campanhas, categorias, verificações, organizações e outros fluxos de operação. A terceira é o domínio partilhado do ecossistema, identificado tecnicamente como \textit{Shared}, que contém dados comuns usados por várias aplicações, como contas, perfis, carteiras e movimentos financeiros.
+
+Esta separação responde a um problema de desenho importante. O \textit{Shared} não é um terceiro backoffice nem uma área de interface autónoma; é um domínio de suporte comum ao ecossistema OnlyHighIQ. A sua existência explica porque a arquitetura distingue a base relacional da JustCauses, a base relacional partilhada e a persistência administrativa do backoffice. Assim, o núcleo administrativo pode evoluir para novas aplicações sem absorver dados de negócio específicos, e a JustCauses pode usar entidades partilhadas sem que estas pertençam ao modelo interno de permissões e auditoria.
 
 \subsection{Modelo de aplicação}
 \label{subsec:modelo_aplicacao}
 
-O modelo de aplicação traduz os conceitos de domínio que a arquitetura precisa de suportar. No estado atual existem duas áreas funcionais: o backoffice transversal, usado para administração interna, e a JustCauses, primeira aplicação operacional integrada. A Tabela~\ref{tab:entidades_dominio} apresenta as principais entidades e o seu papel.
+O modelo de aplicação traduz os conceitos de domínio que a arquitetura precisa de suportar. A Tabela~\ref{tab:entidades_dominio} organiza as principais entidades por área funcional, para evitar que conceitos transversais, operacionais e partilhados sejam apresentados ao mesmo nível. Esta organização também antecipa a arquitetura: o núcleo do backoffice é persistido em DynamoDB, o módulo JustCauses usa dados relacionais próprios, e o domínio \textit{Shared} representa dados comuns do ecossistema acedidos através da \gls{API}.
 
-\begin{table}[H]
+\begingroup
+\small
+\begin{longtable}{|p{2.8cm}|p{3.2cm}|p{7cm}|}
 \caption{Principais entidades do modelo de aplicação}
-\label{tab:entidades_dominio}
-\begin{center}
-\footnotesize
-\begin{tabular}{|l|p{9cm}|}
+\label{tab:entidades_dominio}\\
 \hline
-\textbf{Entidade} & \textbf{Descrição} \\ \hline
-Aplicação         & Área funcional administrada pelo backoffice. No estado atual, existem o backoffice transversal e a aplicação JustCauses, estando o modelo preparado para futuras aplicações. \\ \hline
-Operador interno  & Utilizador autorizado a aceder ao backoffice, autenticado via Cognito e associado internamente a perfis de acesso. \\ \hline
-Perfil de acesso  & Conjunto de permissões associado a uma aplicação. Um operador pode ter, no máximo, um perfil por aplicação, exceto quando tem um perfil global de backoffice. \\ \hline
-Permissão         & Capacidade granular que autoriza uma ação ou consulta. Cada permissão pertence a uma aplicação e só pode ser atribuída a perfis dessa aplicação. \\ \hline
-\textit{Page gate} & Configuração que define que permissões permitem abrir uma página do backoffice ou de uma aplicação integrada. \\ \hline
-Registo de auditoria & Entrada imutável que documenta uma ação de um operador sobre uma entidade crítica da plataforma, com marca temporal e identificação do responsável. \\ \hline
-Utilizador individual & Conta pessoal registada na plataforma JustCauses, com perfil próprio, estado de conta e processo de verificação de identidade associado. \\ \hline
-Organização       & Perfil coletivo que pode criar campanhas em nome de uma entidade, com dados de identificação, estado operacional e processo de verificação próprio (\gls{KYB}). \\ \hline
-Criador           & Abstração usada para representar quem submete campanhas na JustCauses. Pode corresponder a um utilizador individual ou a uma organização, consoante a natureza do perfil. \\ \hline
-Campanha          & Projeto de angariação de fundos submetido por um criador, com ciclo de vida acompanhado pelo painel. \\ \hline
-Thread de revisão & Sequência de revisão associada a uma campanha ou alteração submetida, permitindo ao operador aprovar, rejeitar ou pedir correções sem perder o histórico da decisão. \\ \hline
-Categoria         & Etiqueta temática associada a campanhas, gerida exclusivamente pelo painel de administração. \\ \hline
-Doação            & Contribuição financeira de um utilizador para uma campanha, consultável para acompanhamento operacional. \\ \hline
-Depósito          & Entrada financeira no sistema partilhado de pagamentos, usada para acompanhar fundos recebidos antes da sua distribuição operacional. \\ \hline
-Transação         & Movimento financeiro registado no sistema, incluindo pagamentos, transferências e outros eventos relevantes para rastreabilidade financeira. \\ \hline
-Levantamento      & Pedido de transferência dos fundos angariados por um criador, sujeito a validação e aprovação manual pelo operador. \\ \hline
-Verificação KYC   & Processo de validação de identidade de um utilizador individual, comparando dados do perfil com dados de verificação recebidos do fornecedor externo. \\ \hline
-Submissão KYB     & Conjunto de documentos e decisão administrativa usados para validar a oficialidade de uma organização e a representação associada. \\ \hline
-Documento de verificação & Ficheiro submetido no âmbito de \gls{KYC} ou \gls{KYB}, armazenado externamente e consultado pelo operador quando necessário para a decisão. \\ \hline
-Denúncia          & Reporte de conteúdo inadequado submetido por um utilizador para revisão pelo operador do painel. \\ \hline
-\end{tabular}
-\end{center}
-\end{table}
+\textbf{Área funcional} & \textbf{Entidade} & \textbf{Descrição} \\ \hline
+\endfirsthead
+\caption[]{Principais entidades do modelo de aplicação (continuação)}\\
+\hline
+\textbf{Área funcional} & \textbf{Entidade} & \textbf{Descrição} \\ \hline
+\endhead
+\hline
+\endfoot
+Núcleo do backoffice & Aplicação & Área funcional administrada pelo backoffice. No estado atual existem o backoffice transversal e a aplicação JustCauses, mantendo o modelo preparado para futuras aplicações. \\ \hline
+Núcleo do backoffice & Operador interno & Utilizador autorizado a aceder ao backoffice, autenticado via Cognito e associado internamente a perfis de acesso. \\ \hline
+Núcleo do backoffice & Perfil de acesso & Conjunto de permissões associado a uma aplicação. Um operador pode ter, no máximo, um perfil por aplicação, exceto quando tem um perfil global de backoffice. \\ \hline
+Núcleo do backoffice & Permissão & Capacidade granular que autoriza uma ação ou consulta. Cada permissão pertence a uma aplicação e só pode ser atribuída a perfis dessa aplicação. \\ \hline
+Núcleo do backoffice & \textit{Page gate} & Configuração que define que permissões permitem abrir uma página do backoffice ou de uma aplicação integrada. \\ \hline
+Núcleo do backoffice & Registo de auditoria & Entrada imutável que documenta uma ação de um operador sobre uma entidade crítica da plataforma, com marca temporal e identificação do responsável. \\ \hline
+Módulo JustCauses & Utilizador individual & Conta pessoal registada na JustCauses, com perfil próprio, estado de conta e processo de verificação de identidade associado. \\ \hline
+Módulo JustCauses & Organização & Perfil coletivo que pode criar campanhas em nome de uma entidade, com dados de identificação, estado operacional e processo de verificação próprio (\gls{KYB}). \\ \hline
+Módulo JustCauses & Criador & Abstração usada para representar quem submete campanhas. Pode corresponder a um utilizador individual ou a uma organização, consoante a natureza do perfil. \\ \hline
+Módulo JustCauses & Campanha & Projeto de angariação de fundos submetido por um criador, com ciclo de vida acompanhado pelo backoffice. \\ \hline
+Módulo JustCauses & Thread de revisão & Sequência de revisão associada a uma campanha ou alteração submetida, permitindo aprovar, rejeitar ou pedir correções sem perder o histórico da decisão. \\ \hline
+Módulo JustCauses & Categoria & Etiqueta temática associada a campanhas, gerida pelo backoffice para estruturar a navegação e a classificação dos projetos. \\ \hline
+Módulo JustCauses & Verificação KYC & Processo de validação de identidade de um utilizador individual, comparando dados do perfil com dados de verificação recebidos do fornecedor externo. \\ \hline
+Módulo JustCauses & Submissão KYB & Conjunto de documentos e decisão administrativa usados para validar a oficialidade de uma organização e a representação associada. \\ \hline
+Módulo JustCauses & Documento de verificação & Ficheiro submetido no âmbito de \gls{KYC} ou \gls{KYB}, armazenado externamente e consultado pelo operador quando necessário para a decisão. \\ \hline
+Módulo JustCauses & Denúncia & Reporte de conteúdo inadequado submetido por um utilizador para revisão pelo operador do backoffice. \\ \hline
+Domínio partilhado (\textit{Shared}) & Conta e perfil partilhado & Informação comum de identidade e perfil usada pelo ecossistema OnlyHighIQ e consumida pelos módulos operacionais quando necessário. \\ \hline
+Domínio partilhado (\textit{Shared}) & Carteira e movimentos partilhados & Estruturas comuns para acompanhar carteiras e movimentos associados ao ecossistema. Estes dados contextualizam operações da JustCauses, mas não pertencem ao núcleo administrativo do backoffice. \\ \hline
+\end{longtable}
+\endgroup
 
-Depois da Tabela~\ref{tab:entidades_dominio}, o aspeto essencial é a separação entre conceitos transversais e conceitos específicos da JustCauses. Aplicação, operador, perfil, permissão, \textit{page gate} e auditoria são reutilizáveis; utilizadores individuais, organizações, criadores, campanhas, threads de revisão, categorias, doações, depósitos, transações, levantamentos e verificações pertencem ao domínio operacional da JustCauses. O conceito de criador evita duplicar regras entre pessoas e organizações: ambos podem submeter campanhas, mas a validação que lhes é aplicável é diferente. Os utilizadores individuais são avaliados por \gls{KYC}; as organizações são avaliadas por \gls{KYB}. Esta distinção também ajuda a perceber porque é que a arquitetura não deve misturar a configuração do backoffice com os dados de negócio de cada aplicação integrada.
+Depois da Tabela~\ref{tab:entidades_dominio}, o aspeto essencial é a separação entre conceitos transversais, conceitos operacionais da JustCauses e dados partilhados do ecossistema. Aplicação, operador, perfil, permissão, \textit{page gate} e auditoria são reutilizáveis. Utilizadores individuais, organizações, criadores, campanhas, threads de revisão, categorias e verificações pertencem ao módulo JustCauses. Contas partilhadas, perfis comuns, carteiras e movimentos financeiros pertencem ao domínio \textit{Shared}. O conceito de criador evita duplicar regras entre pessoas e organizações: ambos podem submeter campanhas, mas a validação que lhes é aplicável é diferente. Os utilizadores individuais são avaliados por \gls{KYC}; as organizações são avaliadas por \gls{KYB}. Esta distinção ajuda a perceber porque a arquitetura não deve misturar configuração administrativa com dados de negócio de cada aplicação integrada.
 
-A Figura~\ref{fig:domain_model} apresenta esta separação no modelo de domínio usado como referência para o desenho da solução.
+A Figura~\ref{fig:domain_model} apresenta esta separação no modelo de domínio usado como referência para o desenho da solução. O diagrama foi organizado por blocos para evidenciar a fronteira entre o núcleo administrativo, o módulo JustCauses e o domínio partilhado. Esta opção segue o princípio de separação de responsabilidades: cada bloco contém entidades que mudam por motivos semelhantes e que, por isso, devem ser mantidas desacopladas no desenho da arquitetura.
 
 \IfFileExists{frontmatter/assets/backoffice/ch3/uml/architecture/domain-model.png}{
 \begin{figure}[H]
@@ -167,7 +172,7 @@ A Figura~\ref{fig:domain_model} apresenta esta separação no modelo de domínio
 \label{fig:domain_model}
 \end{figure}
 
-Depois da Figura~\ref{fig:domain_model}, a leitura pretendida é que o backoffice administra entidades da JustCauses, mas mantém o seu próprio domínio de acesso e auditoria separado. No bloco de backoffice surgem as entidades que suportam autorização e auditoria. No bloco Only Just Causes surgem perfis, organizações, campanhas, categorias, verificações, doações, denúncias e relações de acompanhamento. No bloco partilhado surgem contas, carteiras e movimentos financeiros, incluindo depósitos e levantamentos.
+A partir da Figura~\ref{fig:domain_model}, a leitura pretendida é que o backoffice administra entidades da JustCauses, mas mantém o seu próprio domínio de acesso e auditoria separado. No bloco de backoffice surgem as entidades que suportam autorização e auditoria. No bloco Only Just Causes surgem perfis, organizações, campanhas, categorias, verificações, denúncias e relações de acompanhamento. No bloco partilhado surgem contas, carteiras e movimentos financeiros, sem os tratar como parte do núcleo administrativo. A presença deste bloco partilhado não altera o foco do relatório: ele serve para explicar porque alguns dados consumidos pela JustCauses não pertencem nem ao núcleo do backoffice nem exclusivamente à própria JustCauses. Esta separação também está alinhada com o objetivo da empresa de manter carteiras digitais transversais ao ecossistema, permitindo que futuras aplicações possam reutilizar contas, saldos e movimentos financeiros sem duplicar essa estrutura em cada domínio aplicacional.
 }{}
 
 %----------------------------------------------------------------------------------------
@@ -175,11 +180,11 @@ Depois da Figura~\ref{fig:domain_model}, a leitura pretendida é que o backoffic
 \section{Arquitetura da solução}
 \label{sec:arquitetura}
 
-A arquitetura do painel de administração foi definida com base nos requisitos levantados e nas restrições de infraestrutura já existentes no ecossistema da OnlyHighIQ. Para a descrever de forma estruturada, adotou-se uma abordagem C4+1: os níveis C4 principais \cite{C4Model}, que organizam a descrição em contexto do sistema, contentores e componentes, são complementados por uma vista física da infraestrutura. Esta extensão é útil porque o comportamento do backoffice depende também da forma como autenticação, distribuição, computação, persistência e observabilidade estão implantadas na AWS.
+A arquitetura do backoffice foi definida com base nos requisitos levantados e nas restrições de infraestrutura já existentes no ecossistema da OnlyHighIQ. Para a descrever de forma estruturada, adotou-se o modelo C4 \cite{C4Model}, usando as vistas de contexto, contentores e componentes. Esta leitura é complementada por vistas de implementação, processo e infraestrutura, porque o comportamento do backoffice depende tanto da decomposição lógica dos contentores como da forma como autenticação, distribuição, computação, persistência e observabilidade estão implantadas na AWS.
 
 \subsection{Nível 1: contexto do sistema}
 
-O painel de administração é um sistema de uso exclusivamente interno, acedido por operadores autorizados da OnlyHighIQ através de um navegador \textit{web}. No nível de contexto, a dependência externa mais relevante para a entrada no sistema é o AWS Cognito, responsável pela autenticação dos operadores. As restantes dependências, como bases de dados, serviços de armazenamento, e-mail transacional e observabilidade, são detalhadas nos níveis seguintes da arquitetura.
+O backoffice é um sistema de uso exclusivamente interno, acedido por operadores autorizados da OnlyHighIQ através de um navegador \textit{web}. No nível de contexto, a dependência externa mais relevante para a entrada no sistema é o AWS Cognito, responsável pela autenticação dos operadores. As restantes dependências, como bases de dados, serviços de armazenamento, e-mail transacional e observabilidade, são detalhadas nos níveis seguintes da arquitetura.
 
 A Figura~\ref{fig:c4_level1} mostra o backoffice como sistema interno acedido pela interface de utilizador e integrado com o AWS Cognito para autenticação.
 
@@ -190,9 +195,40 @@ A Figura~\ref{fig:c4_level1} mostra o backoffice como sistema interno acedido pe
 \label{fig:c4_level1}
 \end{figure}
 
-Depois da Figura~\ref{fig:c4_level1}, o ponto a reter é que o backoffice se posiciona como aplicação administrativa interna. O operador não comunica diretamente com os dados da JustCauses ou com serviços de suporte: entra primeiro no painel, autentica-se através do Cognito e só depois executa operações sujeitas ao modelo de autorização descrito nas secções seguintes.
+A Figura~\ref{fig:c4_level1} coloca o backoffice como aplicação administrativa interna, e não como interface direta sobre dados de negócio. O operador entra primeiro no backoffice, autentica-se através do Cognito e só depois executa operações sujeitas ao modelo de autorização descrito nas secções seguintes. Esta decisão separa a identidade do operador, tratada pelo fornecedor de autenticação, da autorização interna, resolvida pelo próprio backoffice.
 
-\subsection{Nível 2: contentores e vista física}
+\subsubsection{Vista de processo de Nível 1}
+\label{subsec:vista_processo_nivel1}
+
+Para complementar o contexto do sistema, apresentam-se dois \glspl{SSD} como vistas de processo de Nível 1. Estes diagramas não descrevem componentes internos nem classes; representam apenas a interação entre o ator externo e o sistema, permitindo perceber que eventos entram no backoffice e que respostas são esperadas. Foram escolhidos dois fluxos representativos: um fluxo transversal de acesso e autorização inicial, que demonstra o núcleo do backoffice, e um fluxo operacional de revisão de campanha, que demonstra a integração da JustCauses.
+
+A Figura~\ref{fig:ssd_level1_access} apresenta o fluxo de acesso inicial. A escolha deste exemplo justifica-se porque a autorização é a base comum que suporta todas as aplicações integradas: antes de qualquer operação específica, o sistema parte de uma sessão autenticada, resolve o contexto interno do operador e decide se a aplicação ou página pedida está disponível.
+
+\IfFileExists{frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd.png}{
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth, height=0.5\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd.png}
+\caption{SSD de Nível 1: acesso e autorização inicial}
+\label{fig:ssd_level1_access}
+\end{figure}
+
+A Figura~\ref{fig:ssd_level1_access} mostra que a entrada no sistema não termina na autenticação. O operador inicia sessão, mas o backoffice só concede acesso depois de resolver permissões, aplicações disponíveis e regras de página. O \gls{SD} detalhado deste fluxo encontra-se no Apêndice~\ref{app:sd_login_full}, onde a interação é expandida com os participantes técnicos envolvidos na fronteira entre autenticação e autorização.
+}{}
+
+A Figura~\ref{fig:ssd_level1_campaign_revision} apresenta o fluxo de revisão de campanha. Este segundo exemplo foi escolhido por representar uma operação concreta da JustCauses onde se combinam decisão administrativa, alteração de estado, auditoria e comunicação externa.
+
+\IfFileExists{frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd.png}{
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth, height=0.5\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd.png}
+\caption{SSD de Nível 1: revisão de campanha}
+\label{fig:ssd_level1_campaign_revision}
+\end{figure}
+
+A Figura~\ref{fig:ssd_level1_campaign_revision} mostra que o backoffice não se limita a apresentar dados da campanha. O sistema recebe uma decisão do operador, valida a operação, altera o estado da revisão, regista a ação e desencadeia a notificação apropriada ao criador. O \gls{SD} detalhado deste fluxo encontra-se no Apêndice~\ref{app:sd_campaign_revision_full}, permitindo acompanhar a passagem do evento pelas camadas técnicas do sistema.
+}{}
+
+\subsection{Nível 2: contentores, implementação, processo e vista física}
 
 O sistema é composto por dois contentores principais: a aplicação \textit{front-end}, desenvolvida em React 19 com TypeScript e Vite, e a \gls{API} \textit{back-end}, desenvolvida em Node.js com Express 5 e TypeScript. A comunicação entre os dois é feita exclusivamente via \gls{REST} sobre HTTPS, com autenticação baseada em tokens JWT emitidos pelo AWS Cognito e validados pelo \textit{back-end} em cada pedido.
 
@@ -205,14 +241,46 @@ A Figura~\ref{fig:c4_level2} evidencia a separação entre interface, \gls{API},
 \label{fig:c4_level2}
 \end{figure}
 
-Depois da Figura~\ref{fig:c4_level2}, a leitura pretendida é a separação de responsabilidades. O navegador apresenta a interface e envia pedidos autenticados; a \gls{API} concentra a validação de tokens, permissões e regras de negócio; o DynamoDB guarda a configuração e a auditoria próprias do backoffice; e as bases Aurora PostgreSQL mantêm os dados operacionais da JustCauses e os dados partilhados do ecossistema. Esta opção suporta uma arquitetura multiaplicação sem criar um backoffice isolado para cada produto.
+A Figura~\ref{fig:c4_level2} deve ser lida como uma separação de responsabilidades. O navegador apresenta a interface e envia pedidos autenticados; a \gls{API} valida tokens, mas concentra sobretudo a resolução do contexto interno, permissões e regras de negócio; o DynamoDB guarda a configuração e a auditoria próprias do backoffice; e as bases Aurora PostgreSQL mantêm os dados relacionais consumidos pelos módulos operacionais. A base Aurora PostgreSQL da JustCauses suporta entidades específicas dessa aplicação, como campanhas, organizações e verificações. A base Aurora PostgreSQL \textit{Shared} suporta entidades comuns do ecossistema, como contas, perfis e estruturas partilhadas. Assim, a base de dados não aparece como sistema independente do desenho: funciona como suporte persistente da \gls{API}, que continua a ser o único contentor responsável por expor regras de acesso e operações ao \textit{front-end}.
 
-A camada de persistência é composta por três áreas com responsabilidades distintas: a base Aurora PostgreSQL da JustCauses para dados operacionais da aplicação, a base Aurora PostgreSQL partilhada para entidades comuns do ecossistema, e o AWS DynamoDB para os dados de configuração e rastreabilidade do painel (perfis, permissões, configuração de acesso por rota e registos de auditoria). O acesso a ficheiros, como documentos de \gls{KYC}, documentos de \gls{KYB} e imagens de campanhas, é feito via AWS S3.
+A camada de persistência é composta por três áreas com responsabilidades distintas: a base Aurora PostgreSQL da JustCauses para dados operacionais da aplicação, a base Aurora PostgreSQL partilhada para entidades comuns do ecossistema, e o AWS DynamoDB para os dados de configuração e rastreabilidade do backoffice (perfis, permissões, configuração de acesso por rota e registos de auditoria). Esta separação impede que o núcleo administrativo do backoffice fique dependente do modelo relacional de uma aplicação específica. O acesso a ficheiros, como documentos de \gls{KYC}, documentos de \gls{KYB} e imagens de campanhas, é feito via AWS S3.
+
+\subsubsection{Vista de implementação}
+\label{subsec:vista_implementacao_nivel2}
+
+A vista de implementação de Nível 2 complementa o diagrama de contentores ao mostrar a organização concreta dos principais blocos da aplicação dentro do sistema OnlyHighIQ Backoffice. A Figura~\ref{fig:c4_level2_implementation} não pretende detalhar classes ou funções internas; essa leitura é feita no Nível 3. O seu papel é clarificar como o \textit{front-end}, o \textit{back-end} e a persistência administrativa se relacionam como unidades de implementação.
+
+\IfFileExists{frontmatter/assets/backoffice/docs/C4-Level2Implementation.png}{
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth, height=0.72\textheight, keepaspectratio]{frontmatter/assets/backoffice/docs/C4-Level2Implementation.png}
+\caption{Vista de implementação: Nível 2}
+\label{fig:c4_level2_implementation}
+\end{figure}
+
+A Figura~\ref{fig:c4_level2_implementation} reforça que a aplicação mantém três responsabilidades principais bem delimitadas. O \textit{front-end} concentra a interação com o operador, o \textit{back-end} concentra a lógica de acesso e operação, e o DynamoDB suporta a configuração administrativa do backoffice. Esta vista reforça a decisão de não acoplar a interface diretamente aos dados persistidos, mantendo a \gls{API} como mediadora das operações.
+}{}
+
+\subsubsection{Vista de processo}
+\label{subsec:vista_processo_nivel2}
+
+A vista de processo de Nível 2 mostra como os contentores colaboram durante uma operação típica. Ao contrário dos \glspl{SSD} de Nível 1, que mostram apenas a interação entre ator e sistema, esta vista inclui os principais contentores e serviços externos envolvidos. A Figura~\ref{fig:level2_process_view} evidencia o padrão adotado: o \textit{front-end} autentica e apresenta a interface, mas o \textit{back-end} resolve o acesso, executa a operação, seleciona a persistência adequada e escreve auditoria.
+
+\IfFileExists{frontmatter/assets/backoffice/ch3/uml/architecture/level2-process-view.png}{
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth, height=0.72\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/architecture/level2-process-view.png}
+\caption{Vista de processo: Nível 2}
+\label{fig:level2_process_view}
+\end{figure}
+
+Na Figura~\ref{fig:level2_process_view}, a autorização aparece antes da operação de negócio. O \textit{back-end} lê a configuração administrativa no DynamoDB para resolver permissões e regista tanto operações aceites como acessos negados. Quando a operação envolve dados da JustCauses, a \gls{API} usa a base relacional dessa aplicação; quando envolve dados comuns do ecossistema, usa a base \textit{Shared}; e, quando a decisão exige comunicação externa, o envio é feito através do Amazon SES. A vista mostra, portanto, a ligação entre o desenho multiaplicação, a separação de persistências e a rastreabilidade.
+}{}
 
 \subsubsection{Vista física}
 \label{subsec:vista_fisica}
 
-A infraestrutura do painel de administração reside integralmente na \gls{AWS} e usa o conjunto de serviços geridos já adotado pelo ecossistema da \textit{OnlyHighIQ}. A Figura~\ref{fig:vista_fisica} apresenta a vista física da solução, desde a filtragem de tráfego por \gls{WAF} e a distribuição via CloudFront, passando pela autenticação com Cognito, até à execução do \textit{back-end} em instâncias Spot com Auto Scaling distribuídas por três zonas de disponibilidade e à persistência em Aurora Multi-AZ e DynamoDB.
+A infraestrutura do backoffice reside integralmente na \gls{AWS} e usa o conjunto de serviços geridos já adotado pelo ecossistema da \textit{OnlyHighIQ}. A Figura~\ref{fig:vista_fisica} apresenta a vista física da solução e clarifica onde os contentores anteriores são executados: o \textit{front-end} compilado é servido por S3 e CloudFront, enquanto o \textit{back-end} corre em contentores Docker geridos pelo ECS, atrás de um Application Load Balancer. A mesma figura mostra ainda a relação com Cognito, Aurora PostgreSQL, DynamoDB e os serviços de borda usados para segurança e distribuição.
 
 \begin{figure}[H]
 \centering
@@ -221,11 +289,11 @@ A infraestrutura do painel de administração reside integralmente na \gls{AWS} 
 \label{fig:vista_fisica}
 \end{figure}
 
-A camada de borda (Route 53, CloudFront com S3, \gls{WAF} e ACM) segue o padrão já estabelecido no ecossistema da \textit{OnlyHighIQ} e não introduz lógica específica do backoffice. O serviço com impacto direto no painel é o Amazon Cognito: gere a identidade dos operadores com \gls{MFA}, emite tokens JWT e organiza utilizadores em grupos que mapeiam para os perfis do painel. O \textit{back-end} valida esses tokens com o \gls{JWKS} público do Cognito sem armazenar credenciais localmente, mantendo a fonte de verdade da identidade fora da aplicação.
+A Figura~\ref{fig:vista_fisica} mostra onde cada contentor passa a existir fisicamente. A camada de borda, composta por Route 53, CloudFront com S3, \gls{WAF} e ACM, já era usada no ecossistema da \textit{OnlyHighIQ}; neste projeto funciona sobretudo como entrada segura e distribuição do \textit{front-end}. Para o \textit{backoffice}, o ponto mais relevante dessa camada é a ligação ao Amazon Cognito. O Cognito mantém a identidade dos operadores, suporta \gls{MFA} e emite os tokens JWT usados nos pedidos. O \textit{back-end} não guarda credenciais: valida os tokens através do \gls{JWKS} público do Cognito e usa depois o seu próprio modelo interno para decidir permissões.
 
 Na computação, o servidor Node.js corre em contentores geridos pelo Amazon ECS com instâncias Spot, distribuídos por um grupo de Auto Scaling em três zonas de disponibilidade, combinando custo reduzido com resiliência a falhas de zona.
 
-Na persistência, o Amazon Aurora PostgreSQL armazena os dados relacionais da JustCauses com replicação Multi-AZ. O Amazon DynamoDB é dedicado exclusivamente aos dados de controlo e rastreabilidade do backoffice: utilizadores internos, perfis, permissões, configuração de page gates e registos de auditoria (\texttt{BO\_Users}, \texttt{BO\_Roles}, \texttt{BO\_Permissions}, \texttt{BO\_PageGates}, \texttt{BO\_Logs}). Este acesso é feito através de um VPC Endpoint privado, sem tráfego pela internet pública. A separação entre os dados operacionais da JustCauses e os dados administrativos do painel é uma decisão deliberada: garante que auditoria e configuração de acesso não concorrem com as entidades da plataforma. O Amazon SES completa esta camada ao enviar notificações automáticas a criadores em resposta a decisões do painel, como revisões de campanhas ou alterações de estado de conta.
+Na persistência, o Amazon Aurora PostgreSQL armazena dados relacionais em duas áreas: a área própria da JustCauses e a área \textit{Shared}, usada por entidades comuns do ecossistema. Esta distinção é relevante porque a JustCauses consome dados partilhados sem que esses dados passem a pertencer ao núcleo administrativo do backoffice. O Amazon DynamoDB é dedicado exclusivamente aos dados de controlo e rastreabilidade do backoffice: utilizadores internos, perfis, permissões, configuração de page gates e registos de auditoria (\texttt{BO\_Users}, \texttt{BO\_Roles}, \texttt{BO\_Permissions}, \texttt{BO\_PageGates}, \texttt{BO\_Logs}). Este acesso é feito através de um VPC Endpoint privado, sem tráfego pela internet pública. A separação entre dados operacionais, dados partilhados e dados administrativos é uma decisão deliberada: garante que auditoria e configuração de acesso não concorrem com as entidades de negócio das aplicações. O Amazon SES completa esta camada ao enviar notificações automáticas a criadores em resposta a decisões do backoffice, como revisões de campanhas ou alterações de estado de conta.
 
 A Tabela~\ref{tab:aws_servicos} resume os serviços utilizados e o papel de cada um na solução.
 
@@ -233,7 +301,7 @@ A Tabela~\ref{tab:aws_servicos} resume os serviços utilizados e o papel de cada
 \caption{Serviços AWS e respetivo papel na solução}
 \label{tab:aws_servicos}
 \begin{center}
-\footnotesize
+\small
 \begin{tabular}{|l|p{9cm}|}
 \hline
 Serviço AWS & Papel na solução \\ \hline
@@ -243,29 +311,29 @@ AWS WAF               & Filtragem de tráfego malicioso na camada de distribuiç
 AWS Certificate Manager & Gestão e renovação automática dos certificados TLS associados ao CloudFront e ao ALB. \\ \hline
 Amazon S3 (UI)        & Repositório dos \textit{assets} estáticos compilados do \textit{front-end} React. \\ \hline
 Amazon S3 (Docs)      & Armazenamento de documentos de \gls{KYC}/\gls{KYB} e ficheiros de campanhas submetidos pelos criadores. \\ \hline
-Amazon Cognito        & Gestão de identidade dos operadores internos do painel, incluindo autenticação com MFA, emissão de tokens JWT e grupos de utilizadores para controlo de acesso. \\ \hline
+Amazon Cognito        & Gestão de identidade dos operadores internos do backoffice, incluindo autenticação com MFA, emissão de tokens JWT e grupos de utilizadores para controlo de acesso. \\ \hline
 AWS IAM               & Controlo de permissões entre serviços AWS, incluindo as políticas que autorizam o \textit{back-end} a aceder ao S3, DynamoDB, SES e CloudWatch. \\ \hline
 Application Load Balancer & Distribuição do tráfego \gls{HTTP} entre as instâncias do \textit{back-end} Node.js nas diferentes zonas de disponibilidade. \\ \hline
 Amazon ECS (Spot)     & Alojamento do servidor \textit{back-end} Node.js com Express em contentores geridos com instâncias Spot, distribuídos por um grupo de Auto Scaling em três zonas de disponibilidade da região \texttt{eu-west-1}. \\ \hline
-Amazon Aurora PostgreSQL & Bases relacionais usadas pela JustCauses e pelo domínio partilhado do ecossistema, persistindo contas, perfis, campanhas, doações, levantamentos e verificações \gls{KYC}/\gls{KYB}, com replicação Multi-AZ em duas sub-redes privadas. \\ \hline
+Amazon Aurora PostgreSQL & Bases relacionais usadas pela JustCauses e pelo domínio partilhado do ecossistema, persistindo contas, perfis, campanhas, verificações \gls{KYC}/\gls{KYB} e outros dados operacionais, com replicação Multi-AZ em duas sub-redes privadas. \\ \hline
 Amazon DynamoDB       & Persistência dos dados administrativos do backoffice (\texttt{BO\_Users}, \texttt{BO\_Roles}, \texttt{BO\_Permissions}, \texttt{BO\_PageGates}, \texttt{BO\_Logs}), acedida através de um VPC Endpoint privado sem tráfego pela internet pública. \\ \hline
-Amazon SES            & Envio de e-mails transacionais automáticos a criadores e utilizadores em resposta a ações do painel, como decisões sobre campanhas, verificações e estado de contas. \\ \hline
+Amazon SES            & Envio de e-mails transacionais automáticos a criadores e utilizadores em resposta a ações do backoffice, como decisões sobre campanhas, verificações e estado de contas. \\ \hline
 Amazon CloudWatch     & Monitorização de métricas de infraestrutura, alertas de erros e análise de logs do \textit{back-end}. \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
 
-O fluxo de uma operação típica percorre os seguintes serviços: o operador acede à interface \textit{web} servida pelo CloudFront a partir dos \textit{assets} em S3; o tráfego é inspecionado e filtrado pelo \gls{WAF} antes de atingir a infraestrutura interna; o \textit{front-end} autentica-se via Cognito e obtém um token JWT; os pedidos \gls{API} são encaminhados pelo Application Load Balancer para o servidor \textit{back-end} em Amazon ECS com instâncias Spot, geridas por um grupo de Auto Scaling distribuído por três zonas de disponibilidade; o servidor valida o token com o \gls{JWKS} público do Cognito, verifica as permissões do operador e executa a operação sobre o Aurora PostgreSQL Multi-AZ; o registo de auditoria é escrito de forma assíncrona no DynamoDB através de um VPC Endpoint privado, sem atravessar a internet pública; e as notificações transacionais relevantes são enviadas via SES.
+O fluxo de uma operação típica percorre os seguintes serviços: o operador acede à interface \textit{web} servida pelo CloudFront a partir dos \textit{assets} em S3; o tráfego é inspecionado e filtrado pelo \gls{WAF} antes de atingir a infraestrutura interna; o \textit{front-end} autentica-se via Cognito e obtém um token JWT; os pedidos \gls{API} são encaminhados pelo Application Load Balancer para o servidor \textit{back-end} em Amazon ECS com instâncias Spot, geridas por um grupo de Auto Scaling distribuído por três zonas de disponibilidade; o servidor valida o token com o \gls{JWKS} público do Cognito, liga essa identidade ao operador interno em DynamoDB, verifica as permissões efetivas e executa a operação sobre a persistência adequada, seja Aurora PostgreSQL ou DynamoDB; o registo de auditoria é escrito no DynamoDB através de um VPC Endpoint privado, sem atravessar a internet pública; e as notificações transacionais relevantes são enviadas via SES.
 
 O envio de e-mails transacionais é centralizado no \textit{back-end}, evitando que o \textit{front-end} conheça credenciais, remetentes ou detalhes do fornecedor externo. Para notificações automáticas da plataforma, o servidor constrói mensagens HTML parametrizadas e invoca o Amazon SES através do \textit{SDK} da AWS. O remetente é configurado por ambiente e o cliente SES usa credenciais explícitas ou as credenciais disponibilizadas pelo ambiente de execução. Como estas mensagens são consequência de uma operação já validada, a falha no envio é registada nos logs do servidor, mas não deve anular a decisão administrativa já persistida.
 
-\subsection{Nível 3: componentes, implementação e dados}
+\subsection{Nível 3: componentes, implementação, processos e dados}
 
-O Nível 3 decompõe os dois contentores identificados no nível anterior em componentes internos e descreve a organização do código, os fluxos de interação com o sistema e as estruturas de persistência e autorização que sustentam o comportamento do painel.
+O Nível 3 decompõe os dois contentores identificados no nível anterior em componentes internos e descreve a organização do código, as vistas de processo e as estruturas de persistência e autorização que sustentam o comportamento do backoffice. As vistas de processo apresentadas neste nível são genéricas: não detalham um módulo funcional específico, mas mostram como um pedido percorre as camadas principais do \textit{front-end} e do \textit{back-end}. Os diagramas de sequência detalhados associados aos componentes de Nível 3 são apresentados no Apêndice~\ref{app:sd_detalhados}. Estes diagramas expandem fluxos concretos, como criação de operadores, atribuição de perfis, configuração de \textit{page gates}, auditoria, revisão de campanhas, categorias e verificações KYC/KYB, sem interromper a leitura principal da arquitetura.
 
 \subsubsection{Componentes do \textit{back-end}}
 
-A \gls{API} \textit{back-end} é organizada em módulos funcionais correspondentes aos domínios operacionais do painel. Cada módulo segue uma estrutura de camadas inspirada em \textit{Domain-Driven Design}: controladores \gls{HTTP} que tratam o pedido e a resposta, serviços de domínio que contêm a lógica de negócio, repositórios que abstraem o acesso à base de dados, e objetos de transferência de dados (\textit{DTOs}) que definem os contratos de comunicação com o exterior. Esta separação garante que a lógica de negócio não fica acoplada nem à camada de comunicação nem à de persistência, facilitando os testes e a evolução independente de cada camada. A Figura~\ref{fig:c4_level3_be} apresenta esta decomposição ao nível dos componentes do servidor.
+A \gls{API} \textit{back-end} é organizada em módulos funcionais correspondentes aos domínios operacionais do backoffice. Cada módulo segue uma estrutura de camadas inspirada em \textit{Domain-Driven Design}: controladores \gls{HTTP} que tratam o pedido e a resposta, serviços de domínio que contêm a lógica de negócio, repositórios que abstraem o acesso à base de dados, e objetos de transferência de dados (\textit{DTOs}) que definem os contratos de comunicação com o exterior. Esta separação garante que a lógica de negócio não fica acoplada nem à camada de comunicação nem à de persistência, facilitando os testes e a evolução independente de cada camada. A Figura~\ref{fig:c4_level3_be} apresenta esta decomposição ao nível dos componentes do servidor.
 
 \begin{figure}[H]
 \centering
@@ -274,7 +342,7 @@ A \gls{API} \textit{back-end} é organizada em módulos funcionais correspondent
 \label{fig:c4_level3_be}
 \end{figure}
 
-Depois da Figura~\ref{fig:c4_level3_be}, o ponto a reter é que os módulos não acedem diretamente uns aos outros de forma arbitrária. A autorização entra antes da lógica de negócio, os serviços concentram regras do domínio, os repositórios isolam a persistência e a auditoria acompanha as operações relevantes.
+A Figura~\ref{fig:c4_level3_be} mostra que os módulos não acedem diretamente uns aos outros de forma arbitrária. A autorização entra antes da lógica de negócio, os serviços concentram regras do domínio, os repositórios isolam a persistência e a auditoria acompanha as operações relevantes. O componente de domínio deve ser entendido como a zona onde ficam as regras que não pertencem nem ao protocolo HTTP nem à tecnologia de base de dados. Esta decisão aproxima o desenho de uma arquitetura por camadas: entradas externas numa extremidade, regras de negócio no centro e persistência abstraída na extremidade oposta.
 
 Para além da decomposição por componentes, a implementação do \textit{back-end} seguiu uma separação por camadas. A Figura~\ref{fig:c4_level3_implementation} apresenta essa vista de implementação, centrada na passagem entre rotas, controladores, serviços, repositórios e modelos de domínio. Esta separação reduz o acoplamento entre camadas e permite evoluir módulos sem alterar toda a cadeia de dependências.
 
@@ -286,8 +354,19 @@ Para além da decomposição por componentes, a implementação do \textit{back-
 \label{fig:c4_level3_implementation}
 \end{figure}
 
-Depois da Figura~\ref{fig:c4_level3_implementation}, importa perceber a direção das dependências. As rotas pertencem à camada mais externa e encaminham pedidos para controladores. Os controladores adaptam o pedido HTTP para chamadas de serviço. Os serviços concentram as regras de negócio e dependem de interfaces de repositório, não de detalhes concretos de persistência. Os modelos representam os conceitos centrais usados por essas regras. Esta organização ajuda a manter a lógica de negócio protegida de detalhes de infraestrutura.
+A Figura~\ref{fig:c4_level3_implementation} torna explícita a direção das dependências. As rotas pertencem à camada mais externa e encaminham pedidos para controladores. Os controladores adaptam o pedido HTTP para chamadas de serviço. Os serviços concentram as regras de negócio e dependem de interfaces de repositório, não de detalhes concretos de persistência. Os modelos representam os conceitos centrais usados por essas regras. Esta organização ajuda a manter a lógica de negócio protegida de detalhes de infraestrutura.
 }{}
+
+A Figura~\ref{fig:backend_process_view} complementa a vista de componentes e a vista de implementação com uma vista de processo do \textit{back-end}. O objetivo desta figura é mostrar a passagem de um pedido pela cadeia de responsabilidades do servidor, desde a entrada na \gls{API} até à persistência adequada.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\textwidth, height=0.7\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/architecture/backend-process-view.png}
+\caption{Vista de processo do \textit{back-end}: Nível 3}
+\label{fig:backend_process_view}
+\end{figure}
+
+A Figura~\ref{fig:backend_process_view} evidencia que o \textit{back-end} não executa pedidos diretamente sobre a base de dados. O pedido entra pelo \textit{routing}, é adaptado pelo controlador, validado através de objetos de transferência de dados, processado nos serviços e convertido para persistência pelos repositórios e modelos de dados. A escolha entre DynamoDB, Aurora PostgreSQL partilhado e Aurora PostgreSQL da JustCauses é feita na camada de repositório, mantendo a regra de negócio separada da tecnologia de armazenamento.
 
 \subsubsection{Componentes do \textit{front-end}}
 
@@ -302,111 +381,23 @@ A implementação foi mantida sobre a base React já existente da empresa, em ve
 \label{fig:c4_level3_fe}
 \end{figure}
 
-Depois da Figura~\ref{fig:c4_level3_fe}, a leitura pretendida é que a interface não é a fonte final de autorização. O \textit{front-end} melhora a experiência do operador ao esconder páginas e ações indisponíveis, mas trabalha sempre sobre o contexto de acesso calculado no servidor.
+A Figura~\ref{fig:c4_level3_fe} deve ser lida com uma ressalva central: a interface não é a fonte final de autorização. O \textit{front-end} melhora a experiência do operador ao esconder páginas e ações indisponíveis, mas trabalha sempre sobre o contexto de acesso calculado no servidor.
 
-\subsubsection{Fluxos de sistema e diagramas de sequência}
-\label{sec:diagramas_comportamento}
-
-No Nível 3, os diagramas de componentes explicam a organização interna do \textit{front-end} e do \textit{back-end}. Para completar essa leitura, os \glspl{SSD} seguintes resumem os principais fluxos ao nível da interação entre o operador e o sistema. Os \glspl{SSD} não mostram os componentes internos, mas indicam que pedidos entram no backoffice, que respostas são devolvidas e que decisões do sistema condicionam cada operação. As Figuras~\ref{fig:ssd_login} a~\ref{fig:ssd_kyb_verification} apresentam estes fluxos resumidos; os \glspl{SD} detalhados correspondentes encontram-se no Apêndice~\ref{app:sd_detalhados}, onde cada fluxo é expandido com controladores, serviços, repositórios, persistência e registos de auditoria.
+A Figura~\ref{fig:frontend_process_view} mostra a vista de processo genérica do \textit{front-end}. Esta figura complementa o diagrama de componentes ao mostrar como a navegação do operador é resolvida, como a sessão Cognito e o contexto de acesso são usados, e como uma página autorizada carrega dados através do Backend API.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth, height=0.38\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/login-authentication/ssd}
-\caption{SSD: autenticação e resolução inicial do operador}
-\label{fig:ssd_login}
+\includegraphics[width=0.98\textwidth, height=0.7\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/architecture/frontend-process-view.png}
+\caption{Vista de processo do \textit{front-end}: Nível 3}
+\label{fig:frontend_process_view}
 \end{figure}
 
-Depois da Figura~\ref{fig:ssd_login}, a leitura pretendida é que a autenticação não termina na validação da identidade. O operador inicia a sessão, mas o sistema ainda tem de resolver o utilizador interno, confirmar o estado da conta e calcular o acesso disponível antes de permitir a navegação. O fluxo detalhado encontra-se na Secção~\ref{app:sd_login_full}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth, height=0.38\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/create-admin-user/ssd}
-\caption{SSD: criação de operador administrativo}
-\label{fig:ssd_create_admin}
-\end{figure}
-
-Depois da Figura~\ref{fig:ssd_create_admin}, a leitura principal é que a criação de operadores administrativos é tratada como uma operação sensível. O sistema valida a autoridade do operador autenticado, cria a conta administrativa, associa o perfil pretendido e regista a ação para auditoria. O detalhe da colaboração interna é apresentado na Secção~\ref{app:sd_create_admin_full}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth, height=0.38\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/CH4-ROLE-ASSIGNMENT/ssd}
-\caption{SSD: atribuição de perfil por aplicação}
-\label{fig:ssd_role_assignment}
-\end{figure}
-
-Depois da Figura~\ref{fig:ssd_role_assignment}, importa observar que a atribuição de perfis não é uma simples edição de um campo do utilizador. O sistema valida a hierarquia administrativa, a aplicação associada ao perfil, a regra de apenas um perfil por aplicação e a exclusividade dos perfis globais de backoffice. O SD detalhado da Secção~\ref{app:sd_role_assignment_full} mostra onde estas validações são aplicadas.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth, height=0.38\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/roles-permissions/ssd}
-\caption{SSD: gestão de perfis e permissões}
-\label{fig:ssd_roles_permissions}
-\end{figure}
-
-Depois da Figura~\ref{fig:ssd_roles_permissions}, a leitura esperada é que os perfis e permissões são sempre administrados dentro do contexto de uma aplicação. Esta separação impede que permissões de uma aplicação sejam associadas a perfis de outra e suporta a evolução do backoffice para novas aplicações sem alterar o princípio de autorização. A Secção~\ref{app:sd_roles_permissions_full} detalha o carregamento, a edição e a persistência destas alterações.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth, height=0.38\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/CH4-PAGE-GATES/ssd}
-\caption{SSD: configuração de page gates}
-\label{fig:ssd_page_gates}
-\end{figure}
-
-Depois da Figura~\ref{fig:ssd_page_gates}, a leitura principal é que o acesso a páginas é configurável a partir do próprio backoffice. O operador escolhe a aplicação, seleciona a página e define que permissões dão acesso a essa área, enquanto o sistema valida a consistência das permissões e guarda a configuração. O fluxo detalhado é apresentado na Secção~\ref{app:sd_page_gates_full}.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth, height=0.38\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/CH4-USER-ACTIVITY/ssd}
-\caption{SSD: consulta de atividade de operador}
-\label{fig:ssd_user_activity}
-\end{figure}
-
-Depois da Figura~\ref{fig:ssd_user_activity}, observa-se que a consulta de atividade agrega evidências de duas origens: ações administrativas registadas em audit logs e tentativas ou eventos de acesso registados em audit trail. Esta visão ajuda a reconstruir o comportamento de um operador sem expor diretamente a complexidade das tabelas internas. A Secção~\ref{app:sd_user_activity_full} descreve a agregação e a filtragem em detalhe.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth, height=0.38\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/CH4-CAMPAIGN-REVISION/ssd}
-\caption{SSD: revisão de campanha}
-\label{fig:ssd_campaign_revision}
-\end{figure}
-
-Depois da Figura~\ref{fig:ssd_campaign_revision}, a leitura pretendida é que a revisão de campanhas combina decisão operacional e comunicação com o utilizador. O sistema valida a permissão do operador, aplica a decisão ao estado da campanha, regista a ação e, quando aplicável, envia a notificação ou o e-mail associado. A Secção~\ref{app:sd_campaign_revision_full} expande este fluxo.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth, height=0.38\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/manage-categories/ssd}
-\caption{SSD: gestão de categorias}
-\label{fig:ssd_categories}
-\end{figure}
-
-Depois da Figura~\ref{fig:ssd_categories}, a leitura principal é que os módulos operacionais da JustCauses seguem o mesmo padrão arquitetural usado nas funcionalidades transversais do backoffice. O operador pede a listagem ou alteração de categorias, o sistema valida a autorização, executa a operação no domínio da aplicação e regista a ação administrativa. O SD detalhado encontra-se na Secção~\ref{app:sd_categories_full}.
-
-\IfFileExists{frontmatter/assets/backoffice/ch3/uml/kyc-verification/ssd.png}{
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth, height=0.38\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/kyc-verification/ssd}
-\caption{SSD: verificação KYC de utilizadores individuais}
-\label{fig:ssd_kyc_verification}
-\end{figure}
-
-Depois da Figura~\ref{fig:ssd_kyc_verification}, a leitura pretendida é que a fila \gls{KYC} não é apenas uma listagem de documentos. O operador consulta submissões, o sistema compara os dados de perfil com os dados recebidos do fornecedor de verificação e, perante inconsistências ou submissões pendentes há demasiado tempo, permite ações controladas, notificadas e auditadas. O SD detalhado encontra-se na Secção~\ref{app:sd_kyc_verification_full}.
-}{}
-
-\IfFileExists{frontmatter/assets/backoffice/ch3/uml/kyb-verification/ssd.png}{
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth, height=0.38\textheight, keepaspectratio]{frontmatter/assets/backoffice/ch3/uml/kyb-verification/ssd}
-\caption{SSD: verificação KYB de organizações}
-\label{fig:ssd_kyb_verification}
-\end{figure}
-
-Depois da Figura~\ref{fig:ssd_kyb_verification}, observa-se que a organização é tratada como entidade do domínio da JustCauses e não como uma conta administrativa. O operador abre a submissão \gls{KYB}, consulta os documentos associados, toma uma decisão de aprovação ou rejeição, e o sistema atualiza o estado de verificação, cria notificação, envia e-mail quando aplicável e regista a auditoria. O SD detalhado encontra-se na Secção~\ref{app:sd_kyb_verification_full}.
-}{}
+A Figura~\ref{fig:frontend_process_view} mostra que o \textit{front-end} usa a informação de acesso para decidir a navegação e a apresentação da interface, mas continua dependente do \textit{back-end} para obter o contexto efetivo e os dados da página. Quando o operador não tem autorização para a rota pedida, a navegação é encaminhada para a vista de acesso negado; quando tem autorização, a página e os componentes são renderizados e os dados são carregados através do AxiosService.
 
 \subsubsection{Modelo de dados administrativo}
 \label{sec:modelo_dados}
 
-O modelo de dados administrativo descreve apenas a persistência própria do backoffice, mantida em DynamoDB. Os dados transacionais da JustCauses continuam na base relacional da aplicação e são tratados, nesta arquitetura, como uma dependência externa ao modelo administrativo. A Figura~\ref{fig:backoffice_data_model} apresenta as tabelas administrativas que suportam esta camada.
+O modelo de dados administrativo descreve apenas a persistência própria do núcleo do backoffice, mantida em DynamoDB. Não representa a totalidade da base de dados da solução, não substitui o modelo relacional da JustCauses e não descreve o domínio \textit{Shared}. A opção por o apresentar nesta secção resulta da ligação entre o desenho de domínio e a persistência: operadores, perfis, permissões, \textit{page gates} e auditoria são entidades administrativas que suportam a autorização multiaplicação e, por isso, foram isoladas dos dados operacionais. Os dados transacionais e partilhados continuam nas bases relacionais correspondentes e são acedidos pela \gls{API} através dos repositórios adequados. A Figura~\ref{fig:backoffice_data_model} apresenta as tabelas administrativas que suportam esta camada.
 
 \IfFileExists{frontmatter/assets/backoffice/ch3/uml/architecture/backoffice-data-model.png}{
 \begin{figure}[H]
@@ -416,7 +407,7 @@ O modelo de dados administrativo descreve apenas a persistência própria do bac
 \label{fig:backoffice_data_model}
 \end{figure}
 
-Depois da Figura~\ref{fig:backoffice_data_model}, a leitura principal é a centralidade do operador interno no modelo administrativo. A tabela \texttt{BO\_Users} liga a identidade autenticada no Cognito ao perfil ou perfis de acesso configurados no backoffice. As tabelas \texttt{BO\_Roles}, \texttt{BO\_Permissions} e \texttt{BO\_PageGates} suportam a autorização: os perfis agregam permissões, e os \textit{page gates} definem que permissões permitem abrir cada área da aplicação. A auditoria fica associada ao utilizador que executou ou tentou executar a ação através de \texttt{BO\_Logs}. Esta tabela guarda tanto ações administrativas como eventos de acesso, sendo a distinção feita pelo tipo de ação e pelos filtros usados na interface. Esta relação evita registos anónimos dentro do contexto administrativo. A Tabela~\ref{tab:modelo_dados_admin} resume a responsabilidade de cada tabela.
+Na Figura~\ref{fig:backoffice_data_model}, o operador interno é o ponto de ligação entre identidade, perfis e auditoria. A tabela \texttt{BO\_Users} liga a identidade autenticada no Cognito ao perfil ou perfis de acesso configurados no backoffice. As tabelas \texttt{BO\_Roles}, \texttt{BO\_Permissions} e \texttt{BO\_PageGates} suportam a autorização: os perfis agregam permissões, e os \textit{page gates} definem que permissões permitem abrir cada área da aplicação. A auditoria fica associada ao utilizador que executou ou tentou executar a ação através de \texttt{BO\_Logs}. Esta tabela guarda tanto ações administrativas como eventos de acesso, sendo a distinção feita pelo tipo de ação e pelos filtros usados na interface. Esta relação evita registos anónimos dentro do contexto administrativo. A Tabela~\ref{tab:modelo_dados_admin} resume a responsabilidade de cada tabela.
 }{}
 
 \begin{table}[H]
@@ -431,19 +422,19 @@ Depois da Figura~\ref{fig:backoffice_data_model}, a leitura principal é a centr
 \texttt{BO\_Roles} & Guarda os perfis de acesso, cada um associado a uma aplicação e a um conjunto de permissões dessa mesma aplicação. \\ \hline
 \texttt{BO\_Permissions} & Guarda as permissões disponíveis para autorização granular, agrupadas por categoria e usadas por perfis e \textit{page gates}. \\ \hline
 \texttt{BO\_PageGates} & Guarda a configuração de acesso a páginas por aplicação, incluindo a identificação da página e as permissões aceites para a abrir. \\ \hline
-\texttt{BO\_Logs} & Guarda ações administrativas, tentativas de acesso e eventos de autenticação ou navegação relevantes, sempre associados a um utilizador interno, a uma marca temporal e ao contexto necessário para consulta por filtros. \\ \hline
+\texttt{BO\_Logs} & Guarda ações administrativas, tentativas de acesso e eventos de navegação relevantes após a resolução do operador interno, sempre associados a um utilizador interno, a uma marca temporal e ao contexto necessário para consulta por filtros. \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
 
-Depois da Tabela~\ref{tab:modelo_dados_admin}, a leitura principal é que a escalabilidade do backoffice está concentrada num modelo administrativo próprio. Ao guardar operadores, perfis, permissões, \textit{page gates} e auditoria fora dos dados transacionais da JustCauses, o sistema consegue acrescentar novas aplicações sem misturar configuração transversal com entidades específicas de cada produto. Esta tabela deve ser lida em conjunto com a Figura~\ref{fig:domain_model} e com a Figura~\ref{fig:backoffice_data_model}: o primeiro diagrama mostra o domínio global administrado pelo painel, enquanto o segundo identifica as estruturas persistidas que pertencem ao núcleo administrativo do backoffice.
+Depois da Tabela~\ref{tab:modelo_dados_admin}, a leitura principal é que a escalabilidade do backoffice está concentrada num modelo administrativo próprio. Ao guardar operadores, perfis, permissões, \textit{page gates} e auditoria fora dos dados transacionais da JustCauses, o sistema consegue acrescentar novas aplicações sem misturar configuração transversal com entidades específicas de cada produto. Esta tabela deve ser lida em conjunto com a Figura~\ref{fig:domain_model} e com a Figura~\ref{fig:backoffice_data_model}: o primeiro diagrama mostra o domínio global administrado pelo backoffice, enquanto o segundo identifica as estruturas persistidas que pertencem ao núcleo administrativo do backoffice.
 
 \subsubsection{Modelo de permissões}
 \label{sec:modelo_permissoes}
 
-O modelo de permissões não foi tratado apenas como uma lista de perfis. Na implementação real, a autorização resulta da combinação entre o contexto do operador, a aplicação em causa e a ação concreta pedida ao sistema. A autenticação é comum, mas a autorização é resolvida depois, com base nos dados internos do backoffice.
+O modelo de permissões não foi tratado apenas como uma lista de perfis. Na implementação real, a autorização resulta da combinação entre o contexto do operador, a aplicação em causa e a ação concreta pedida ao sistema. Este modelo liga diretamente as vistas anteriores: o \textit{front-end} usa o contexto de acesso para orientar navegação, páginas e ações visíveis; o \textit{back-end} revalida permissões em cada pedido sensível antes de executar a operação. A autenticação é comum, mas a autorização é resolvida depois, com base nos dados internos do backoffice.
 
-Em termos práticos, há dois grandes contextos de utilização: o backoffice de gestão e o painel operacional da JustCauses. Ambos partilham a mesma autenticação Cognito, mas o acesso efetivo é refinado por três decisões sucessivas: acesso à aplicação, acesso à página e autorização da ação pedida à \gls{API}. Esta decomposição permite alinhar a interface, o \textit{router}, o \textit{middleware} da \gls{API} e o sistema de auditoria sob a mesma regra de negócio.
+Em termos práticos, há dois grandes contextos de utilização: o backoffice de gestão e o módulo operacional da JustCauses. Ambos partilham a mesma autenticação Cognito, mas o acesso efetivo é refinado por três decisões sucessivas: acesso à aplicação, acesso à página e autorização da ação pedida à \gls{API}. Esta decomposição permite alinhar a interface, o \textit{router}, o \textit{middleware} da \gls{API} e o sistema de auditoria sob a mesma regra de negócio.
 
 Assim, o desenho do modelo de permissões responde a quatro perguntas principais: o operador autenticado pode entrar na aplicação pedida; pode abrir a página para a qual foi encaminhado; pode executar a ação disponível na interface; e o servidor deve aceitar ou rejeitar o pedido \gls{HTTP} correspondente.
 
@@ -483,4 +474,6 @@ Esta opção evita uma matriz estática demasiado rígida. Em vez de fixar todas
 \section{Sumário}
 \label{sec:sumario_cap3}
 
-Este capítulo descreveu os requisitos, a análise do domínio, a arquitetura e o desenho do backoffice multiaplicação, tendo a JustCauses como primeira aplicação operacional integrada. A análise concentrou-se nos mecanismos que sustentam o comportamento do sistema: separação entre aplicações, resolução centralizada de permissões, \textit{page gates}, auditoria e revalidação no \textit{back-end}. Os requisitos funcionais foram organizados em treze capacidades centrais, com destaque para autenticação, autorização, operação da plataforma, verificação \gls{KYC}/\gls{KYB} e rastreabilidade. A arquitetura adotada, descrita com recurso a C4+1, separa o \textit{front-end} React do \textit{back-end} Node.js, com persistência em \gls{PostgreSQL} e DynamoDB e infraestrutura na AWS. O modelo de permissões é tratado como um mecanismo transversal que decide, em cada pedido, as aplicações, páginas e ações acessíveis ao operador. O capítulo seguinte descreve como esse desenho foi concretizado no código e na interface.
+Este capítulo descreveu os requisitos, a análise do domínio, a arquitetura e o desenho do backoffice multiaplicação, tendo a JustCauses como primeira aplicação operacional integrada. A análise separou o núcleo administrativo do backoffice, o módulo operacional da JustCauses e o domínio partilhado do ecossistema, evitando misturar configuração interna com dados de negócio. Os requisitos foram organizados segundo \gls{FURPS+}, em português, e relacionados com os objetivos definidos na introdução.
+
+A arquitetura combinou as vistas C4 de contexto, contentores e componentes com vistas complementares de implementação, processo e infraestrutura. No Nível 1, os dois \glspl{SSD} representativos mostraram o acesso/autorização inicial e a revisão de campanha. No Nível 2, as vistas de implementação e processo explicaram a relação entre \textit{front-end}, \textit{back-end}, persistência administrativa e serviços externos. No Nível 3, as vistas de processo explicaram a passagem de pedidos pelo \textit{front-end} e pelo \textit{back-end}. O modelo de dados administrativo e o modelo de permissões completaram o desenho, demonstrando como operadores, perfis, permissões, \textit{page gates} e auditoria sustentam a autorização multiaplicação. O capítulo seguinte descreve como esse desenho foi concretizado no código e na interface.

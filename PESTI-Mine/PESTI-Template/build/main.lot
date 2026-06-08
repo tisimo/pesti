@@ -1,25 +1,23 @@
 \babel@toc {portuguese}{}\relax 
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {1.1}{\ignorespaces Missão, Visão e Valores da OnlyHighIQ}}{1}{table.caption.12}%
+\contentsline {table}{\numberline {1.1}{\ignorespaces Missão, Visão e Valores da OnlyHighIQ}}{1}{table.caption.14}%
 \contentsline {table}{\numberline {1.2}{\ignorespaces Planeamento do trabalho}}{5}{table.caption.19}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {2.1}{\ignorespaces Comparação dos sistemas de administração analisados}}{13}{table.caption.40}%
-\contentsline {table}{\numberline {2.2}{\ignorespaces Comparação de \textit {frameworks} de \textit {UI} para painéis de administração}}{14}{table.caption.43}%
-\contentsline {table}{\numberline {2.3}{\ignorespaces Comparação de \textit {frameworks} de \textit {front-end} para painéis de administração}}{14}{table.caption.45}%
-\contentsline {table}{\numberline {2.4}{\ignorespaces Comparação de \textit {frameworks} de \textit {back-end} para \glspl {API} REST}}{15}{table.caption.47}%
-\contentsline {table}{\numberline {2.5}{\ignorespaces Comparação de sistemas de gestão de bases de dados relacionais}}{15}{table.caption.49}%
-\contentsline {table}{\numberline {2.6}{\ignorespaces Comparação de soluções para auditoria e dados de alta escrita}}{16}{table.caption.51}%
-\contentsline {table}{\numberline {2.7}{\ignorespaces Comparação de provedores de serviços \textit {cloud} por área de serviço}}{16}{table.caption.53}%
-\contentsline {table}{\numberline {2.8}{\ignorespaces Comparação de soluções de autenticação e gestão de identidade}}{17}{table.caption.55}%
-\contentsline {table}{\numberline {2.9}{\ignorespaces Comparação de soluções de pagamento para plataformas globais de \textit {crowdfunding}}}{17}{table.caption.57}%
+\contentsline {table}{\numberline {2.1}{\ignorespaces Critérios de análise para painéis de administração}}{8}{table.caption.25}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Comparação de exemplos de painéis de administração}}{13}{table.caption.44}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {3.1}{\ignorespaces Principais entidades do domínio do painel de administração}}{22}{table.caption.62}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces Requisitos não funcionais do painel de administração}}{24}{table.caption.69}%
-\contentsline {table}{\numberline {3.3}{\ignorespaces Serviços AWS e respetivo papel na solução}}{28}{table.caption.79}%
-\contentsline {table}{\numberline {3.4}{\ignorespaces Camadas de aplicação do modelo de autorização}}{29}{table.caption.81}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Relação entre objetivos e requisitos}}{19}{table.caption.54}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Principais entidades do modelo de aplicação}}{21}{table.caption.57}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Serviços AWS e respetivo papel na solução}}{31}{table.caption.73}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Tabelas administrativas do backoffice em DynamoDB}}{39}{table.caption.84}%
+\contentsline {table}{\numberline {3.5}{\ignorespaces Camadas de aplicação do modelo de autorização}}{40}{table.caption.86}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {4.1}{\ignorespaces Módulos cobertos pela suite de testes de integração da JustCauses API}}{45}{table.caption.153}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces Estado de implementação por eixo funcional}}{47}{table.caption.157}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces E-mails transacionais acionados por operações administrativas}}{51}{table.caption.206}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Evidências visuais usadas no Capítulo 4}}{53}{table.caption.209}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Cenários de validação manual da solução}}{61}{table.caption.226}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Caracterização dos testes automatizados de qualidade}}{63}{table.caption.229}%
+\contentsline {table}{\numberline {4.5}{\ignorespaces Critérios complementares de avaliação da solução}}{65}{table.caption.268}%
+\contentsline {table}{\numberline {4.6}{\ignorespaces Estado de implementação por eixo funcional}}{66}{table.caption.270}%
 \addvspace {10\p@ }
-\contentsline {table}{\numberline {5.1}{\ignorespaces Grau de concretização dos objetivos}}{49}{table.caption.161}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Grau de concretização dos objetivos}}{69}{table.caption.274}%
 \addvspace {10\p@ }
