@@ -1,0 +1,14 @@
+-- Wallet Table
+
+CREATE TABLE IF NOT EXISTS "Wallet" (
+    "walletAddress" VARCHAR(255) PRIMARY KEY NOT NULL,
+    "accountId" UUID NOT NULL UNIQUE,
+    "status" VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' CHECK ("status" IN ('ACTIVE', 'FROZEN', 'INACTIVE')),
+    "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "fk_wallet_account"
+    FOREIGN KEY ("accountId") REFERENCES "Account" ("accountId") ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS "idx_wallet_accountId" ON "Wallet" ("accountId");

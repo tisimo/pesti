@@ -1,0 +1,65 @@
+.api-access-denied-toast {
+  position: fixed;
+  top: 84px;
+  right: 18px;
+  z-index: 3000;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 12px;
+  width: min(420px, calc(100vw - 32px));
+  padding: 14px 14px 14px 16px;
+  border: 1px solid #fed7aa;
+  border-radius: 18px;
+  background: #fffaf3;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+  color: #431407;
+}
+
+.api-access-denied-toast__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.api-access-denied-toast__title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #111827;
+}
+
+.api-access-denied-toast__message {
+  margin-top: 3px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #7c2d12;
+}
+
+.api-access-denied-toast__close {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #9a3412;
+  cursor: pointer;
+}
+
+.api-access-denied-toast__close:hover {
+  background: #ffedd5;
+}
+
+@media (max-width: 640px) {
+  .api-access-denied-toast {
+    top: auto;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    width: auto;
+  }
+}

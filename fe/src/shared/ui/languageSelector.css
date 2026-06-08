@@ -1,0 +1,41 @@
+.language-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 8px;
+  border: 1px solid #dbe3ef;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.language-selector i {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.language-selector select {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+  cursor: pointer;
+}
+
+.language-selector__label {
+  color: #64748b;
+}
+
+.language-selector--compact {
+  min-height: 30px;
+  padding: 0 6px;
+}
+
+.language-selector--compact .language-selector__label {
+  display: none;
+}

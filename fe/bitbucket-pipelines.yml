@@ -1,0 +1,65 @@
+image: node:22
+
+pipelines:
+  branches:
+    developer:
+      - step:
+          name: Build & Deploy
+          size: 4x
+          deployment: Development
+          caches:
+            - node
+          script:
+            - npm i
+            - npm install --save-optional @rollup/rollup-linux-x64-gnu
+            - npm run build
+            - pipe: atlassian/aws-s3-deploy:2.0.1
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+                S3_BUCKET: dev.backofficeohiqdev.com
+                LOCAL_PATH: dist
+
+      - step:
+          name: Invalidate CloudFront
+          size: 4x
+          script:
+            - pipe: atlassian/aws-cloudfront-invalidate:0.11.0
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+                DISTRIBUTION_ID: E31GRI53F34UW3
+                INVALIDATION_PATHS: "/*"
+
+    production:
+      - step:
+          name: Build & Deploy
+          size: 4x
+          deployment: Production
+          caches:
+            - node
+          script:
+            - npm i
+            - npm install --save-optional @rollup/rollup-linux-x64-gnu
+            - npm run build
+            - pipe: atlassian/aws-s3-deploy:2.0.1
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID_PROD
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY_PROD
+                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION_PROD
+                S3_BUCKET: backofficeohiq.com
+                LOCAL_PATH: dist
+
+      - step:
+          name: Invalidate CloudFront
+          size: 4x
+          script:
+            - pipe: atlassian/aws-cloudfront-invalidate:0.11.0
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID_PROD
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY_PROD
+                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION_PROD
+                DISTRIBUTION_ID: EIQ8RNZ8FBQTF
+                INVALIDATION_PATHS: "/*"

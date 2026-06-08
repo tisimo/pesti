@@ -1,0 +1,34 @@
+@startuml UC_UserPlatform
+
+left to right direction
+
+actor "Analyst" as analyst
+actor "Support\nAgent" as support
+actor "Finance\nOfficer" as finance
+actor "Moderator" as mod
+actor "Admin" as admin
+actor "Super\nAdmin" as superAdmin
+
+superAdmin --|> admin
+
+rectangle "User & Platform Management" {
+    usecase "View platform\nanalytics" as UC03
+    usecase "Search & view\nuser profiles" as UC13
+    usecase "Review KYC\nsubmissions" as UC02
+    usecase "Review withdrawal\nrequests" as UC05
+}
+
+analyst --> UC03
+support --> UC03
+support --> UC13
+finance --> UC03
+finance --> UC05
+mod --> UC03
+mod --> UC13
+mod --> UC02
+admin --> UC03
+admin --> UC13
+admin --> UC02
+admin --> UC05
+
+@enduml

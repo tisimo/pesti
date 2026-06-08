@@ -1,0 +1,42 @@
+@startuml SDUS05
+
+title SSD — Admin reviews withdrawal request (Actor · System · Payouts API)
+
+actor "Admin" as admin
+participant ": System" as system
+participant ": Payouts API" as payouts
+
+admin -> system : 1: Access withdrawal queue
+system --> admin : 1.1: Display pending withdrawals
+
+admin -> system : 2: Select withdrawal request
+system --> admin : 2.1: Load withdrawal details
+
+alt [3a Approve]
+
+    admin -> system : 3a: Submit approval
+    system -> system : 3a.1: Set status → "Processing"
+    system -> payouts : 3a.2: Initiate transfer (bank or crypto)
+    payouts --> system : 3a.3: Transfer initiated
+    system -> system : 3a.4: Notify creator by email
+    system --> admin : 3a.5: Withdrawal approved
+
+else [3b Reject]
+
+    admin -> system : 3b: Submit rejection with reason
+    system -> system : 3b.1: Set status → "rejected"
+    system -> system : 3b.2: Return funds to creator wallet
+    system -> system : 3b.3: Notify creator by email
+    system --> admin : 3b.4: Withdrawal rejected
+
+else [3c Request More Info]
+
+    admin -> system : 3c: Request more info with notes
+    system -> system : 3c.1: Notify creator by email
+    system --> admin : 3c.2: Info requested
+
+end
+
+system -> system : 4: Log decision + record in withdrawal history
+
+@enduml

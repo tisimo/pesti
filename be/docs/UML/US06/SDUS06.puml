@@ -1,0 +1,47 @@
+@startuml SDUS06
+
+title SSD — Admin reviews reported cause (Actor · System)
+
+actor "Admin" as admin
+participant ": System" as system
+
+admin -> system : 1: Access Reports section
+system --> admin : 1.1: Display reports list
+
+admin -> system : 2: Select report
+system --> admin : 2.1: Load report details
+
+alt [3 Cause is valid]
+
+    admin -> system : 3a: Mark cause as valid
+    system --> admin : 3a.1: Report resolved — cause remains live
+
+else [3 Remove Cause]
+
+    admin -> system : 3b: Remove cause
+    system --> admin : 3b.1: Cause unpublished — creator notified
+
+else [3 Warn Creator]
+
+    admin -> system : 3c: Issue warning
+    system -> system : 3c.1: Record strike for creator
+    opt [3 3 strikes reached]
+        system -> system : 3c.2: Suspend creator account
+    end
+    system --> admin : 3c.3: Warning issued — creator notified
+
+else [3 Request Changes]
+
+    admin -> system : 3d: Request changes with notes
+    system --> admin : 3d.1: Changes requested — creator notified
+
+else [3 Dismiss Report]
+
+    admin -> system : 3e: Dismiss report
+    system --> admin : 3e.1: Report dismissed
+
+end
+
+system -> system : 4: Log action in audit trail
+
+@enduml

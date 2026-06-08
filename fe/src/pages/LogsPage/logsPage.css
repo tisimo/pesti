@@ -1,0 +1,76 @@
+.logs-page__panel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 100%;
+  min-width: max-content;
+}
+
+.logs-page__filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.logs-page__filter {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 170px;
+  min-width: 160px;
+}
+
+.logs-page__table {
+  width: 100%;
+}
+
+.logs-table {
+  width: 100%;
+  min-width: 1180px;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: auto;
+}
+
+.logs-table th,
+.logs-table td {
+  vertical-align: top;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.logs-table__action-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+}
+
+@media (max-width: 720px) {
+  .logs-page__filters {
+    align-items: stretch;
+  }
+
+  .logs-page__filters input,
+  .logs-page__filters select,
+  .logs-page__apply {
+    width: 100%;
+  }
+
+  .logs-page__apply {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .logs-page__pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

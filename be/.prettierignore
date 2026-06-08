@@ -1,0 +1,15 @@
+node_modules
+build
+dist
+coverage
+*.log
+package-lock.json
+.env
+.env.*
+.prettierrc
+eslint.config.js
+nodemon.json
+tsconfig.json
+README.md
+*.json
+.gitignore

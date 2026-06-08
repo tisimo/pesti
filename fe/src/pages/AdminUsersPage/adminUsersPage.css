@@ -1,0 +1,113 @@
+.admin-users__panel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 100%;
+  min-width: max-content;
+}
+
+.admin-users__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-users__search {
+  flex: 1 1 220px;
+  min-width: 200px;
+}
+
+.admin-users__table {
+  width: 100%;
+}
+
+.admin-users-table {
+  width: 100%;
+  min-width: 1080px;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: auto;
+}
+
+.admin-users-table th,
+.admin-users-table td {
+  vertical-align: top;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+@media (max-width: 720px) {
+  .admin-users__panel {
+    min-width: 0;
+  }
+
+  .admin-users-table thead {
+    display: none;
+  }
+
+  .admin-users-table,
+  .admin-users-table tbody,
+  .admin-users-table tr,
+  .admin-users-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .admin-users-table {
+    min-width: 0;
+  }
+
+  .admin-users-table tr {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .admin-users-table td {
+    padding: 8px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .admin-users-table td::before {
+    content: attr(data-label);
+    min-width: 90px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+
+  .admin-users-table td[data-label="User"]::before {
+    content: none;
+  }
+
+  .admin-users-table td[data-label="User"] {
+    padding-top: 4px;
+  }
+
+  .admin-users__toolbar {
+    align-items: stretch;
+  }
+
+  .admin-users__toolbar button,
+  .admin-users__toolbar .admin-users__count {
+    width: 100%;
+  }
+
+  .admin-users__count {
+    margin-left: 0;
+    text-align: left;
+  }
+}
+
+@media (max-width: 520px) {
+  .admin-users__toolbar {
+    align-items: stretch;
+  }
+}
+

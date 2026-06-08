@@ -1,0 +1,77 @@
+@startuml SD_Full
+
+title Frontend ↔ Backend — End-to-end flow (success & error)
+
+actor "User" as user
+
+box "Frontend (React)" #EEF4FF
+    participant "React View\n(Component)" as view
+    participant "Form/Client\nValidation" as validation
+    participant "API Client\n(fetch/axios)" as axios
+    participant "State Store\n(Zustand/Context)" as store
+end box
+
+box "Backend (Node/Express)" #FEFAE8
+    participant "Route\n(Express)" as route
+    participant "IController" as icontroller
+    participant "Controller" as controller
+    participant "DTO" as dto
+    participant "Mapper" as mapper
+    participant "IService" as iservice
+    participant "Service" as service
+    participant "Domain" as domain
+    participant "IRepo" as irepo
+    participant "Repo" as repo
+    participant "DataModel\nPersistence" as datamodel
+    participant "DB\n(PostgreSQL/\nDynamoDB)" as db
+end box
+
+user -> view : Clicks / Submits form
+view -> validation : Validate inputs (sync/async)
+
+alt [A Frontend validation invalid]
+    validation --> view : Errors
+    view -> store : setErrors(err)
+    view --> user : Show validation messages
+else [A Frontend validation OK]
+    validation --> view : OK
+    view -> axios : HTTP GET/POST /resource (JSON Request DTO)
+    view -> store : pending(loading=true)
+    axios -> route : HTTP request
+    route -> icontroller : dispatch(r)
+    icontroller -> controller : handler(request)
+    controller -> dto : buildDTO from request
+    dto --> controller : validate DTO (schema/ma)
+    alt [B Backend DTO invalid]
+        controller --> route : HTTP 400 + error DTO
+        route --> axios : 400 Bad Request
+        axios --> view : Error response
+        view -> store : setError(apiError)\nsetLoading(false)
+        view --> user : Show toast/banner
+    else [B Backend DTO valid]
+        controller -> iservice : toDomain(DTO)
+        iservice -> service : callService(dto)
+        service -> domain : construct entity
+        domain --> service : Domain entity
+        service -> service : callDomain / query
+        service -> service : execute use case
+        service -> irepo : save/find(domain)
+        irepo -> repo : call implementation
+        repo -> mapper : toDataModel(domain)
+        mapper -> datamodel : construct
+        datamodel -> db : INSERT/SELECT/UPDATE/DELETE
+        db --> datamodel : result rows/data
+        datamodel --> repo : persistence result
+        repo --> service : toDomain(data)
+        service -> service : Domain entity/result
+        service --> controller : toDTO(domain)
+        controller --> route : HTTP 200 + Response DTO
+        route --> axios : JSON response
+        axios --> view : Response JSON
+        view -> store : setData(responseDTO)\nsetLoading(false)
+        store --> view : derive UI state
+        view --> user : Render updated UI
+    end
+end
+
+@enduml

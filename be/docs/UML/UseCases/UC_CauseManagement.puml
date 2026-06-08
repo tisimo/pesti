@@ -1,0 +1,26 @@
+@startuml UC_CauseManagement
+
+left to right direction
+
+actor "Moderator" as mod
+actor "Admin" as admin
+actor "Super\nAdmin" as superAdmin
+
+superAdmin --|> admin
+admin --|> mod
+
+rectangle "Cause & Content Management" {
+    usecase "Review & approve causes" as UC01
+    usecase "Review edits to published causes" as UC08
+    usecase "Review reported content" as UC06
+    usecase "Block fraudulent causes" as UC10
+    usecase "Manage cause categories" as UC07
+}
+
+mod --> UC01
+mod --> UC08
+mod --> UC06
+mod --> UC10
+admin --> UC07
+
+@enduml

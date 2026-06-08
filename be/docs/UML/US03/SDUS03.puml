@@ -1,0 +1,34 @@
+@startuml SDUS03
+
+title SSD — Admin views platform analytics (Actor · System)
+
+actor "Admin" as admin
+participant ": System" as system
+
+admin -> system : 1: Access Analytics Dashboard
+system -> system : 1.1: Query default analytics data (last 30 days)
+system --> admin : 1.2: Display dashboard (KPIs, charts, tables)
+
+alt [2 Apply Filter]
+
+    admin -> system : 2: Set filters (date range and/or category)
+    system -> system : 2.1: Query analytics data with filters
+    system --> admin : 2.2: Refresh dashboard
+
+end
+
+alt [3a Export PDF]
+
+    admin -> system : 3a: Request PDF export
+    system -> system : 3a.1: Generate PDF report
+    system --> admin : 3a.2: Download PDF file
+
+else [3b Export Excel]
+
+    admin -> system : 3b: Request Excel export
+    system -> system : 3b.1: Generate Excel report
+    system --> admin : 3b.2: Download Excel file
+
+end
+
+@enduml

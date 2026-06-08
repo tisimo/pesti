@@ -1,0 +1,56 @@
+import { Router } from "express";
+import status from "./routes/status";
+import permissions from "./routes/permissions";
+import roles from "./routes/roles";
+import ojcOverview from "./routes/ojc/overview";
+import ojcUsers from "./routes/ojc/users";
+import ojcOrganizations from "./routes/ojc/organizations";
+import ojcCampaigns from "./routes/ojc/campaigns";
+import ojcReports from "./routes/ojc/reports";
+import ojcDonations from "./routes/ojc/donations";
+import ojcDeposits from "./routes/ojc/deposits";
+import ojcTransactions from "./routes/ojc/transactions";
+import ojcAnalytics from "./routes/ojc/analytics";
+import ojcCategories from "./routes/ojc/categories";
+import ojcAdminUsers from "./routes/ojc/adminUsers";
+import ojcKyc from "./routes/ojc/kyc";
+import ojcWithdrawals from "./routes/ojc/withdrawals";
+import ojcCampaignRevisionThreads from "./routes/ojc/campaignRevisionThreads";
+import adminUsers from "./routes/adminUsers";
+import users from "./routes/users";
+import accountCognito from "./routes/accountCognito";
+import logs from "./routes/logs";
+import pageGates from "./routes/pageGates";
+import auth from "./routes/auth";
+import adminEmail from "./routes/adminEmail";
+
+export default () => {
+  const app = Router();
+
+  permissions(app);
+  roles(app);
+  users(app);
+  adminUsers(app);
+  ojcOverview(app);
+  ojcUsers(app);
+  ojcOrganizations(app);
+  ojcCampaigns(app);
+  ojcReports(app);
+  ojcDonations(app);
+  ojcDeposits(app);
+  ojcTransactions(app);
+  ojcAnalytics(app);
+  ojcCategories(app);
+  ojcCampaignRevisionThreads(app);
+  ojcAdminUsers(app);
+  ojcKyc(app);
+  ojcWithdrawals(app);
+  accountCognito(app);
+  logs(app);
+  pageGates(app);
+  adminEmail(app);
+  auth(app);
+  status(app);
+
+  return app;
+};

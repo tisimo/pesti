@@ -1,0 +1,47 @@
+@startuml SDUS02
+
+title SSD — Admin reviews KYC submission (Actor · System · Email Service)
+
+actor "Admin" as admin
+participant ": System" as system
+participant ": Email Service" as emailSvc
+
+admin -> system : 1: Access KYC Queue
+system --> admin : 1.1: Display pending KYC list
+
+admin -> system : 2: Select KYC submission
+system --> admin : 2.1: Load detail view (documents + user info)
+
+admin -> system : 3: Review documents and fill checklist
+system --> admin : 3.1: Display side-by-side document viewer
+
+alt [4a Approve]
+
+    admin -> system : 4a: Submit approval
+    system -> system : 4a.1: Set KYC status → "Verified"
+    system -> system : 4a.2: Enable "Create Cause" for user
+    system -> emailSvc : 4a.3: Send approval notification
+    emailSvc --> system : 4a.4: Notification sent
+    system --> admin : 4a.5: KYC approved
+
+else [4b Reject]
+
+    admin -> system : 4b: Submit rejection with reason
+    system -> system : 4b.1: Set KYC status → "rejected"
+    system -> emailSvc : 4b.2: Send rejection email with issues
+    emailSvc --> system : 4b.3: Email sent
+    system --> admin : 4b.4: KYC rejected — resubmission available
+
+else [4c Request Resubmission]
+
+    admin -> system : 4c: Request resubmission with notes
+    system -> system : 4c.1: Set KYC status → "resubmission_required"
+    system -> emailSvc : 4c.2: Notify user with issues to address
+    emailSvc --> system : 4c.3: Notification sent
+    system --> admin : 4c.4: Resubmission requested
+
+end
+
+system -> system : 5: Log decision (AdminID + timestamp + action)
+
+@enduml

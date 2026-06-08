@@ -1,0 +1,125 @@
+.audit-trail__panel {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  width: 100%;
+  min-width: max-content;
+}
+
+.audit-trail__filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.audit-trail__filter {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 170px;
+  min-width: 160px;
+}
+
+.audit-trail__table {
+  width: 100%;
+}
+
+.audit-trail-table {
+  width: 100%;
+  min-width: 1180px;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: auto;
+}
+
+.audit-trail-table__email {
+  min-width: 0;
+}
+
+.audit-trail-table__timestamp {
+  white-space: nowrap;
+}
+
+.audit-trail-table th,
+.audit-trail-table td {
+  vertical-align: top;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+@media (max-width: 720px) {
+  .audit-trail__panel {
+    min-width: 0;
+  }
+
+  .audit-trail-table thead {
+    display: none;
+  }
+
+  .audit-trail-table,
+  .audit-trail-table tbody,
+  .audit-trail-table tr,
+  .audit-trail-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .audit-trail-table {
+    min-width: 0;
+  }
+
+  .audit-trail-table tr {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .audit-trail-table td {
+    padding: 8px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .audit-trail-table td::before {
+    content: attr(data-label);
+    min-width: 90px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+
+  .audit-trail-table td[data-label="Details"]::before {
+    content: none;
+  }
+
+  .audit-trail-table td[data-label="Timestamp"] {
+    white-space: normal;
+  }
+
+  .audit-trail__filters {
+    align-items: stretch;
+  }
+
+  .audit-trail__filters input,
+  .audit-trail__filters select,
+  .audit-trail__apply {
+    width: 100%;
+  }
+
+  .audit-trail__apply {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .audit-trail__pagination {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

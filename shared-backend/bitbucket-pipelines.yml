@@ -1,0 +1,92 @@
+pipelines:
+  branches:
+    developer:
+      - step:
+          name: Build & Push DEV image to ECR
+          image: docker:24.0.5
+          services:
+            - docker
+          caches:
+            - docker
+          script:
+            - apk add --no-cache python3 py3-pip
+            - pip3 install awscli
+
+            - export DOCKER_BUILDKIT=0
+
+            - export DATE_TAG=$(date -u +"%Y%m%d%H%M%S")
+            - echo "DATE_TAG=$DATE_TAG"
+
+            - echo "Login into ECR"
+            - >
+              aws ecr get-login-password --region "$AWS_REGION" |
+              docker login --username AWS --password-stdin
+              "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
+
+            - echo "Tag immutable (commit hash)"
+
+            - export FULL_TAG=$DATE_TAG
+            - echo "FULL_TAG=$FULL_TAG"
+
+            - echo "Build image"
+            - echo $ECR_REPOSITORY
+            - docker build -t "$ECR_REPOSITORY:$FULL_TAG" .
+
+            - echo "Tag for ECR (immutable)"
+            - docker tag "$ECR_REPOSITORY:$FULL_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$FULL_TAG"
+
+            - echo "Tag for ECR (latest)"
+            - docker tag "$ECR_REPOSITORY:$FULL_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest"
+
+            - echo "Push immutable tag"
+            - docker push "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$FULL_TAG"
+
+            - echo "Push latest tag"
+            - docker push "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest"
+    production:
+      - step:
+          name: Build & Push PROD image to ECR
+          image: docker:24.0.5
+          services:
+            - docker
+          caches:
+            - docker
+          script:
+            - apk add --no-cache python3 py3-pip
+            - pip3 install awscli
+
+            - export DOCKER_BUILDKIT=0
+
+            - export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID_PROD
+            - export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY_PROD
+
+            - export DATE_TAG=$(date -u +"%Y%m%d%H%M%S")
+            - echo "DATE_TAG=$DATE_TAG"
+
+            - echo "Login into ECR"
+            - >
+              aws ecr get-login-password --region "$AWS_REGION" |
+              docker login --username AWS --password-stdin
+              "$AWS_ACCOUNT_ID_PROD.dkr.ecr.$AWS_REGION.amazonaws.com"
+
+            - echo "Tag immutable (commit hash)"
+
+            - export FULL_TAG=$DATE_TAG
+            - echo "FULL_TAG=$FULL_TAG"
+
+            - echo "Build image"
+            - echo $ECR_REPOSITORY_PROD
+            - docker build -t "$ECR_REPOSITORY_PROD:$FULL_TAG" .
+
+            - echo "Tag for ECR (immutable)"
+            - docker tag "$ECR_REPOSITORY_PROD:$FULL_TAG" "$AWS_ACCOUNT_ID_PROD.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_PROD:$FULL_TAG"
+
+            - echo "Tag for ECR (latest)"
+            - docker tag "$ECR_REPOSITORY_PROD:$FULL_TAG" "$AWS_ACCOUNT_ID_PROD.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_PROD:latest"
+
+            - echo "Push immutable tag"
+            - docker push "$AWS_ACCOUNT_ID_PROD.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_PROD:$FULL_TAG"
+
+            - echo "Push latest tag"
+            - docker push "$AWS_ACCOUNT_ID_PROD.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY_PROD:latest"
+
