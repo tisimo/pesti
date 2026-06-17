@@ -23,18 +23,7 @@ export default ({ app }: { app: express.Application }) => {
   // It shows the real origin IP in the heroku or Cloudwatch logs
   app.enable("trust proxy");
 
-  // Alternate description:
-  // Enable Cross Origin Resource Sharing to all origins by default
-  // NOVO: valida API key quando o pedido não tem Origin (APK, curl, etc.)
-  app.use((req, res, next) => {
-    if (!req.headers.origin) {
-      const apiKey = req.headers["x-api-key"];
-      if (apiKey !== config.apiKey) {
-        return res.status(401).json({ message: "API key inválida ou ausente" });
-      }
-    }
-    next();
-  });
+
 
   // CORS continua igual, só que agora confia no middleware acima
   app.use(
