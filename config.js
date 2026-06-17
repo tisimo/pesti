@@ -174,4 +174,6 @@ export default {
   auroraPasswordShared: process.env.DB_PASSWORD_SHARED,
   auroraDatabaseShared: process.env.DB_NAME_SHARED,
   corsOrigin: (process.env.CORS_ORIGIN || "http://localhost:5173,http://10.0.2.2:5173").split(",").map(o => o.trim()),
+  apiKey: process.env.API_KEY,
+
 };

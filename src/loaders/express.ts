@@ -25,6 +25,18 @@ export default ({ app }: { app: express.Application }) => {
 
   // Alternate description:
   // Enable Cross Origin Resource Sharing to all origins by default
+  // NOVO: valida API key quando o pedido não tem Origin (APK, curl, etc.)
+  app.use((req, res, next) => {
+    if (!req.headers.origin) {
+      const apiKey = req.headers["x-api-key"];
+      if (apiKey !== config.apiKey) {
+        return res.status(401).json({ message: "API key inválida ou ausente" });
+      }
+    }
+    next();
+  });
+
+  // CORS continua igual, só que agora confia no middleware acima
   app.use(
     cors({
       origin: (origin, callback) => {
@@ -34,7 +46,7 @@ export default ({ app }: { app: express.Application }) => {
           callback(new Error(`CORS: origin '${origin}' not allowed`));
         }
       },
-      exposedHeaders: ["X-Total-Count"],
+      exposedHeaders: ["X-Total-Count", "X-Next-Cursor"],
     })
   );
 
