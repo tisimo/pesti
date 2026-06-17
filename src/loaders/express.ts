@@ -25,29 +25,17 @@ export default ({ app }: { app: express.Application }) => {
 
   // Alternate description:
   // Enable Cross Origin Resource Sharing to all origins by default
-  // NOVO: valida API key quando o pedido não tem Origin (APK, curl, etc.)
-  app.use((req, res, next) => {
-    if (!req.headers.origin) {
-      const apiKey = req.headers["x-api-key"];
-      if (apiKey !== config.apiKey) {
-        return res.status(401).json({ message: "API key inválida ou ausente" });
-      }
-    }
-    next();
-  });
-
-  // CORS continua igual, só que agora confia no middleware acima
   app.use(
     cors({
       origin: (origin, callback) => {
         if (!origin || config.corsOrigin.includes(origin)) {
           callback(null, true);
         } else {
-          callback(new Error(`CORS: origin '${origin}' not allowed`));
+          callback(new Error(`CORS: Origin '${origin}' Not Allowed!`));
         }
       },
       exposedHeaders: ["X-Total-Count", "X-Next-Cursor"],
-    })
+    }),
   );
 
   const jsonLimit = "80mb";
@@ -55,12 +43,14 @@ export default ({ app }: { app: express.Application }) => {
   app.use(require("method-override")());
 
   // Single JSON parser that also captures rawBody for webhook signature verification
-  app.use(bodyParser.json({
-    limit: jsonLimit,
-    verify: (req: any, _res, buf) => {
-      req.rawBody = buf;
-    },
-  }));
+  app.use(
+    bodyParser.json({
+      limit: jsonLimit,
+      verify: (req: any, _res, buf) => {
+        req.rawBody = buf;
+      },
+    }),
+  );
 
   // Swagger documentation
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

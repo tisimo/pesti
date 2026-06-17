@@ -3,10 +3,6 @@ import dotenv from "dotenv";
 // Set the NODE_ENV to 'development' by default
 
 const result = dotenv.config();
-const corsOrigin = (process.env.CORS_ORIGIN || "http://localhost:5173,http://10.0.2.2:5173,http://localhost")
-  .split(",")
-  .map(origin => origin.trim())
-  .filter(origin => origin.length > 0);
 
 if (!result.parsed) {
   throw new Error("⚠️  Couldn't find .env file  ⚠️");
@@ -178,6 +174,5 @@ export default {
   auroraPasswordShared: process.env.DB_PASSWORD_SHARED,
   auroraDatabaseShared: process.env.DB_NAME_SHARED,
   apiKey: process.env.API_KEY,
-  corsOrigin,
-
+  corsOrigin: (process.env.CORS_ORIGIN || "http://localhost:5173,https://localhost").split(",").map(URL => URL.trim()),
 };
